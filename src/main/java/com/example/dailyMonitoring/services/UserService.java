@@ -6,4 +6,6 @@ public interface UserService {
   UserData createUser(UserData userData);
 
   UserData getUserById(Long userId);
+
+  boolean deleteUser(Long userId);
 }

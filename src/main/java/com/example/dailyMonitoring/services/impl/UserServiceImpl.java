@@ -21,7 +21,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserData createUser(UserData userData) {
-    if (userRepository.getUserByUsername(userData.getUsername()).isPresent()) {
+    if (userRepository.getUserByUsername(userData.getUsername()).isPresent()
+            || userRepository.getUserByEmail(userData.getEmail()).isPresent()) {
       return UserData.builder().build();
     }
 
@@ -41,4 +42,17 @@ public class UserServiceImpl implements UserService {
             .map(user -> conversionService.convert(user, UserData.class))
             .orElse(UserData.builder().build());
   }
+
+  @Override
+  public boolean deleteUser(Long userId) {
+    return userRepository.checkStatus(userId)
+            .map(status -> {
+              if (StatusType.fromValue(status).equals(StatusType.INACTIVE)) {
+                return false;
+              }
+              userRepository.markAsDeleted(userId);
+              return true;
+            }).orElse(false);
+  }
 }
+

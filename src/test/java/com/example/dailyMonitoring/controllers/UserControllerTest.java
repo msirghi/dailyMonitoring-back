@@ -179,4 +179,31 @@ public class UserControllerTest {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
   }
+
+  @Test
+  @Order(9)
+  public void userDelete() throws Exception {
+    mockMvc.perform(delete("/users/{id}", 1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().is(204));
+  }
+
+  @Test
+  @Order(10)
+  public void userDeleteWithInactiveStatus() throws Exception {
+    mockMvc.perform(delete("/users/{id}", 1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Order(11)
+  public void nonExistingUserDelete() throws Exception {
+    mockMvc.perform(delete("/users/{id}", 10)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+  }
 }
