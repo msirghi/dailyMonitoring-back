@@ -75,22 +75,30 @@ public interface UserApi {
           @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId
   );
 
-    @ApiOperation(value = "Update User", nickname = "userUpdate",
-            response = UserData.class, tags = {"Update, User",})
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Ok", response = UserData.class),
-            @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
-            @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
-            @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
-            @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-            @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
-    @RequestMapping(
-            value = "users/{userId}",
-            method = RequestMethod.PUT,
-            produces = "application/json;charset=utf-8"
-    )
-    ResponseEntity<?> userUpdate(
-            @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId , @RequestBody @Valid UserData userData
-    );
+  @ApiOperation(value = "Update User", nickname = "userUpdate",
+          response = UserData.class, tags = {"Update, User",})
+  @ApiResponses(value = {
+          @ApiResponse(code = 200, message = "Ok", response = UserData.class),
+          @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
+          @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
+          @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
+          @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
+          @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+  @RequestMapping(
+          value = "users/{userId}",
+          method = RequestMethod.PUT,
+          produces = "application/json;charset=utf-8"
+  )
+  ResponseEntity<?> userUpdate(
+          @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId, @RequestBody @Valid UserData userData
+  );
 
+  //    TODO: 25.03.2020
+  /*
+    username
+    fullName
+    email
+
+    users/{id}/resetPwd
+   */
 }

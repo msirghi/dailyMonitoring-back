@@ -30,7 +30,7 @@ public class UserData {
   private String email;
 
   @JsonProperty("password")
-  @NotNull
+//  TODO: test on null cases
   private String password;
 
   @JsonProperty("fullName")

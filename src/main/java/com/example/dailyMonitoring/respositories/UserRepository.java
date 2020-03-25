@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -36,8 +37,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
   @Transactional
   @Modifying
   @Query("UPDATE UserEntity usr " +
-         "SET usr.status = 'INACTIVE' " +
-         "WHERE usr.id = :id")
+          "SET usr.status = 'INACTIVE' " +
+          "WHERE usr.id = :id")
   void markAsDeleted(
           @Param("id") Long id
   );
@@ -48,7 +49,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
           "SET usr.email = :email " +
           "WHERE usr.id = :id")
   void updateEmail(
-          @Param("id") Long id ,
+          @Param("id") Long id,
           @Param("email") String email
   );
 
@@ -58,7 +59,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
           "SET usr.username = :username " +
           "WHERE usr.id = :id")
   void updateUsername(
-          @Param("id") Long id ,
+          @Param("id") Long id,
           @Param("username") String username
   );
 
@@ -69,8 +70,20 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
           "SET usr.password = :password " +
           "WHERE usr.id = :id")
   void updatePassword(
-          @Param("id") Long id ,
+          @Param("id") Long id,
           @Param("password") String password
   );
 
+  @Query("SELECT usr FROM UserEntity usr " +
+          "WHERE usr.email = :email OR usr.username = :username")
+  List<UserEntity> getUserByUsernameOrEmail(
+          @Param("username") String username,
+          @Param("email") String email
+  );
+
+  @Query("SELECT usr FROM UserEntity usr " +
+          "WHERE usr.id = :id")
+  Optional<UserEntity> getActiveUser(
+          @Param("id") Long id
+  );
 }

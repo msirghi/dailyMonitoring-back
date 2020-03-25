@@ -8,6 +8,8 @@ import com.example.dailyMonitoring.services.UserService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
@@ -56,37 +58,60 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean updateUser(Long userId, UserData userData) {
+  public UserData updateUser(Long userId, UserData userData) {
 
-    return userRepository.checkStatus(userId)
-            .map(status -> {
-              if (StatusType.fromValue(status).equals(StatusType.INACTIVE) || !userRepository.findById(userId).isPresent()) {
-                return false;
+    return userRepository
+            .getActiveUser(userId)
+            .map(user -> {
+              List<UserEntity> userList = userRepository.getUserByUsernameOrEmail(userData.getUsername(),
+                      userData.getEmail());
+              if (userList.size() == 0) {
+                user.setEmail(userData.getEmail());
+                user.setFullName(userData.getFullName());
+                user.setUsername(userData.getUsername());
+                userData.setId(userId);
+                return conversionService.convert(userRepository.save(user), UserData.class);
               }
-              if (!(getUserById(userId).getEmail().equals(userData.getEmail()))) {
-                if (!(userRepository.getUserByEmail(userData.getEmail()).isPresent())) {
-                  userRepository.updateEmail(userId, userData.getEmail());
-                  return true;
+
+              for (UserEntity userEntity : userList) {
+                if (userEntity.getUsername().equalsIgnoreCase(userData.getUsername())) {
+                  return UserData.builder().id(-2L).build();
+                } else if (userEntity.getEmail().equalsIgnoreCase(userData.getEmail())) {
+                  return UserData.builder().id(-1L).build();
                 }
               }
-              else if (!(getUserById(userId).getUsername().equals(userData.getUsername()))) {
-                  if (!(userRepository.getUserByUsername(userData.getUsername()).isPresent())) {
-                      userRepository.updateUsername(userId, userData.getUsername());
-                      return true;
-                  }
-                }
-//              if (!(getUserById(userId).getFullName().equals(userData.getFullName()))) {
-//                  if (!(userRepository.getUserByFullName(userData.getFullName()).isPresent())) {
-//                      userRepository.updateFullName(userId, userData.getFullName());
+              return UserData.builder().build();
+            }).orElse(UserData.builder().build());
+
+//    return userRepository.checkStatus(userId)
+//            .map(status -> {
+//              if (StatusType.fromValue(status).equals(StatusType.INACTIVE) || !userRepository.findById(userId).isPresent()) {
+//                return false;
+//              }
+//              if (!(getUserById(userId).getEmail().equals(userData.getEmail()))) {
+//                if (!(userRepository.getUserByEmail(userData.getEmail()).isPresent())) {
+//                  userRepository.updateEmail(userId, userData.getEmail());
+//                  return true;
+//                }
+//              }
+//              else if (!(getUserById(userId).getUsername().equals(userData.getUsername()))) {
+//                  if (!(userRepository.getUserByUsername(userData.getUsername()).isPresent())) {
+//                      userRepository.updateUsername(userId, userData.getUsername());
 //                      return true;
 //                  }
-//               }
-               else if(!(getUserById(userId).getPassword().equals(userData.getPassword()))) {
-                   userRepository.updatePassword(userId , userData.getPassword());
-                   return true;
-                 }
-              return false;
-            }).orElse(false);
+//                }
+////              if (!(getUserById(userId).getFullName().equals(userData.getFullName()))) {
+////                  if (!(userRepository.getUserByFullName(userData.getFullName()).isPresent())) {
+////                      userRepository.updateFullName(userId, userData.getFullName());
+////                      return true;
+////                  }
+////               }
+//               else if(!(getUserById(userId).getPassword().equals(userData.getPassword()))) {
+//                   userRepository.updatePassword(userId , userData.getPassword());
+//                   return true;
+//                 }
+//              return false;
+//            }).orElse(false);
   }
 }
 

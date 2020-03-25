@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "USERS")
@@ -32,6 +33,8 @@ public class UserEntity {
 
   @Column(name = "USERNAME")
   @NotNull
+  // TODO: 25.03.2020 regex check
+  //  @Pattern()
   private String username;
 
   @Column(name = "PASSWORD")
@@ -40,6 +43,8 @@ public class UserEntity {
 
   @Column(name = "FULL_NAME")
   @NotNull
+  // TODO: 25.03.2020 regex check
+  //  @Pattern() only string (not numbers!)
   private String fullName;
 
   @Column(name = "EMAIL")

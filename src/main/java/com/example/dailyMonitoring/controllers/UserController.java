@@ -51,25 +51,45 @@ public class UserController implements UserApi {
   }
 
   @Override
-  public ResponseEntity<?> userUpdate(@Min(1) Long userId , @Valid UserData userData) {
-    return this.userService.updateUser(userId , userData)
-            ? ResponseEntity.status(204).build()
+  public ResponseEntity<?> userUpdate(@Min(1) Long userId, @Valid UserData userData) {
+    UserData result = this.userService.updateUser(userId, userData);
+
+    if (result.getId() == -2L) {
+      return ResponseEntity.badRequest()
+              .body(Error
+                      .builder()
+                      .code(400)
+                      .message("Failed to update user.")
+                      .description("Username is already taken.")
+                      .build());
+    } else if (result.getId() == -1L) {
+      return ResponseEntity.badRequest()
+              .body(Error
+                      .builder()
+                      .code(400)
+                      .message("Failed to update user.")
+                      .description("Email is already taken.")
+                      .build());
+    }
+
+    return result.getId() != null
+            ? ResponseEntity.status(200).body(result)
             : ResponseEntity.notFound().build();
   }
 
 
-
+  // TODO: 25.03.2020
+  /*
+    Endpoints:
+    - update email only
+    - update username only
+    - tests
+    - password
+    - pattern annotation
+   */
 
 
   /*
-    TODO:
-    1. method PUT - update existing user (read about status codes)
-    2. method DELETE - userId as param, set status to inactive *Done*
-    3. Unit tests  *added two tests*
-
-    FIXME:
-    1. on user creation same email bug *Done*
-
     H2 - database
     http://localhost:8080/h2-console
    */
