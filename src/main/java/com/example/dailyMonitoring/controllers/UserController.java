@@ -50,6 +50,15 @@ public class UserController implements UserApi {
             : ResponseEntity.notFound().build();
   }
 
+  @Override
+  public ResponseEntity<?> userUpdate(@Min(1) Long userId , @Valid UserData userData) {
+    return this.userService.updateUser(userId , userData)
+            ? ResponseEntity.status(204).build()
+            : ResponseEntity.notFound().build();
+  }
+
+
+
 
 
   /*

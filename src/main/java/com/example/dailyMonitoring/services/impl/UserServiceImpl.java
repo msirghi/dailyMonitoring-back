@@ -54,5 +54,40 @@ public class UserServiceImpl implements UserService {
               return true;
             }).orElse(false);
   }
+
+  @Override
+  public boolean updateUser(Long userId, UserData userData) {
+
+    return userRepository.checkStatus(userId)
+            .map(status -> {
+              if (StatusType.fromValue(status).equals(StatusType.INACTIVE) || !userRepository.findById(userId).isPresent()) {
+                return false;
+              }
+              if (!(getUserById(userId).getEmail().equals(userData.getEmail()))) {
+                if (!(userRepository.getUserByEmail(userData.getEmail()).isPresent())) {
+                  userRepository.updateEmail(userId, userData.getEmail());
+                  return true;
+                }
+              }
+              else if (!(getUserById(userId).getUsername().equals(userData.getUsername()))) {
+                  if (!(userRepository.getUserByUsername(userData.getUsername()).isPresent())) {
+                      userRepository.updateUsername(userId, userData.getUsername());
+                      return true;
+                  }
+                }
+//              if (!(getUserById(userId).getFullName().equals(userData.getFullName()))) {
+//                  if (!(userRepository.getUserByFullName(userData.getFullName()).isPresent())) {
+//                      userRepository.updateFullName(userId, userData.getFullName());
+//                      return true;
+//                  }
+//               }
+               else if(!(getUserById(userId).getPassword().equals(userData.getPassword()))) {
+                   userRepository.updatePassword(userId , userData.getPassword());
+                   return true;
+                 }
+              return false;
+            }).orElse(false);
+  }
 }
+
 

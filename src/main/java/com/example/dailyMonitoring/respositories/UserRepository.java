@@ -1,5 +1,6 @@
 package com.example.dailyMonitoring.respositories;
 
+import com.example.dailyMonitoring.models.UserData;
 import com.example.dailyMonitoring.models.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -40,4 +41,36 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
   void markAsDeleted(
           @Param("id") Long id
   );
+
+  @Transactional
+  @Modifying
+  @Query("UPDATE UserEntity usr " +
+          "SET usr.email = :email " +
+          "WHERE usr.id = :id")
+  void updateEmail(
+          @Param("id") Long id ,
+          @Param("email") String email
+  );
+
+  @Transactional
+  @Modifying
+  @Query("UPDATE UserEntity usr " +
+          "SET usr.username = :username " +
+          "WHERE usr.id = :id")
+  void updateUsername(
+          @Param("id") Long id ,
+          @Param("username") String username
+  );
+
+
+  @Transactional
+  @Modifying
+  @Query("UPDATE UserEntity usr " +
+          "SET usr.password = :password " +
+          "WHERE usr.id = :id")
+  void updatePassword(
+          @Param("id") Long id ,
+          @Param("password") String password
+  );
+
 }
