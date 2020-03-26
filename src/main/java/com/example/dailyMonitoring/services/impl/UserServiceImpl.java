@@ -1,6 +1,8 @@
 package com.example.dailyMonitoring.services.impl;
 
+import com.example.dailyMonitoring.models.EmailData;
 import com.example.dailyMonitoring.models.UserData;
+import com.example.dailyMonitoring.models.UsernameData;
 import com.example.dailyMonitoring.models.entities.UserEntity;
 import com.example.dailyMonitoring.models.enums.StatusType;
 import com.example.dailyMonitoring.respositories.UserRepository;
@@ -82,37 +84,58 @@ public class UserServiceImpl implements UserService {
               }
               return UserData.builder().build();
             }).orElse(UserData.builder().build());
-
-//    return userRepository.checkStatus(userId)
-//            .map(status -> {
-//              if (StatusType.fromValue(status).equals(StatusType.INACTIVE) || !userRepository.findById(userId).isPresent()) {
-//                return false;
-//              }
-//              if (!(getUserById(userId).getEmail().equals(userData.getEmail()))) {
-//                if (!(userRepository.getUserByEmail(userData.getEmail()).isPresent())) {
-//                  userRepository.updateEmail(userId, userData.getEmail());
-//                  return true;
-//                }
-//              }
-//              else if (!(getUserById(userId).getUsername().equals(userData.getUsername()))) {
-//                  if (!(userRepository.getUserByUsername(userData.getUsername()).isPresent())) {
-//                      userRepository.updateUsername(userId, userData.getUsername());
-//                      return true;
-//                  }
-//                }
-////              if (!(getUserById(userId).getFullName().equals(userData.getFullName()))) {
-////                  if (!(userRepository.getUserByFullName(userData.getFullName()).isPresent())) {
-////                      userRepository.updateFullName(userId, userData.getFullName());
-////                      return true;
-////                  }
-////               }
-//               else if(!(getUserById(userId).getPassword().equals(userData.getPassword()))) {
-//                   userRepository.updatePassword(userId , userData.getPassword());
-//                   return true;
-//                 }
-//              return false;
-//            }).orElse(false);
   }
+    @Override
+    public boolean updateUserPasswordOnly(Long userId , UserData userData){
+        return userRepository.checkStatus(userId)
+                .map(status -> {
+                    if (StatusType.fromValue(status).equals(StatusType.INACTIVE)) {
+                        return false;
+                    }
+                    userRepository.updatePassword(userId , userData.getPassword());
+                    return true;
+                }).orElse(false);
+    }
+
+    @Override
+    public boolean updateUserEmailOnly(Long userId , EmailData emailData){
+        return userRepository
+                .getActiveUser(userId)
+                .map(user -> {
+                    boolean emailCheck = userRepository.getUserByEmail(emailData.getEmail()).isPresent();
+                    if (emailCheck) {
+                        return false;
+                    }
+                    else{
+                        user.setEmail(emailData.getEmail());
+                        conversionService.convert(userRepository.save(user), UserData.class);
+                        return true;
+                    }
+                }).orElse(false);
+
+    }
+
+    @Override
+    public boolean updateUserUsernameOnly(Long userId , UsernameData usernameData){
+        return userRepository
+                .getActiveUser(userId)
+                .map(user -> {
+                    boolean usernameCheck = userRepository.getUserByUsername(usernameData.getUsername()).isPresent();
+                    if (usernameCheck) {
+                        return false;
+                    }
+                    else{
+                        user.setEmail(usernameData.getUsername());
+                        conversionService.convert(userRepository.save(user), UserData.class);
+                        return true;
+                    }
+                }).orElse(false);
+
+    }
+
+
+    //TODO: 26.03.2020
+    // 1.For all update types fix the opportunity to update the Innactive user
 }
 
 

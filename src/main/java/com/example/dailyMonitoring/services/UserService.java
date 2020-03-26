@@ -1,6 +1,8 @@
 package com.example.dailyMonitoring.services;
 
+import com.example.dailyMonitoring.models.EmailData;
 import com.example.dailyMonitoring.models.UserData;
+import com.example.dailyMonitoring.models.UsernameData;
 
 public interface UserService {
 
@@ -11,4 +13,11 @@ public interface UserService {
   boolean deleteUser(Long userId);
 
   UserData updateUser(Long userId , UserData userData);
+
+  boolean updateUserPasswordOnly(Long userId , UserData userData);
+
+  boolean updateUserEmailOnly(Long userId , EmailData emailData);
+
+  boolean updateUserUsernameOnly(Long userId , UsernameData usernameData);
+
 }

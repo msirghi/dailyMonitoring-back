@@ -1,8 +1,10 @@
 package com.example.dailyMonitoring.controllers;
 
 import com.example.dailyMonitoring.controllers.api.UserApi;
+import com.example.dailyMonitoring.models.EmailData;
 import com.example.dailyMonitoring.models.Error;
 import com.example.dailyMonitoring.models.UserData;
+import com.example.dailyMonitoring.models.UsernameData;
 import com.example.dailyMonitoring.services.UserService;
 import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
@@ -31,7 +33,7 @@ public class UserController implements UserApi {
                     .builder()
                     .code(400)
                     .message("Failed to created user.")
-                    .description("Username or password already exists.")
+                    .description("Username or email is already taken.")
                     .build());
   }
 
@@ -78,14 +80,48 @@ public class UserController implements UserApi {
   }
 
 
+  @Override
+  public ResponseEntity<?> userUpdatePasswordOnly(@Min(1) Long userId , @Valid UserData userData) {
+    return this.userService.updateUserPasswordOnly(userId ,userData)
+            ? ResponseEntity.status(204).build()
+            : ResponseEntity.notFound().build();
+  }
+
+  @Override
+  public ResponseEntity<?> userUpdateEmailOnly(@Min(1) Long userId , @Valid EmailData emailData) {
+    return this.userService.updateUserEmailOnly(userId ,emailData)
+            ? ResponseEntity.status(204).build()
+            : ResponseEntity.badRequest()
+            .body(Error
+                    .builder()
+                    .code(400)
+                    .message("Failed to update user.")
+                    .description("Email is already taken.")
+                    .build());
+  }
+
+  @Override
+  public ResponseEntity<?> userUpdateUsernameOnly(@Min(1) Long userId , @Valid UsernameData usernameData) {
+    return this.userService.updateUserUsernameOnly(userId , usernameData)
+            ? ResponseEntity.status(204).build()
+            : ResponseEntity.badRequest()
+            .body(Error
+                    .builder()
+                    .code(400)
+                    .message("Failed to update user.")
+                    .description("Username is already taken.")
+                    .build());
+  }
+
   // TODO: 25.03.2020
   /*
     Endpoints:
-    - update email only
-    - update username only
+    - update email only (*done*)
+    - update username only (*done*)
+    - password (*done*)
+    - pattern annotation (*done*)
+    - add Data class only for email and username (*done*)
     - tests
-    - password
-    - pattern annotation
    */
 
 

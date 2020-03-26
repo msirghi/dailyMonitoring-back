@@ -63,17 +63,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
           @Param("username") String username
   );
 
-
-  @Transactional
-  @Modifying
-  @Query("UPDATE UserEntity usr " +
-          "SET usr.password = :password " +
-          "WHERE usr.id = :id")
-  void updatePassword(
-          @Param("id") Long id,
-          @Param("password") String password
-  );
-
   @Query("SELECT usr FROM UserEntity usr " +
           "WHERE usr.email = :email OR usr.username = :username")
   List<UserEntity> getUserByUsernameOrEmail(
@@ -85,5 +74,16 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
           "WHERE usr.id = :id")
   Optional<UserEntity> getActiveUser(
           @Param("id") Long id
+  );
+
+
+  @Transactional
+  @Modifying
+  @Query("UPDATE UserEntity usr " +
+          "SET usr.password = :password " +
+          "WHERE usr.id = :id")
+  void updatePassword(
+          @Param("id") Long id,
+          @Param("password") String password
   );
 }
