@@ -85,57 +85,50 @@ public class UserServiceImpl implements UserService {
               return UserData.builder().build();
             }).orElse(UserData.builder().build());
   }
-    @Override
-    public boolean updateUserPasswordOnly(Long userId , UserData userData){
-        return userRepository.checkStatus(userId)
-                .map(status -> {
-                    if (StatusType.fromValue(status).equals(StatusType.INACTIVE)) {
-                        return false;
-                    }
-                    userRepository.updatePassword(userId , userData.getPassword());
-                    return true;
-                }).orElse(false);
-    }
 
-    @Override
-    public boolean updateUserEmailOnly(Long userId , EmailData emailData){
-        return userRepository
-                .getActiveUser(userId)
-                .map(user -> {
-                    boolean emailCheck = userRepository.getUserByEmail(emailData.getEmail()).isPresent();
-                    if (emailCheck) {
-                        return false;
-                    }
-                    else{
-                        user.setEmail(emailData.getEmail());
-                        conversionService.convert(userRepository.save(user), UserData.class);
-                        return true;
-                    }
-                }).orElse(false);
+  @Override
+  public boolean updateUserPasswordOnly(Long userId, UserData userData) {
+    return userRepository
+            .getActiveUser(userId)
+            .map(user -> {
+              user.setPassword(userData.getPassword());
+              userRepository.save(user);
+              return true;
+            })
+            .orElse(false);
+  }
 
-    }
+  @Override
+  public boolean updateUserEmailOnly(Long userId, EmailData emailData) {
+    return userRepository
+            .getActiveUser(userId)
+            .map(user -> {
+              if (userRepository.getUserByEmail(emailData.getEmail()).isPresent()) {
+                return false;
+              } else {
+                user.setEmail(emailData.getEmail());
+                userRepository.save(user);
+                return true;
+              }
+            }).orElse(false);
 
-    @Override
-    public boolean updateUserUsernameOnly(Long userId , UsernameData usernameData){
-        return userRepository
-                .getActiveUser(userId)
-                .map(user -> {
-                    boolean usernameCheck = userRepository.getUserByUsername(usernameData.getUsername()).isPresent();
-                    if (usernameCheck) {
-                        return false;
-                    }
-                    else{
-                        user.setEmail(usernameData.getUsername());
-                        conversionService.convert(userRepository.save(user), UserData.class);
-                        return true;
-                    }
-                }).orElse(false);
+  }
 
-    }
+  @Override
+  public boolean updateUserUsernameOnly(Long userId, UsernameData usernameData) {
+    return userRepository
+            .getActiveUser(userId)
+            .map(user -> {
+              if (userRepository.getUserByUsername(usernameData.getUsername()).isPresent()) {
+                return false;
+              } else {
+                user.setEmail(usernameData.getUsername());
+                userRepository.save(user);
+                return true;
+              }
+            }).orElse(false);
 
-
-    //TODO: 26.03.2020
-    // 1.For all update types fix the opportunity to update the Innactive user
+  }
 }
 
 

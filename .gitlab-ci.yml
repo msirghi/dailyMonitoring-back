@@ -1,0 +1,20 @@
+stages:
+  - assemble
+before_script:
+  - echo `pwd`
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+  - chmod +x ./gradlew
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+assemble:
+  image: java:8
+  stage: assemble
+  script:
+    - ./gradlew assemble
+test:
+  image: java:8
+  stage: check
+  script:
+    - ./gradlew check --stacktrace

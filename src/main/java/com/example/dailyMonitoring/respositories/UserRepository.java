@@ -70,20 +70,21 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
           @Param("email") String email
   );
 
-  @Query("SELECT usr FROM UserEntity usr " +
-          "WHERE usr.id = :id")
+  @Query("SELECT usr FROM UserEntity usr "
+          + "WHERE usr.id = :id "
+          + "AND usr.status = 'ACTIVE'")
   Optional<UserEntity> getActiveUser(
           @Param("id") Long id
   );
 
 
-  @Transactional
-  @Modifying
-  @Query("UPDATE UserEntity usr " +
-          "SET usr.password = :password " +
-          "WHERE usr.id = :id")
-  void updatePassword(
-          @Param("id") Long id,
-          @Param("password") String password
-  );
+//  @Transactional
+//  @Modifying
+//  @Query("UPDATE UserEntity usr " +
+//          "SET usr.password = :password " +
+//          "WHERE usr.id = :id")
+//  void updatePassword(
+//          @Param("id") Long id,
+//          @Param("password") String password
+//  );
 }

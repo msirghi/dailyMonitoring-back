@@ -4,7 +4,6 @@ import com.example.dailyMonitoring.models.EmailData;
 import com.example.dailyMonitoring.models.Error;
 import com.example.dailyMonitoring.models.UserData;
 import com.example.dailyMonitoring.models.UsernameData;
-import com.example.dailyMonitoring.respositories.UserRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -114,7 +113,6 @@ public interface UserApi {
           @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId, @RequestBody @Valid UserData userData
   );
 
-
   @ApiOperation(value = "Update User Email Only", nickname = "userUpdateEmailOnly",
           response = UserData.class, tags = {"Update, User,Email",})
   @ApiResponses(value = {
@@ -133,8 +131,6 @@ public interface UserApi {
           @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId, @RequestBody @Valid EmailData emailData
   );
 
-
-
   @ApiOperation(value = "Update User Username Only", nickname = "userUpdateUsernameOnly",
           response = UserData.class, tags = {"Update, User,Username",})
   @ApiResponses(value = {
@@ -152,12 +148,4 @@ public interface UserApi {
   ResponseEntity<?> userUpdateUsernameOnly(
           @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId, @RequestBody @Valid UsernameData usernameData
   );
-  //    TODO: 25.03.2020
-  /*
-    username
-    fullName
-    email
-
-    users/{id}/resetPwd
-   */
 }

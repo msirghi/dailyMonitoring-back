@@ -75,7 +75,7 @@ public class UserController implements UserApi {
     }
 
     return result.getId() != null
-            ? ResponseEntity.status(200).body(result)
+            ? ResponseEntity.ok().body(result)
             : ResponseEntity.notFound().build();
   }
 
@@ -83,14 +83,14 @@ public class UserController implements UserApi {
   @Override
   public ResponseEntity<?> userUpdatePasswordOnly(@Min(1) Long userId , @Valid UserData userData) {
     return this.userService.updateUserPasswordOnly(userId ,userData)
-            ? ResponseEntity.status(204).build()
+            ? ResponseEntity.ok().build()
             : ResponseEntity.notFound().build();
   }
 
   @Override
   public ResponseEntity<?> userUpdateEmailOnly(@Min(1) Long userId , @Valid EmailData emailData) {
     return this.userService.updateUserEmailOnly(userId ,emailData)
-            ? ResponseEntity.status(204).build()
+            ? ResponseEntity.ok().build()
             : ResponseEntity.badRequest()
             .body(Error
                     .builder()
@@ -103,7 +103,7 @@ public class UserController implements UserApi {
   @Override
   public ResponseEntity<?> userUpdateUsernameOnly(@Min(1) Long userId , @Valid UsernameData usernameData) {
     return this.userService.updateUserUsernameOnly(userId , usernameData)
-            ? ResponseEntity.status(204).build()
+            ? ResponseEntity.ok().build()
             : ResponseEntity.badRequest()
             .body(Error
                     .builder()
@@ -112,21 +112,4 @@ public class UserController implements UserApi {
                     .description("Username is already taken.")
                     .build());
   }
-
-  // TODO: 25.03.2020
-  /*
-    Endpoints:
-    - update email only (*done*)
-    - update username only (*done*)
-    - password (*done*)
-    - pattern annotation (*done*)
-    - add Data class only for email and username (*done*)
-    - tests
-   */
-
-
-  /*
-    H2 - database
-    http://localhost:8080/h2-console
-   */
 }

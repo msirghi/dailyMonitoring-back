@@ -1,0 +1,9 @@
+1. Add new dto to updateUserPasswordOnly() method
+2. Separate class for constants (public static final ....)
+3. Fix @Pattern regex
+4. Tests (check if pwd may be null on create)
+
+
+Useful:
+- H2 - database
+    http://localhost:8080/h2-console
