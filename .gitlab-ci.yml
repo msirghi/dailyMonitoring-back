@@ -13,8 +13,3 @@ assemble:
   stage: assemble
   script:
     - ./gradlew assemble
-test:
-  image: java:8
-  stage: check
-  script:
-    - ./gradlew check --stacktrace
