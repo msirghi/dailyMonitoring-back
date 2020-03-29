@@ -8,7 +8,11 @@ import com.example.dailyMonitoring.models.entities.UserEntity;
 import com.example.dailyMonitoring.models.enums.StatusType;
 import com.example.dailyMonitoring.respositories.UserRepository;
 import com.example.dailyMonitoring.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +21,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final ConversionService conversionService;
+  @Autowired
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
 
   public UserServiceImpl(UserRepository userRepository,
                          ConversionService conversionService) {
@@ -30,6 +36,7 @@ public class UserServiceImpl implements UserService {
             || userRepository.getUserByEmail(userData.getEmail()).isPresent()) {
       return UserData.builder().build();
     }
+    userData.setPassword(bCryptPasswordEncoder.encode(userData.getPassword()));
 
     UserEntity userEntity = conversionService.convert(userData, UserEntity.class);
     userEntity.setStatus(StatusType.ACTIVE);
@@ -91,6 +98,9 @@ public class UserServiceImpl implements UserService {
     return userRepository
             .getActiveUser(userId)
             .map(user -> {
+              // checks if incoming old password matches with the current one from database
+              // wrap this in if statement and handle the error
+              bCryptPasswordEncoder.matches(passwordData.getPassword(), user.getPassword());
               user.setPassword(passwordData.getPassword());
               userRepository.save(user);
               return true;
@@ -127,7 +137,6 @@ public class UserServiceImpl implements UserService {
                 return true;
               }
             }).orElse(false);
-
   }
 }
 
