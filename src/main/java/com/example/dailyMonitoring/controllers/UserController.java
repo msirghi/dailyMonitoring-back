@@ -54,22 +54,24 @@ public class UserController implements UserApi {
   public ResponseEntity<?> userUpdate(@Min(1) Long userId, @Valid UserData userData) {
     UserData result = this.userService.updateUser(userId, userData);
 
-    if (result.getId() == -2L) {
-      return ResponseEntity.badRequest()
-              .body(Error
-                      .builder()
-                      .code(400)
-                      .message("Failed to update user.")
-                      .description("Username is already taken.")
-                      .build());
-    } else if (result.getId() == -1L) {
-      return ResponseEntity.badRequest()
-              .body(Error
-                      .builder()
-                      .code(400)
-                      .message("Failed to update user.")
-                      .description("Email is already taken.")
-                      .build());
+    if(result.getId() != null) {
+        if (result.getId() == -2L) {
+            return ResponseEntity.badRequest()
+                    .body(Error
+                            .builder()
+                            .code(400)
+                            .message("Failed to update user.")
+                            .description("Username is already taken.")
+                            .build());
+        } else if (result.getId() == -1L) {
+            return ResponseEntity.badRequest()
+                    .body(Error
+                            .builder()
+                            .code(400)
+                            .message("Failed to update user.")
+                            .description("Email is already taken.")
+                            .build());
+        }
     }
 
     return result.getId() != null

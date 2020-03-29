@@ -1,5 +1,6 @@
 package com.example.dailyMonitoring.controllers;
 
+import com.example.dailyMonitoring.models.EmailData;
 import com.example.dailyMonitoring.models.UserData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,6 +59,13 @@ public class UserControllerTest {
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         return ow.writeValueAsString(userData);
+    }
+
+    public String generateJsonEmail(EmailData emailData) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        return ow.writeValueAsString(emailData);
     }
 
     private ResultActions getUserDataPattern(ResultActions resultActions) throws Exception {
@@ -329,6 +337,8 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.fullName").value("Test Test"));
     }
 
+
+    //Check TransactionSystemException
     @Test
     @Order(19)
     public void userUpdateEmailFullNameUsernameWithUnsuitableEmail() throws Exception {
@@ -347,6 +357,8 @@ public class UserControllerTest {
                 .hasCauseInstanceOf(TransactionSystemException.class);
     }
 
+
+    //Check TransactionSystemException
     @Test
     @Order(20)
     public void userUpdateEmailFullNameUsernameWithUnsuitableUsername() throws Exception {
@@ -365,6 +377,8 @@ public class UserControllerTest {
                 .hasCauseInstanceOf(TransactionSystemException.class);
     }
 
+
+    //Check TransactionSystemException
     @Test
     @Order(21)
     public void userUpdateEmailFullNameUsernameWithUnsuitableFullName() throws Exception {
@@ -383,6 +397,8 @@ public class UserControllerTest {
                 .hasCauseInstanceOf(TransactionSystemException.class);
     }
 
+
+    //Check TransactionSystemException
     @Test
     @Order(22)
     public void userUpdateEmailFullNameUsernameWithoutEmail() throws Exception {
@@ -401,6 +417,8 @@ public class UserControllerTest {
                 .hasCauseInstanceOf(TransactionSystemException.class);
     }
 
+
+    //Check TransactionSystemException
     @Test
     @Order(23)
     public void userUpdateEmailFullNameUsernameWithoutUsername() throws Exception {
@@ -419,6 +437,8 @@ public class UserControllerTest {
                 .hasCauseInstanceOf(TransactionSystemException.class);
     }
 
+
+    //Check TransactionSystemException
     @Test
     @Order(24)
     public void userUpdateEmailFullNameUsernameWithoutFullName() throws Exception {
@@ -437,28 +457,28 @@ public class UserControllerTest {
                 .hasCauseInstanceOf(TransactionSystemException.class);
     }
 
-//    @Test
-//    @Order(25)
-//    public void userUpdateEmailFullNameUsernameForUnexistentUser() throws Exception {
-//        UserData userData = createUserModel();
-//        userData.setFullName("Test Test Test");
-//        userData.setEmail("testemail@gmail.com");
-//        userData.setUsername("IDontKnow");
-//        userData.setPassword("Password3");
-//        String json = generateJson(userData);
-//        mockMvc.perform(put("/users/{id}", 10)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(json))
-//                .andExpect(status().isNotFound());
-//    }
+    @Test
+    @Order(25)
+    public void userUpdateEmailFullNameUsernameForUnexistentUser() throws Exception {
+        UserData userData = createUserModel();
+        userData.setFullName("Test Test Test");
+        userData.setEmail("testemail@gmail.com");
+        userData.setUsername("IDontKnow");
+        userData.setPassword("Password3");
+        String json = generateJson(userData);
+        mockMvc.perform(put("/users/{id}", 10)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     @Order(26)
     public void userUpdateEmailFullNameUsernameWithTakenEmail() throws Exception {
         UserData userData = createUserModel();
         userData.setFullName("Test Data");
-        userData.setEmail("test@test.com");
+        userData.setEmail("test1@test.com");
         userData.setUsername("IDontKnow");
         userData.setPassword("Password3");
         String json = generateJson(userData);
@@ -469,7 +489,82 @@ public class UserControllerTest {
                 .andExpect(status().is(400));
     }
 
+    @Test
+    @Order(27)
+    public void userUpdateEmailFullNameUsernameWithTakenUsername() throws Exception {
+        UserData userData = createUserModel();
+        userData.setFullName("Test Data");
+        userData.setEmail("test142@test.com");
+        userData.setUsername("username2");
+        userData.setPassword("Password3");
+        String json = generateJson(userData);
+        mockMvc.perform(put("/users/{id}", 2)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().is(400));
+    }
 
-    //Update for unexisting user , update for taken username , email
-    //TODO: Fix null pointer exeption if updating Unexistent User
+    @Test
+    @Order(28)
+    public void userUpdateEmailOnly() throws Exception {
+        EmailData emailData = new EmailData();
+        emailData.setEmail("test142@test.com");
+        String json = generateJsonEmail(emailData);
+        mockMvc.perform(put("/users/{id}/resetEmail", 2)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isOk());
+    }
+
+
+    //Check TransactionSystemException
+    @Test
+    @Order(29)
+    public void userUpdateEmailOnlyWithUnsuitableEmail() throws Exception {
+        EmailData emailData = new EmailData();
+        emailData.setEmail("test142@test");
+        String json = generateJsonEmail(emailData);
+        Assertions.assertThatThrownBy(() ->
+                mockMvc.perform(put("/users/{id}/resetEmail", 2)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                        .andExpect(status().is(500)))
+                .hasCauseInstanceOf(TransactionSystemException.class);
+    }
+
+    @Test
+    @Order(30)
+    public void userUpdateEmailOnlyWithTakenEmail() throws Exception {
+        EmailData emailData = new EmailData();
+        emailData.setEmail("test@test.com");
+        String json = generateJsonEmail(emailData);
+        mockMvc.perform(put("/users/{id}/resetEmail", 2)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().is(400));
+    }
+
+
+    //Check TransactionSystemException
+    @Test
+    @Order(31)
+    public void userUpdateEmailOnlyWithEmptyEmail() throws Exception {
+        EmailData emailData = new EmailData();
+        emailData.setEmail("");
+        String json = generateJsonEmail(emailData);
+        Assertions.assertThatThrownBy(() ->
+                mockMvc.perform(put("/users/{id}/resetEmail", 2)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                        .andExpect(status().is(500)))
+                .hasCauseInstanceOf(TransactionSystemException.class);
+    }
+
+
+
 }

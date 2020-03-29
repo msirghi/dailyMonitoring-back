@@ -1,8 +1,7 @@
-1. Add new dto to updateUserPasswordOnly() method (*Done*)
-2. Separate class for constants (public static final ....)  (*Done*?)
-3. Fix @Pattern regex (*Done*)
-4. Tests (check if pwd may be null on create)
-5. When update user , error Not found
+1. Tests (check if pwd may be null on create)
+2.Add aold password to update password function
+3.Check the old password when update password
+4.Check different Expected status of tests where catch TransactionSystemException exception.
 
 
 Useful:
