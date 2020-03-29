@@ -1,10 +1,8 @@
 package com.example.dailyMonitoring.controllers;
 
 import com.example.dailyMonitoring.controllers.api.UserApi;
-import com.example.dailyMonitoring.models.EmailData;
+import com.example.dailyMonitoring.models.*;
 import com.example.dailyMonitoring.models.Error;
-import com.example.dailyMonitoring.models.UserData;
-import com.example.dailyMonitoring.models.UsernameData;
 import com.example.dailyMonitoring.services.UserService;
 import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
@@ -81,8 +79,8 @@ public class UserController implements UserApi {
 
 
   @Override
-  public ResponseEntity<?> userUpdatePasswordOnly(@Min(1) Long userId , @Valid UserData userData) {
-    return this.userService.updateUserPasswordOnly(userId ,userData)
+  public ResponseEntity<?> userUpdatePasswordOnly(@Min(1) Long userId , @Valid PasswordData passwordData) {
+    return this.userService.updateUserPasswordOnly(userId ,passwordData)
             ? ResponseEntity.ok().build()
             : ResponseEntity.notFound().build();
   }

@@ -1,6 +1,7 @@
 package com.example.dailyMonitoring.services.impl;
 
 import com.example.dailyMonitoring.models.EmailData;
+import com.example.dailyMonitoring.models.PasswordData;
 import com.example.dailyMonitoring.models.UserData;
 import com.example.dailyMonitoring.models.UsernameData;
 import com.example.dailyMonitoring.models.entities.UserEntity;
@@ -61,7 +62,6 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserData updateUser(Long userId, UserData userData) {
-
     return userRepository
             .getActiveUser(userId)
             .map(user -> {
@@ -87,11 +87,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean updateUserPasswordOnly(Long userId, UserData userData) {
+  public boolean updateUserPasswordOnly(Long userId, PasswordData passwordData) {
     return userRepository
             .getActiveUser(userId)
             .map(user -> {
-              user.setPassword(userData.getPassword());
+              user.setPassword(passwordData.getPassword());
               userRepository.save(user);
               return true;
             })

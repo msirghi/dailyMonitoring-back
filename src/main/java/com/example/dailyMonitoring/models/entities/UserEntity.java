@@ -1,5 +1,6 @@
 package com.example.dailyMonitoring.models.entities;
 
+import com.example.dailyMonitoring.models.Constants;
 import com.example.dailyMonitoring.models.enums.StatusType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,25 +34,26 @@ public class UserEntity {
 
   @Column(name = "USERNAME")
   @NotNull
-//  @Pattern(regexp = "\"^(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$\"",
-//          message = "Username can contain only alphabetic , numeric , . and _ characters.")
+  @Pattern(regexp = Constants.USERNAME_REGEX,
+           message = Constants.USERNAME_ERROR)
   private String username;
 
   @Column(name = "PASSWORD")
   @NotNull
-  @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
-          message = "Minimum eight characters, at least one letter and one number.")
+  @Pattern(regexp = Constants.PASSWORD_REGEX,
+           message = Constants.PASSWORD_ERROR)
   private String password;
 
   @Column(name = "FULL_NAME")
   @NotNull
-//  @Pattern(regexp = "\"^([a-zA-Z]+|[a-zA-Z]+\\s{1}[a-zA-Z]{1,}|[a-zA-Z]+\\s{1}[a-zA-Z]{3,}\\s{1}[a-zA-Z]{1,})$\"",
-//          message = "Letters only , one space between words , Max : First name , last name , patronymic , Min : First name.")
+  @Pattern(regexp = Constants.FULLNAME_REGEX,
+           message = Constants.FULLNAME_ERROR)
   private String fullName;
 
   @Column(name = "EMAIL")
   @NotNull
-//  @Pattern(regexp = "\".+@.+\\..+\"", message = "Email must be like example@expample.com")
+  @Pattern(regexp = Constants.EMAIL_REGEX,
+           message = Constants.EMAIL_ERROR)
   @Email
   private String email;
 

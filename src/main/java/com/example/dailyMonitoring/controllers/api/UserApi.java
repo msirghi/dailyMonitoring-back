@@ -1,9 +1,7 @@
 package com.example.dailyMonitoring.controllers.api;
 
-import com.example.dailyMonitoring.models.EmailData;
+import com.example.dailyMonitoring.models.*;
 import com.example.dailyMonitoring.models.Error;
-import com.example.dailyMonitoring.models.UserData;
-import com.example.dailyMonitoring.models.UsernameData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -110,7 +108,7 @@ public interface UserApi {
           produces = "application/json;charset=utf-8"
   )
   ResponseEntity<?> userUpdatePasswordOnly(
-          @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId, @RequestBody @Valid UserData userData
+          @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId, @RequestBody @Valid PasswordData passwordData
   );
 
   @ApiOperation(value = "Update User Email Only", nickname = "userUpdateEmailOnly",
