@@ -40,8 +40,8 @@ public class UserEntity {
 
   @Column(name = "PASSWORD")
   @NotNull
-  @Pattern(regexp = Constants.PASSWORD_REGEX,
-           message = Constants.PASSWORD_ERROR)
+//  @Pattern(regexp = Constants.PASSWORD_REGEX,
+//           message = Constants.PASSWORD_ERROR)
   private String password;
 
   @Column(name = "FULL_NAME")
