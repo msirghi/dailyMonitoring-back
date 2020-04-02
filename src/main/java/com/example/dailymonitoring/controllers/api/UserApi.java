@@ -5,6 +5,7 @@ import com.example.dailymonitoring.models.Error;
 import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.UsernameData;
+import com.example.dailymonitoring.models.auth.AuthenticationResponseData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -14,20 +15,21 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-
 @Api
 @Validated
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public interface UserApi {
 
   @ApiOperation(value = "Create User", nickname = "userCreate",
       response = UserData.class, tags = {"Create, User",})
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = UserData.class),
+      @ApiResponse(code = 200, message = "Ok", response = AuthenticationResponseData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),

@@ -73,4 +73,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
   Optional<UserEntity> getActiveUser(
       @Param("id") Long id
   );
+
+  @Query("SELECT usr FROM UserEntity usr "
+      + "WHERE usr.username = :username")
+  Optional<UserEntity> findUserByUsername(
+      @Param("username") String username
+  );
 }
