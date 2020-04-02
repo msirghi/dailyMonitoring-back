@@ -3,6 +3,10 @@ package com.example.dailymonitoring.models;
 import com.example.dailymonitoring.models.enums.StatusType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -34,8 +38,6 @@ public class UserData {
           message = Constants.EMAIL_ERROR)
   private String email;
 
-
-
   @JsonProperty("password")
   @Pattern(regexp = Constants.PASSWORD_REGEX,
           message = Constants.PASSWORD_ERROR)
@@ -49,4 +51,5 @@ public class UserData {
 
   @JsonProperty("status")
   private StatusType status;
+
 }
