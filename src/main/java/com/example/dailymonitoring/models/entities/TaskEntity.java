@@ -1,14 +1,9 @@
 package com.example.dailymonitoring.models.entities;
 
 import com.example.dailymonitoring.models.enums.TaskStatusType;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -56,13 +50,8 @@ public class TaskEntity {
   @Column(name = "CATEGORY_ID")
   private Long categoryId;
 
-  @Column(name = "DELETED")
-  private boolean deleted;
-
-//  @Column(name = "DATES")
-//  @ElementCollection
-//  @JoinTable
-//  private Set<String> dates;
+  @Column(name = "DATE")
+  private LocalDateTime date;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "STATUS")

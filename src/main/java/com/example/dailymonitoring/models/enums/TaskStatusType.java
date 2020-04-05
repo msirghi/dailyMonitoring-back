@@ -5,7 +5,8 @@ import java.util.Arrays;
 public enum TaskStatusType {
   DONE("done"),
   INPROGRESS("inprogress"),
-  UNDONE("undone");
+  UNDONE("undone"),
+  DELETED("deleted");
 
   private String value;
 

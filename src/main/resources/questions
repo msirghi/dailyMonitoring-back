@@ -1,5 +1,0 @@
-1. UserEntity - should we add private List<TaskData> tasks = new ArrayList<>() there?
-2. Check the OneToMany and ManyToOne relations
-3. @JsonProperty("dates")
-   private List<LocalDateTime> dates = new ArrayList<>(); is it correct to user List for dates
-4. What if the task is not repeated , what should we use in that case?
