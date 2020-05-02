@@ -1,8 +1,10 @@
 package com.example.dailymonitoring.models.entities;
 
+import com.example.dailymonitoring.models.TaskData;
 import com.example.dailymonitoring.models.enums.TaskStatusType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -57,7 +59,5 @@ public class TaskEntity {
   @Column(name = "STATUS")
   @NotNull
   private TaskStatusType status;
-
-
 
 }

@@ -6,7 +6,10 @@ import com.example.dailymonitoring.models.Error;
 import com.example.dailymonitoring.models.TaskData;
 import com.example.dailymonitoring.models.entities.UserEntity;
 import com.example.dailymonitoring.services.impl.TaskServiceImpl;
+import io.swagger.annotations.ApiParam;
+import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,16 +27,58 @@ public class TaskController implements TaskApi {
 
 
   @Override
-  public ResponseEntity<?> taskCreate(@Valid TaskData taskData , @Valid UserEntity userId) {
-    TaskData result = this.taskServiceImpl.createTask(taskData , userId);
+  public ResponseEntity<?> taskCreate(@Valid TaskData taskData, @Valid @Min(1) Long userId) {
+    TaskData result = this.taskServiceImpl.createTask(taskData, userId);
     return result.getId() != null
-        ? ResponseEntity.status(HttpStatus.CREATED).body(result)
-        : ResponseEntity.badRequest()
-              .body(Error
-                  .builder()
-                  .code(400)
-                  .message("Failed to created task.")
-                  .description("No such user.")
-                  .build());
+        ? ResponseEntity.ok().build()
+        : ResponseEntity.notFound().build();
+  }
+
+  @Override
+  public ResponseEntity<List<TaskData>> taskGet(@Valid @Min(1) Long userId) {
+   List<TaskData> result = this.taskServiceImpl.getTask(userId);
+   return !result.isEmpty()
+       ? ResponseEntity.ok().body(result)
+       : ResponseEntity.notFound().build();
+  }
+
+  @Override  //Rename getTaskByID
+  public ResponseEntity<?> particularTaskGet(@Valid @Min(1) Long userId,  @Valid @Min(1) Long taskId) {
+    TaskData result = this.taskServiceImpl.getParticularTask(userId, taskId);
+    return result.getId() != null
+        ? ResponseEntity.ok().body(result)
+        : ResponseEntity.notFound().build();
+  }
+
+  @Override
+  public ResponseEntity<?> taskDelete(@Valid @Min(1) Long userId, @Valid @Min(1) Long taskId){
+    boolean result = this.taskServiceImpl.deleteTask(userId, taskId);
+    return result
+        ? ResponseEntity.ok().build()
+        : ResponseEntity.notFound().build();
+  }
+
+  @Override
+  public ResponseEntity<List<TaskData>> doneTasksGet(@Valid @Min(1) Long userId){
+    List<TaskData> result = this.taskServiceImpl.getDoneTasks(userId);
+    return !result.isEmpty()
+        ? ResponseEntity.ok().body(result)
+        : ResponseEntity.notFound().build();
+  }
+
+  @Override
+  public ResponseEntity<List<TaskData>> inProgressTasksGet(@Valid @Min(1) Long userId){
+    List<TaskData> result = this.taskServiceImpl.getInProgressTasks(userId);
+    return !result.isEmpty()
+        ? ResponseEntity.ok().body(result)
+        : ResponseEntity.notFound().build();
+  }
+
+  @Override
+  public ResponseEntity<List<TaskData>> undoneTasksGet(@Valid @Min(1) Long userId){
+    List<TaskData> result = this.taskServiceImpl.getUndoneTasks(userId);
+    return !result.isEmpty()
+        ? ResponseEntity.ok().body(result)
+        : ResponseEntity.notFound().build();
   }
 }
