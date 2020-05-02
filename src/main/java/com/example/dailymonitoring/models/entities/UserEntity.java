@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 
-
 @Entity
 @Table(name = "USERS")
 @Data
