@@ -2,17 +2,10 @@ package com.example.dailymonitoring.models.entities;
 
 import com.example.dailymonitoring.models.Constants;
 import com.example.dailymonitoring.models.enums.StatusType;
-import java.util.Collection;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -20,11 +13,11 @@ import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
-
-
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "USERS")
 @Data
@@ -32,11 +25,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+public class UserEntity extends BaseEntity {
 
   @Column(name = "USERNAME")
   @NotNull
@@ -65,6 +54,5 @@ public class UserEntity {
   @Column(name = "STATUS")
   @NotNull
   private StatusType status;
-
 
 }
