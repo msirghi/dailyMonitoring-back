@@ -1,10 +1,6 @@
 package com.example.dailymonitoring.respositories;
 
-
-import com.example.dailymonitoring.models.TaskData;
-import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.entities.TaskEntity;
-import com.example.dailymonitoring.models.entities.UserEntity;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -38,6 +34,17 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
       + "WHERE tsk.user.id = :userId "
       + "AND tsk.id = :taskId")
   void markAsDeleted(
+      @Param("userId") Long userId,
+      @Param("taskId") Long taskId
+  );
+
+  @Transactional
+  @Modifying
+  @Query("UPDATE TaskEntity tsk "
+      + "SET tsk.status = 'DONE' "
+      + "WHERE tsk.user.id = :userId "
+      + "AND tsk.id = :taskId")
+  int markAsDone(
       @Param("userId") Long userId,
       @Param("taskId") Long taskId
   );

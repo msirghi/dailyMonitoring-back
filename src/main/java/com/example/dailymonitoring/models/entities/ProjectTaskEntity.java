@@ -14,19 +14,20 @@ import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "USER_PROJECT",
+@Table(name = "PROJECT_TASK",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"USER_ID", "PROJECT_ID"})
-    })
+        @UniqueConstraint(columnNames = {"PROJECT_ID", "TASK_ID"})
+    }
+)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProjectEntity extends BaseEntity {
+public class ProjectTaskEntity extends BaseEntity {
 
   @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "USER_ID", nullable = false)
-  UserEntity user;
+  @JoinColumn(name = "TASK_ID", nullable = false)
+  TaskEntity task;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "PROJECT_ID", nullable = false)

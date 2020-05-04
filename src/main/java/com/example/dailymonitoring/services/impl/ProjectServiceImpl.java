@@ -42,6 +42,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     ProjectEntity projectEntity = conversionService.convert(projectData, ProjectEntity.class);
+    projectEntity.setDeleted(false);
     projectData.setId(projectRepository.save(projectEntity).getId());
     userProjectRepository
         .save(UserProjectEntity.builder().user(user).project(projectEntity).build());
@@ -57,6 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     return projectRepository
         .findById(projectId)
+        .filter(project -> !project.getDeleted())
         .map(project -> conversionService.convert(project, ProjectData.class))
         .orElse(ProjectData.builder().build());
   }

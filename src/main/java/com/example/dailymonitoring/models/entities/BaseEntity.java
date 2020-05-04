@@ -10,6 +10,7 @@ import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
@@ -22,6 +23,13 @@ public class BaseEntity {
   private Long id;
 
   @CreatedDate
-  @Column(name = "created_at")
+  @Column(name = "CREATED_AT")
   private Timestamp createdAt;
+
+  @LastModifiedDate
+  @Column(name = "UPDATED_AT")
+  private Timestamp updatedAt;
+
+  @Column(name = "DELETED")
+  private Boolean deleted;
 }

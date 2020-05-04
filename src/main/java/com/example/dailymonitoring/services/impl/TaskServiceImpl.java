@@ -36,8 +36,7 @@ public class TaskServiceImpl implements TaskService {
     }
     UserEntity user = userRepository.getOne(userId);
 
-    for (LocalDateTime data : taskData.getDates()
-    ) {
+    for (LocalDateTime data : taskData.getDates()) {
       TaskEntity taskEntity = conversionService.convert(taskData, TaskEntity.class);
       assert taskEntity != null;
       taskEntity.setUser(user);
