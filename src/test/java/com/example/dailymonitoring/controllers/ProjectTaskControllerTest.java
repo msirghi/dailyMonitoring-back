@@ -55,7 +55,7 @@ public class ProjectTaskControllerTest {
 
   @Test
   @Order(1)
-  public void createProjectTaskForUnexistingUserProject() throws Exception {
+  public void createProjectTaskForNonExistingUserProject() throws Exception {
     String json = generateJson(createTaskData());
 
     mockMvc.perform(post(baseUrl, 1, 2)
@@ -85,7 +85,7 @@ public class ProjectTaskControllerTest {
 
   @Test
   @Order(3)
-  public void createProjectTaskForUnexstingUser() throws Exception {
+  public void createProjectTaskForNonExistingUser() throws Exception {
     String json = generateJson(createTaskData());
 
     mockMvc.perform(post(baseUrl, 99, 1)
@@ -97,7 +97,7 @@ public class ProjectTaskControllerTest {
 
   @Test
   @Order(4)
-  public void createProjectTaskForUnexstingProject() throws Exception {
+  public void createProjectTaskForNonExistingProject() throws Exception {
     String json = generateJson(createTaskData());
 
     mockMvc.perform(post(baseUrl, 1, 99)
@@ -256,5 +256,227 @@ public class ProjectTaskControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(20)
+  public void markProjectTaskAsDoneForNonExistingProject() throws Exception {
+    mockMvc.perform(put(baseUrl + "/{taskId}/complete", 1, 99, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(21)
+  public void markProjectTaskAsDoneForNonExistingUser() throws Exception {
+    mockMvc.perform(put(baseUrl + "/{taskId}/complete", 99, 1, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(22)
+  public void markProjectTaskAsDoneForNonExistingUserAndProject() throws Exception {
+    mockMvc.perform(put(baseUrl + "/{taskId}/complete", 99, 99, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(23)
+  public void markProjectTaskAsDoneForNonExistingRelationUserAndProject() throws Exception {
+    mockMvc.perform(put(baseUrl + "/{taskId}/complete", 2, 1, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(24)
+  public void markProjectTaskAsDoneForNonExistingRelationProjectAndUser() throws Exception {
+    mockMvc.perform(put(baseUrl + "/{taskId}/complete", 1, 2, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(25)
+  public void getLastDoneProjectTasksForNonExistingProjectAndUser() throws Exception {
+    mockMvc.perform(get(baseUrl + "/lastDone", 99, 99)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(26)
+  public void createProjectTaskWithNullName() throws Exception {
+    TaskData taskData = createTaskData();
+    taskData.setName(null);
+    String json = generateJson(taskData);
+
+    mockMvc.perform(post(baseUrl, 1, 2)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(27)
+  public void createProjectTaskWithNullCategory() throws Exception {
+    TaskData taskData = createTaskData();
+    taskData.setCategoryId(null);
+    String json = generateJson(taskData);
+
+    mockMvc.perform(post(baseUrl, 1, 2)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(28)
+  public void markProjectTaskAsDoneForNonExistingUserProject() throws Exception {
+    mockMvc.perform(put(baseUrl + "/{taskId}/complete", 99, 99, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(29)
+  public void updateProjectTask() throws Exception {
+    TaskData taskData = createTaskData();
+    taskData.setName("Updated name");
+    String json = generateJson(taskData);
+
+    mockMvc.perform(put(baseUrl + "/{taskId}", 1, 1, 2)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(jsonPath("$.name").value("Updated name"))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @Order(30)
+  public void getUpdateProjectTask() throws Exception {
+    mockMvc.perform(get(baseUrl + "/{taskId}", 1, 1, 2)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.name").value("Updated name"))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @Order(29)
+  public void updateNonExistingProjectTask() throws Exception {
+    TaskData taskData = createTaskData();
+    taskData.setName("Updated name");
+    String json = generateJson(taskData);
+
+    mockMvc.perform(put(baseUrl + "/{taskId}", 1, 1, 99)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(30)
+  public void updateProjectTaskForNonExistingProject() throws Exception {
+    TaskData taskData = createTaskData();
+    taskData.setName("Updated name");
+    String json = generateJson(taskData);
+
+    mockMvc.perform(put(baseUrl + "/{taskId}", 1, 99, 2)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(31)
+  public void updateProjectTaskForNonExistingUser() throws Exception {
+    TaskData taskData = createTaskData();
+    taskData.setName("Updated name");
+    String json = generateJson(taskData);
+
+    mockMvc.perform(put(baseUrl + "/{taskId}", 99, 1, 2)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(32)
+  public void updateProjectTaskForNonExistingUserProject() throws Exception {
+    TaskData taskData = createTaskData();
+    taskData.setName("Updated name");
+    String json = generateJson(taskData);
+
+    mockMvc.perform(put(baseUrl + "/{taskId}", 99, 99, 2)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(33)
+  public void updateDeletedProjectTask() throws Exception {
+    TaskData taskData = createTaskData();
+    taskData.setName("Updated name");
+    String json = generateJson(taskData);
+
+    mockMvc.perform(put(baseUrl + "/{taskId}", 1, 1, 7)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(34)
+  public void getAllProjectTasksForNonExistingProject() throws Exception {
+    mockMvc.perform(get(baseUrl, 1, 99)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Order(35)
+  public void getAllProjectTasksForNonExistingUser() throws Exception {
+    mockMvc.perform(get(baseUrl, 99, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Order(36)
+  public void getAllProjectTasksForNonExistingUserAndProject() throws Exception {
+    mockMvc.perform(get(baseUrl, 99, 99)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Order(37)
+  public void getAllProjectTasksForNonExistingRelationOfUserAndProject() throws Exception {
+    mockMvc.perform(get(baseUrl, 2, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
   }
 }

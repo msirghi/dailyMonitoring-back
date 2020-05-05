@@ -1,5 +1,6 @@
 package com.example.dailymonitoring.controllers;
 
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -132,7 +133,7 @@ public class ProjectControllerTest {
 
   @Test
   @Order(7)
-  public void createProjectForUnexistingUser() throws Exception {
+  public void createProjectForNonExistingUser() throws Exception {
     ProjectData projectData = createProjectData();
     String json = generateJson(projectData);
 
@@ -162,7 +163,7 @@ public class ProjectControllerTest {
 
   @Test
   @Order(9)
-  public void updateUnexistingProject() throws Exception {
+  public void updateNonExistingProject() throws Exception {
     ProjectData projectData = createProjectData();
     String json = generateJson(projectData);
 
@@ -192,7 +193,7 @@ public class ProjectControllerTest {
 
   @Test
   @Order(11)
-  public void deleteUnexistingProject() throws Exception {
+  public void deleteNonExistingProject() throws Exception {
     mockMvc.perform(delete(baseUrl + "/{projectId}", 1, 99)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
@@ -233,6 +234,17 @@ public class ProjectControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @Order(16)
+  public void getUserProjectsAfterDeleting() throws Exception {
+    mockMvc.perform(get(baseUrl, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$", hasSize(4)))
         .andExpect(status().isOk());
   }
 }

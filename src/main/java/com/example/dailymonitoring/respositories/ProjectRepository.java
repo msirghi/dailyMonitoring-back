@@ -25,7 +25,7 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
       + "WHERE project.deleted = false "
       + "AND project.id = :projectId")
   Optional<ProjectEntity> getActiveProjectById(
-    @Param("projectId") Long id
+      @Param("projectId") Long id
   );
 
 }

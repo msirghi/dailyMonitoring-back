@@ -1,6 +1,5 @@
 package com.example.dailymonitoring.services.impl;
 
-
 import com.example.dailymonitoring.models.TaskData;
 import com.example.dailymonitoring.models.entities.TaskEntity;
 import com.example.dailymonitoring.models.entities.UserEntity;

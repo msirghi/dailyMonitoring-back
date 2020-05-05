@@ -3,6 +3,7 @@ package com.example.dailymonitoring.services;
 import com.example.dailymonitoring.models.ProjectData;
 import com.example.dailymonitoring.models.ProjectTaskData;
 import com.example.dailymonitoring.models.TaskData;
+import com.example.dailymonitoring.models.UserTaskData;
 import java.util.List;
 import javassist.NotFoundException;
 
@@ -20,7 +21,7 @@ public interface ProjectTaskService {
 
   int markProjectTaskAsDone(Long userId, Long projectId, Long taskId);
 
-  List<TaskData> getAllInProgressProjectTasks(Long userId, Long projectId);
+  List<UserTaskData> getAllInProgressProjectTasks(Long userId, Long projectId);
 
   List<TaskData> getLastDoneTasks(Long userId, Long projectId);
 

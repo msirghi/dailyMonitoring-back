@@ -1,6 +1,8 @@
 package com.example.dailymonitoring.services.impl;
 
 import com.example.dailymonitoring.models.TaskData;
+import com.example.dailymonitoring.models.UserData;
+import com.example.dailymonitoring.models.UserTaskData;
 import com.example.dailymonitoring.models.entities.ProjectTaskEntity;
 import com.example.dailymonitoring.models.entities.TaskEntity;
 import com.example.dailymonitoring.models.entities.UserProjectEntity;
@@ -9,7 +11,6 @@ import com.example.dailymonitoring.respositories.ProjectRepository;
 import com.example.dailymonitoring.respositories.ProjectTaskRepository;
 import com.example.dailymonitoring.respositories.TaskRepository;
 import com.example.dailymonitoring.respositories.UserProjectRepository;
-import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.services.ProjectTaskService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,15 +20,11 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProjectTaskServiceImpl implements ProjectTaskService {
-
-  @Autowired
-  private UserRepository userRepository;
 
   @Autowired
   private TaskRepository taskRepository;
@@ -102,9 +99,11 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
             .stream()
             .map(task -> {
               TaskData taskData = conversionService.convert(task.getTask(), TaskData.class);
-              taskData.setDates(new ArrayList<LocalDateTime>() {{
-                add(task.getTask().getDate());
-              }});
+              taskData.setDates(new ArrayList<LocalDateTime>() {
+                {
+                  add(task.getTask().getDate());
+                }
+              });
               return taskData;
             })
             .collect(Collectors.toList()))
@@ -132,8 +131,11 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     if (!userProjectRepository.getProjectByUserIdAndProjectId(userId, projectId).isPresent()) {
       return TaskData.builder().build();
     }
+
     return projectTaskRepository
         .findNotDeletedTaskById(taskId)
+        .filter(
+            projectTaskEntity -> projectTaskEntity.getTask().getStatus() != TaskStatusType.DELETED)
         .map(task -> {
           task.getTask().setName(taskData.getName());
           task.getTask().setDescription(taskData.getDescription());
@@ -151,24 +153,31 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
   }
 
   @Override
-  public List<TaskData> getAllInProgressProjectTasks(Long userId, Long projectId) {
+  public List<UserTaskData> getAllInProgressProjectTasks(Long userId, Long projectId) {
     if (!userProjectRepository.getProjectByUserIdAndProjectId(userId, projectId).isPresent()) {
       return null;
     }
-    return projectTaskRepository
+    List<UserTaskData> list = new ArrayList<>();
+
+    projectTaskRepository
         .getAllInProgressProjectTasks(projectId)
         .map(taskEntities -> taskEntities
             .stream()
             .map(task -> {
               TaskData taskData = conversionService.convert(task.getTask(), TaskData.class);
-              taskData.setDates(new ArrayList<LocalDateTime>() {{
-                add(task.getTask().getDate());
-              }});
+              taskData.setDates(new ArrayList<LocalDateTime>() {
+                {
+                  add(task.getTask().getDate());
+                }
+              });
+              list.add(UserTaskData.builder()
+                  .user(conversionService.convert(task.getTask().getUser(), UserData.class))
+                  .task(taskData)
+                  .build());
               return taskData;
             })
-            .collect(Collectors.toList())
-        )
-        .orElse(new ArrayList<>());
+            .collect(Collectors.toList()));
+    return list;
   }
 
   @Override

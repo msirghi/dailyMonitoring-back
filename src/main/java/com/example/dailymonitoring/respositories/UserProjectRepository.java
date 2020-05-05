@@ -13,7 +13,8 @@ import org.springframework.stereotype.Repository;
 public interface UserProjectRepository extends JpaRepository<UserProjectEntity, Long> {
 
   @Query("SELECT up FROM UserProjectEntity up "
-      + "WHERE up.user.id = :userId")
+      + "WHERE up.user.id = :userId "
+      + "AND up.project.deleted = false")
   List<UserProjectEntity> getProjectsByUser(
       @Param("userId") Long userId
   );
@@ -22,7 +23,7 @@ public interface UserProjectRepository extends JpaRepository<UserProjectEntity, 
       + "WHERE up.user.id = :userId "
       + "AND up.project.id = :projectId")
   Optional<UserProjectEntity> getProjectByUserIdAndProjectId(
-    @Param("userId") Long userId,
-    @Param("projectId") Long projectId
+      @Param("userId") Long userId,
+      @Param("projectId") Long projectId
   );
 }

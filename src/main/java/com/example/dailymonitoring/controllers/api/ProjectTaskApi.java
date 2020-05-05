@@ -4,6 +4,7 @@ import com.example.dailymonitoring.models.Error;
 import com.example.dailymonitoring.models.ProjectData;
 import com.example.dailymonitoring.models.ProjectTaskData;
 import com.example.dailymonitoring.models.TaskData;
+import com.example.dailymonitoring.models.UserTaskData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -164,7 +165,7 @@ public interface ProjectTaskApi {
       consumes = "application/json;charset=utf-8",
       produces = "application/json;charset=utf-8"
   )
-  ResponseEntity<List<TaskData>> getAllInProgressProjectTasks(
+  ResponseEntity<List<UserTaskData>> getAllInProgressProjectTasks(
       @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
       @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId
   );

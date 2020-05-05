@@ -97,7 +97,7 @@ public class UserControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json)))
-        .andExpect(jsonPath("$.id").value(1))
+        .andExpect(jsonPath("$.id").value(IsNull.notNullValue()))
         .andExpect(jsonPath("$.password").value(""));
   }
 
@@ -183,7 +183,7 @@ public class UserControllerTest {
   @Order(7)
   public void userGet() throws Exception {
     UserData userData = createUserModel();
-    getUserDataPattern(mockMvc.perform(get(baseUrl + "/{id}", 1)
+    getUserDataPattern(mockMvc.perform(get(baseUrl + "/{id}", 3)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk()))
@@ -317,7 +317,7 @@ public class UserControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json)))
-        .andExpect(jsonPath("$.id").value(2))
+        .andExpect(jsonPath("$.id").value(IsNull.notNullValue()))
         .andExpect(jsonPath("$.password").value(""));
   }
 
@@ -602,7 +602,7 @@ public class UserControllerTest {
     passwordData.setPassword("ribkaSveta3");
     passwordData.setOldpassword("password1");
     String json = generateJsonPassword(passwordData);
-    mockMvc.perform(put("/users/{id}/resetPwd", 2)
+    mockMvc.perform(put("/users/{id}/resetPwd", 4)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
@@ -658,7 +658,7 @@ public class UserControllerTest {
     passwordData.setPassword("ribkaSveta3");
     passwordData.setOldpassword("ribkaSveta3");
     String json = generateJsonPassword(passwordData);
-    mockMvc.perform(put("/users/{id}/resetPwd", 2)
+    mockMvc.perform(put("/users/{id}/resetPwd", 4)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))

@@ -2,6 +2,7 @@ package com.example.dailymonitoring.controllers;
 
 import com.example.dailymonitoring.controllers.api.ProjectTaskApi;
 import com.example.dailymonitoring.models.TaskData;
+import com.example.dailymonitoring.models.UserTaskData;
 import com.example.dailymonitoring.services.ProjectTaskService;
 import java.util.List;
 import javassist.NotFoundException;
@@ -31,7 +32,6 @@ public class ProjectTaskController implements ProjectTaskApi {
   public ResponseEntity<TaskData> getProjectTaskById(@Min(1) Long userId, @Min(1) Long projectId,
       @Min(1) Long taskId) {
     TaskData result = projectTaskService.getProjectTaskById(userId, projectId, taskId);
-    System.out.println(result);
     return result.getId() != null
         ? ResponseEntity.ok().body(result)
         : ResponseEntity.notFound().build();
@@ -75,9 +75,9 @@ public class ProjectTaskController implements ProjectTaskApi {
   }
 
   @Override
-  public ResponseEntity<List<TaskData>> getAllInProgressProjectTasks(@Min(1) Long userId,
+  public ResponseEntity<List<UserTaskData>> getAllInProgressProjectTasks(@Min(1) Long userId,
       @Min(1) Long projectId) {
-    List<TaskData> list = projectTaskService.getAllInProgressProjectTasks(userId, projectId);
+    List<UserTaskData> list = projectTaskService.getAllInProgressProjectTasks(userId, projectId);
     return list == null
         ? ResponseEntity.badRequest().build()
         : ResponseEntity.ok().body(list);

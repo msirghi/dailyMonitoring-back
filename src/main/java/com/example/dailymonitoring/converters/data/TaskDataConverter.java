@@ -17,6 +17,7 @@ public class TaskDataConverter implements Converter<TaskEntity, TaskData> {
         .description(source.getDescription())
         .categoryId(source.getCategoryId())
         .status(source.getStatus())
+        .updatedAt(source.getUpdatedAt())
         .build();
   }
 }
