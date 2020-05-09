@@ -70,7 +70,6 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
           return taskData;
         })
         .orElse(TaskData.builder().build());
-
   }
 
   @Override

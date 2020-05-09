@@ -1,4 +1,4 @@
-package com.example.dailymonitoring.models;
+package com.example.dailymonitoring.constants;
 
 public class Constants {
 
@@ -16,4 +16,16 @@ public class Constants {
   public static final String FULLNAME_REGEX = "^([a-zA-Z]+|[a-zA-Z]+\\s{1}[a-zA-Z]{1,}|[a-zA-Z]+"
       + "\\s{1}[a-zA-Z]{3,}\\s{1}[a-zA-Z]{1,})$";
   public static final String EMAIL_REGEX = ".+@.+\\..+";
+
+  public static final String USER_EMAIL_NOT_FOUND = "User with such email was not found";
+  public static final String PROJECT_USER_ADD_BODY = "Check daily-monitoring.net for more info!";
+  public static final String PROJECT_USER_SUBJECT = "You were invited to the %s project";
+  public static final String EMAIL_SENT_SUCCESS = "Email sent successfully";
+  public static final String NO_SUCH_PROJECT = "This project does not exist";
+  public static final String PROJECT_USER_DELETED_SUBJECT = "You were deleted from the %s "
+      + "project";
+  public static final String PROJECT_USER_DELETED_BODY = "You were deleted from the %s longer "
+      + "have access.";
+  public static final String PROJECT_USER_ALREADY_EXISTS = "User is already in the project";
+  public static final String PROJECT_NOT_FOUND = "Project not found";
 }

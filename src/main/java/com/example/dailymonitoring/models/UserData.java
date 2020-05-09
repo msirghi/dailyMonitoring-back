@@ -1,12 +1,9 @@
 package com.example.dailymonitoring.models;
 
+import com.example.dailymonitoring.constants.Constants;
 import com.example.dailymonitoring.models.enums.StatusType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.example.dailymonitoring.models.entities;
 
-import com.example.dailymonitoring.models.Constants;
+import com.example.dailymonitoring.constants.Constants;
 import com.example.dailymonitoring.models.enums.StatusType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
