@@ -1,7 +1,9 @@
 package com.example.dailymonitoring.respositories;
 
 import com.example.dailymonitoring.models.entities.UserEntity;
+import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -72,5 +74,19 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
       + "AND usr.status = 'ACTIVE'")
   Optional<UserEntity> getActiveUser(
       @Param("id") Long id
+  );
+
+  @Query(value = "SELECT to_char(created_at, 'YYYY-MM'), count(id) FROM USERS usr "
+      + "WHERE usr.created_at >= :startDate AND usr.created_at <= :endDate "
+      + "GROUP BY TO_CHAR(created_at, 'YYYY-MM') ", nativeQuery = true)
+  List<Map<Object, Object>> getUserStatistics(
+      @Param("startDate") Date startDate,
+      @Param("endDate") Date endDate
+  );
+
+  @Query(value = "SELECT count(id) FROM USERS usr "
+      + "WHERE TO_CHAR(usr.created_at, 'YYYY') = :year", nativeQuery = true)
+  int countUsersByYear(
+      @Param("year") int year
   );
 }

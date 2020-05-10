@@ -185,7 +185,7 @@ public class ProjectUserControllerTest {
   @Test
   @Order(9)
   public void deleteUserFromAnExistingProject() throws Exception {
-    mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 1, 2)
+    mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 1, 6)
         .accept(MediaType.APPLICATION_JSON)
         .header("Origin", "*")
         .header("Content-type", "application/json")

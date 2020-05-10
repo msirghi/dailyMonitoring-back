@@ -1,16 +1,20 @@
-insert into USERS(username, FULL_NAME, PASSWORD, EMAIL, STATUS)
+insert into USERS(username, FULL_NAME, PASSWORD, EMAIL, STATUS, CREATED_AT)
 values
-('user1', 'Full Name', 'password', 'user1@email.com', 'ACTIVE'),
-('user2', 'Full Name2', 'password', 'user2@email.com', 'ACTIVE');
+('user1', 'Full Name', 'password', 'user1@email.com', 'ACTIVE', '2020-04-04 15:07:39.154493'),
+('user1', 'Full Name', 'password', 'user1@email.com', 'ACTIVE', '2020-06-04 15:07:39.154493'),
+('user1', 'Full Name', 'password', 'user1@email.com', 'ACTIVE', '2020-06-04 15:07:39.154493'),
+('user1', 'Full Name', 'password', 'user1@email.com', 'ACTIVE', '2020-07-04 15:07:39.154493'),
+('user1', 'Full Name', 'password', 'user1@email.com', 'ACTIVE', '2020-05-04 15:07:39.154493'),
+('user2', 'Full Name2', 'password', 'user2@email.com', 'ACTIVE', '2020-05-03 15:07:39.154493');
 
-insert into TASKS(USER_ID, NAME, DESCRIPTION, STATUS, UPDATED_AT, DELETED)
+insert into TASKS(USER_ID, NAME, DESCRIPTION, STATUS, CREATED_AT, UPDATED_AT, DELETED)
 values
-(1, 'Task 1', 'Desc 1', 'DONE', '2020-05-04 15:07:39.154493', false),
-(1, 'Task 2', 'Desc 2', 'DONE', '2020-05-04 15:07:39.154493', false),
-(1, 'Task 3', 'Desc 3', 'DONE', '2020-05-04 15:07:39.154493', false),
-(1, 'Task 4', 'Desc 4', 'DONE', '2020-05-04 15:07:39.154493', false),
-(1, 'Task 5', 'Desc 5', 'DONE', '2020-05-04 15:07:39.154493', false),
-(1, 'Task 6', 'Desc 6', 'DONE', '2020-05-04 15:07:39.154493', false);
+(1, 'Task 1', 'Desc 1', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false),
+(1, 'Task 2', 'Desc 2', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false),
+(1, 'Task 3', 'Desc 3', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false),
+(1, 'Task 4', 'Desc 4', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false),
+(1, 'Task 5', 'Desc 5', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false),
+(1, 'Task 6', 'Desc 6', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false);
 
 insert into PROJECTS(NAME, DESCRIPTION, DELETED)
 values

@@ -1,7 +1,9 @@
 package com.example.dailymonitoring.respositories;
 
 import com.example.dailymonitoring.models.entities.TaskEntity;
+import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,5 +49,19 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
   int markAsDone(
       @Param("userId") Long userId,
       @Param("taskId") Long taskId
+  );
+
+  @Query(value = "SELECT to_char(created_at, 'YYYY-MM'), count(id) FROM TASKS tsk "
+      + "WHERE tsk.created_at >= :startDate AND tsk.created_at <= :endDate "
+      + "GROUP BY TO_CHAR(created_at, 'YYYY-MM') ", nativeQuery = true)
+  List<Map<Object, Object>> getTasksStatistics(
+      @Param("startDate") Date startDate,
+      @Param("endDate") Date endDate
+  );
+
+  @Query(value = "SELECT count(id) FROM TASKS tsk "
+      + "WHERE TO_CHAR(tsk.created_at, 'YYYY') = :year", nativeQuery = true)
+  int countTaskByYear(
+      @Param("year") int year
   );
 }

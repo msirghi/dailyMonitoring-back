@@ -41,6 +41,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.2.6.RELEASE'
 //    compile group: 'de.codecentric', name: 'spring-boot-admin-starter-server', version: '2.1.0'
 //    compile group: 'de.codecentric', name: 'spring-boot-admin-server', version: '2.2.2'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
 
 
 }
