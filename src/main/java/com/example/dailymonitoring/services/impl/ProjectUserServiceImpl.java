@@ -68,7 +68,7 @@ public class ProjectUserServiceImpl implements ProjectUserService {
     String emailSubject = String.format(Constants.PROJECT_USER_SUBJECT, project.getName());
     String emailBody = Constants.PROJECT_USER_ADD_BODY;
 
-//    mailService.sendMessage(environment.getProperty("mail.username"), emailSubject, emailBody);
+    mailService.sendMessage(environment.getProperty("mail.username"), emailSubject, emailBody);
     projectUserData.setMessage(Constants.EMAIL_SENT_SUCCESS);
     return projectUserData;
   }
@@ -88,7 +88,7 @@ public class ProjectUserServiceImpl implements ProjectUserService {
             userProjectEntity.getProject().getName());
     String emailBody = String.format(Constants.PROJECT_USER_DELETED_BODY,
         userProjectEntity.getProject().getName());
-//    mailService.sendMessage(environment.getProperty("mail.username"), emailSubject, emailBody);
+    mailService.sendMessage(environment.getProperty("mail.username"), emailSubject, emailBody);
     return 1;
   }
 

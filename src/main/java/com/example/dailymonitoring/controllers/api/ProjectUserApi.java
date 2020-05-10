@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,8 +56,8 @@ public interface ProjectUserApi {
       produces = "application/json;charset=utf-8"
   )
   ResponseEntity<Void> deleteUserFromProject(
-      @ApiParam(required = true) @PathVariable("projectId") Long projectId,
-      @ApiParam(required = true) @PathVariable("userId") Long userId
+      @ApiParam(required = true) @Min(1) @PathVariable("projectId") Long projectId,
+      @ApiParam(required = true) @Min(1) @PathVariable("userId") Long userId
   );
 
   @ApiOperation(value = "Get all project users", nickname = "getAllProjectUsers",
@@ -75,7 +76,7 @@ public interface ProjectUserApi {
       produces = "application/json;charset=utf-8"
   )
   ResponseEntity<List<ProjectUserData>> getAllProjectUsers(
-      @ApiParam(required = true) @PathVariable("userId") Long userId,
-      @ApiParam(required = true) @PathVariable("projectId") Long projectId
+      @ApiParam(required = true) @Min(1) @PathVariable("userId") Long userId,
+      @ApiParam(required = true) @Min(1) @PathVariable("projectId") Long projectId
   );
 }

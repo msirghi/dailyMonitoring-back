@@ -12,6 +12,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import java.util.HashSet;
+import javax.validation.ConstraintViolationException;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -58,7 +61,7 @@ public class ProjectUserControllerTest {
 
     mockMvc.perform(post("/projects/addUser")
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
@@ -70,7 +73,7 @@ public class ProjectUserControllerTest {
   public void getListOfProjectUsers() throws Exception {
     mockMvc.perform(get("/users/1/projects/1/users")
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
@@ -91,7 +94,7 @@ public class ProjectUserControllerTest {
 
     mockMvc.perform(post("/projects/addUser")
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
@@ -107,7 +110,7 @@ public class ProjectUserControllerTest {
 
     mockMvc.perform(post("/projects/addUser")
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
@@ -123,7 +126,7 @@ public class ProjectUserControllerTest {
 
     mockMvc.perform(post("/projects/addUser")
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
@@ -139,7 +142,7 @@ public class ProjectUserControllerTest {
 
     mockMvc.perform(post("/projects/addUser")
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
@@ -155,7 +158,7 @@ public class ProjectUserControllerTest {
 
     mockMvc.perform(post("/projects/addUser")
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
@@ -172,7 +175,7 @@ public class ProjectUserControllerTest {
 
     mockMvc.perform(post("/projects/addUser")
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
@@ -184,7 +187,7 @@ public class ProjectUserControllerTest {
   public void deleteUserFromAnExistingProject() throws Exception {
     mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 1, 2)
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is(204));
@@ -195,7 +198,7 @@ public class ProjectUserControllerTest {
   public void getListOfProjectUsersAfterDeletion() throws Exception {
     mockMvc.perform(get("/users/1/projects/1/users")
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
@@ -210,7 +213,7 @@ public class ProjectUserControllerTest {
   public void deleteAlreadyDeletedUserFromAnExistingProject() throws Exception {
     mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 1, 2)
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
@@ -221,7 +224,7 @@ public class ProjectUserControllerTest {
   public void deleteNonExistingUserFromAnExistingProject() throws Exception {
     mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 1, 99)
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
@@ -232,7 +235,7 @@ public class ProjectUserControllerTest {
   public void deleteNonRelatedUserFromAnExistingProject() throws Exception {
     mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 1, 2)
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
@@ -243,7 +246,7 @@ public class ProjectUserControllerTest {
   public void deleteUserFromNonExistingProject() throws Exception {
     mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 99, 1)
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
@@ -254,7 +257,7 @@ public class ProjectUserControllerTest {
   public void deleteNonExistingUserFromProject() throws Exception {
     mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 1, 99)
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
@@ -265,9 +268,79 @@ public class ProjectUserControllerTest {
   public void deleteNonExistingUserFromNonExistingProject() throws Exception {
     mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 99, 99)
         .accept(MediaType.APPLICATION_JSON)
-        .header("Origin","*")
+        .header("Origin", "*")
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Order(17)
+  public void deleteUserWithNegativeIdFromNonExistingProject() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 2, -1)
+            .accept(MediaType.APPLICATION_JSON)
+            .header("Origin", "*")
+            .header("Content-type", "application/json")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isInternalServerError()))
+        .hasCause(new ConstraintViolationException(
+            "deleteUserFromProject.userId: must be greater than or equal to 1", new HashSet<>()));
+  }
+
+  @Test
+  @Order(18)
+  public void deleteUserFromNonExistingProjectWithNegativeId() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(delete("/projects/{projectId}/users/{userId}", -1, 2)
+            .accept(MediaType.APPLICATION_JSON)
+            .header("Origin", "*")
+            .header("Content-type", "application/json")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isInternalServerError()))
+        .hasCause(new ConstraintViolationException(
+            "deleteUserFromProject.projectId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(19)
+  public void getUserWithNegativeIdFromExistingProject() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(get("/users/{userId}/projects/{projectId}/users", -1, 2)
+            .accept(MediaType.APPLICATION_JSON)
+            .header("Origin", "*")
+            .header("Content-type", "application/json")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isInternalServerError()))
+        .hasCause(new ConstraintViolationException(
+            "getAllProjectUsers.userId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(20)
+  public void getUserFromExistingProjectWithNegativeId() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(get("/users/{userId}/projects/{projectId}/users", 1, -1)
+            .accept(MediaType.APPLICATION_JSON)
+            .header("Origin", "*")
+            .header("Content-type", "application/json")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isInternalServerError()))
+        .hasCause(new ConstraintViolationException(
+            "getAllProjectUsers.projectId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(21)
+  public void createProjectUserWithoutBody() throws Exception {
+    mockMvc.perform(post("/projects/addUser")
+        .accept(MediaType.APPLICATION_JSON)
+        .header("Origin", "*")
+        .header("Content-type", "application/json")
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
   }
 }
