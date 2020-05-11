@@ -7,8 +7,12 @@ import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.UsernameData;
 import com.example.dailymonitoring.services.UserService;
+import com.example.dailymonitoring.models.events.OnRegistrationCompleteEvent;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,15 +20,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController implements UserApi {
 
+  @Autowired
   private UserService userService;
 
-  public UserController(UserService userService) {
-    this.userService = userService;
-  }
+  @Autowired
+  private ApplicationEventPublisher eventPublisher;
 
   @Override
-  public ResponseEntity<?> userCreate(@Valid UserData userData) {
+  public ResponseEntity<?> userCreate(@Valid UserData userData, HttpServletRequest request) {
     UserData result = this.userService.createUser(userData);
+
+    if (result.getId() != null) {
+      eventPublisher.publishEvent(new OnRegistrationCompleteEvent(result,
+          request.getLocale(), request.getContextPath()));
+    }
+
     return result.getId() != null
         ? ResponseEntity.status(HttpStatus.CREATED).body(result)
         : ResponseEntity.badRequest()

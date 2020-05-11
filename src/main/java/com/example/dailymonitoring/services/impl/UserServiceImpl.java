@@ -5,8 +5,10 @@ import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.UsernameData;
 import com.example.dailymonitoring.models.entities.UserEntity;
+import com.example.dailymonitoring.models.entities.VerificationTokenEntity;
 import com.example.dailymonitoring.models.enums.StatusType;
 import com.example.dailymonitoring.respositories.UserRepository;
+import com.example.dailymonitoring.respositories.VerificationTokenRepository;
 import com.example.dailymonitoring.services.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +16,20 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class UserServiceImpl implements UserService {
 
-  private final UserRepository userRepository;
-  private final ConversionService conversionService;
+  @Autowired
+  private UserRepository userRepository;
+
+  @Autowired
+  private ConversionService conversionService;
+
   @Autowired
   private BCryptPasswordEncoder passwordEncoder;
 
-  public UserServiceImpl(UserRepository userRepository,
-      ConversionService conversionService) {
-    this.userRepository = userRepository;
-    this.conversionService = conversionService;
-  }
+  @Autowired
+  private VerificationTokenRepository verificationTokenRepository;
 
   @Override
   public UserData createUser(UserData userData) {
@@ -39,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
     UserEntity userEntity = conversionService.convert(userData, UserEntity.class);
     userEntity.setStatus(StatusType.ACTIVE);
-
+    userEntity.setEnabled(false);
     userData.setId(userRepository.save(userEntity).getId());
     userData.setStatus(userEntity.getStatus());
     userData.setPassword("");
@@ -138,6 +140,14 @@ public class UserServiceImpl implements UserService {
             return true;
           }
         }).orElse(false);
+  }
+
+  @Override
+  public void createVerificationToken(UserData user, String token) {
+    UserEntity userEntity = conversionService.convert(user, UserEntity.class);
+    userEntity.setId(user.getId());
+    VerificationTokenEntity tokenEntity = new VerificationTokenEntity(token, userEntity);
+    verificationTokenRepository.save(tokenEntity);
   }
 }
 

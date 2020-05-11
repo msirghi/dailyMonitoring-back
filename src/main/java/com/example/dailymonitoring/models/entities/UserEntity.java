@@ -55,4 +55,7 @@ public class UserEntity extends BaseEntity {
   @NotNull
   private StatusType status;
 
+  @Column(name = "ENABLED")
+  private boolean enabled;
+
 }

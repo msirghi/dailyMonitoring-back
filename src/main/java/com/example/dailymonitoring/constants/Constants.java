@@ -28,4 +28,8 @@ public class Constants {
       + "have access.";
   public static final String PROJECT_USER_ALREADY_EXISTS = "User is already in the project";
   public static final String PROJECT_NOT_FOUND = "Project not found";
+
+  public static final String TOKEN_INVALID = "Token is invalid";
+  public static final String TOKEN_EXPIRED = "Token is expired";
+  public static final String TOKEN_VALID = "Token is valid";
 }

@@ -22,4 +22,6 @@ public interface UserService {
 
   boolean updateUserUsernameOnly(Long userId, UsernameData usernameData);
 
+  void createVerificationToken(UserData user, String token);
+
 }

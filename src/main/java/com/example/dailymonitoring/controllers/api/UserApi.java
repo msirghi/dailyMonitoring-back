@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,8 @@ public interface UserApi {
       produces = "application/json;charset=utf-8"
   )
   ResponseEntity<?> userCreate(
-      @ApiParam(required = true) @RequestBody @Valid UserData userData
+      @ApiParam(required = true) @RequestBody @Valid UserData userData,
+      HttpServletRequest request
   );
 
   @ApiOperation(value = "Get User", nickname = "userGet",
