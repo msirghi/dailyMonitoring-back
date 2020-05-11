@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
     UserEntity userEntity = conversionService.convert(userData, UserEntity.class);
     userEntity.setStatus(StatusType.ACTIVE);
     userEntity.setEnabled(false);
+    userEntity.setDeleted(false);
     userData.setId(userRepository.save(userEntity).getId());
     userData.setStatus(userEntity.getStatus());
     userData.setPassword("");
@@ -141,14 +142,4 @@ public class UserServiceImpl implements UserService {
           }
         }).orElse(false);
   }
-
-  @Override
-  public void createVerificationToken(UserData user, String token) {
-    UserEntity userEntity = conversionService.convert(user, UserEntity.class);
-    userEntity.setId(user.getId());
-    VerificationTokenEntity tokenEntity = new VerificationTokenEntity(token, userEntity);
-    verificationTokenRepository.save(tokenEntity);
-  }
 }
-
-

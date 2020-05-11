@@ -32,4 +32,6 @@ public class Constants {
   public static final String TOKEN_INVALID = "Token is invalid";
   public static final String TOKEN_EXPIRED = "Token is expired";
   public static final String TOKEN_VALID = "Token is valid";
+
+  public static final String EMAIL_CONFIRMATION_SUBJECT = "Registration Confirmation";
 }
