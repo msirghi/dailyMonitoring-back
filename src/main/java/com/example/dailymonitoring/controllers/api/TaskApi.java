@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Api
+@Api(value = "Tasks")
 @Validated
 public interface TaskApi {
 
   @ApiOperation(value = "Create Task", nickname = "taskCreate",
-      response = TaskData.class, tags = {"Task, Create",})
+      response = TaskData.class, tags = {"Tasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = TaskData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -44,7 +44,7 @@ public interface TaskApi {
   );
 
   @ApiOperation(value = "Get Task", nickname = "taskGet",
-      response = TaskData.class, tags = {"Get, Task",})
+      response = TaskData.class, tags = {"Tasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = TaskData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -62,7 +62,7 @@ public interface TaskApi {
   );
 
   @ApiOperation(value = "Get particular Task", nickname = "particularTaskGet",
-      response = TaskData.class, tags = {"Get, Task , Particular",})
+      response = TaskData.class, tags = {"Tasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = TaskData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -81,7 +81,7 @@ public interface TaskApi {
   );
 
   @ApiOperation(value = "Delete Particular Task", nickname = "particularTaskDelete",
-      response = TaskData.class, tags = {"Delete, Task , Particular",})
+      response = TaskData.class, tags = {"Tasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = TaskData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -101,7 +101,7 @@ public interface TaskApi {
 
 
   @ApiOperation(value = "Get Done Tasks", nickname = "doneTaskGet",
-      response = TaskData.class, tags = {"Done , Get , Tasks",})
+      response = TaskData.class, tags = {"Tasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = TaskData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -119,7 +119,7 @@ public interface TaskApi {
   );
 
   @ApiOperation(value = "Get In Progress Tasks", nickname = "inProgressTaskGet",
-      response = TaskData.class, tags = {"InProgress , Get , Tasks",})
+      response = TaskData.class, tags = {"Tasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = TaskData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -137,7 +137,7 @@ public interface TaskApi {
   );
 
   @ApiOperation(value = "Get Undone Tasks", nickname = "undoneTaskGet",
-      response = TaskData.class, tags = {"Undone , Get , Tasks",})
+      response = TaskData.class, tags = {"Tasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = TaskData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),

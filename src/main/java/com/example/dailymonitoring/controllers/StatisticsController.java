@@ -29,4 +29,12 @@ public class StatisticsController implements StatisticsApi {
         : ResponseEntity.ok(statisticsService.getTasksStatisticsForSelectedYear(
             Math.toIntExact(selectedYear)));
   }
+
+  @Override
+  public ResponseEntity<StatisticsData> getProjectsStatistics(@Min(2020) Long selectedYear) {
+    return selectedYear == null
+        ? ResponseEntity.ok(statisticsService.getProjectsCurrentYearStatistics())
+        : ResponseEntity.ok(statisticsService.getProjectsSelectedYearStatistics(
+            Math.toIntExact(selectedYear)));
+  }
 }

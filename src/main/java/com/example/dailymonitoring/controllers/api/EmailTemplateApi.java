@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Api
+@Api(value = "EmailTemplates")
 @Validated
 public interface EmailTemplateApi {
 
   @ApiOperation(value = "Add email template", nickname = "addTemplate",
-      response = EmailTemplateData.class, tags = {"Template, Email, Add",})
+      response = EmailTemplateData.class, tags = {"EmailTemplates",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = EmailTemplateData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -41,7 +41,7 @@ public interface EmailTemplateApi {
   );
 
   @ApiOperation(value = "Get email template by id", nickname = "getTemplateById",
-      response = EmailTemplateData.class, tags = {"Template, Email, Get",})
+      response = EmailTemplateData.class, tags = {"EmailTemplates",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = EmailTemplateData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -60,7 +60,7 @@ public interface EmailTemplateApi {
   );
 
   @ApiOperation(value = "Get email templates", nickname = "getTemplates",
-      response = EmailTemplateData.class, tags = {"Template, Email, Get",})
+      response = EmailTemplateData.class, tags = {"EmailTemplates",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = EmailTemplateData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -77,7 +77,7 @@ public interface EmailTemplateApi {
   ResponseEntity<List<EmailTemplateData>> getTemplates();
 
   @ApiOperation(value = "Delete email template by id", nickname = "deleteTemplateById",
-      response = EmailTemplateData.class, tags = {"Template, Email, Delete",})
+      response = EmailTemplateData.class, tags = {"EmailTemplates",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = EmailTemplateData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -96,7 +96,7 @@ public interface EmailTemplateApi {
   );
 
   @ApiOperation(value = "Update email template by id", nickname = "updateTemplateById",
-      response = EmailTemplateData.class, tags = {"Template, Email, Update",})
+      response = EmailTemplateData.class, tags = {"EmailTemplates",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = EmailTemplateData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),

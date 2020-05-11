@@ -16,12 +16,12 @@ values
 (1, 'Task 5', 'Desc 5', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false),
 (1, 'Task 6', 'Desc 6', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false);
 
-insert into PROJECTS(NAME, DESCRIPTION, DELETED)
+insert into PROJECTS(NAME, DESCRIPTION, CREATED_AT, DELETED)
 values
-('Project 1', 'Desc', false),
-('Project 2', 'Desc', false),
-('Project 3', 'Desc', false),
-('Project 4', 'Desc', true);
+('Project 1', 'Desc', '2020-02-04 15:07:39.154493', false),
+('Project 2', 'Desc', '2020-05-04 15:07:39.154493', false),
+('Project 3', 'Desc', '2020-06-04 15:07:39.154493', false),
+('Project 4', 'Desc', '2020-05-04 15:07:39.154493', true);
 
 insert into USER_PROJECT(USER_ID, PROJECT_ID)
 values

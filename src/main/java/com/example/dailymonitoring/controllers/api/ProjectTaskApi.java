@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Api
+@Api(value = "ProjectTasks")
 @Validated
 public interface ProjectTaskApi {
 
   @ApiOperation(value = "Create task for project", nickname = "projectTaskCreate",
-      response = ProjectData.class, tags = {"Project, Task, Create",})
+      response = ProjectData.class, tags = {"ProjectTasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -46,7 +46,7 @@ public interface ProjectTaskApi {
   );
 
   @ApiOperation(value = "Create task for project", nickname = "projectGet",
-      response = ProjectData.class, tags = {"Project, Task, Get",})
+      response = ProjectData.class, tags = {"ProjectTasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -67,7 +67,7 @@ public interface ProjectTaskApi {
   );
 
   @ApiOperation(value = "Get projects tasks", nickname = "projectGetTasks",
-      response = ProjectData.class, tags = {"Project, Tasks, Get",})
+      response = ProjectData.class, tags = {"ProjectTasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -87,7 +87,7 @@ public interface ProjectTaskApi {
   );
 
   @ApiOperation(value = "Delete project task", nickname = "deleteProjectTask",
-      response = ProjectData.class, tags = {"Project, Task, Delete",})
+      response = ProjectData.class, tags = {"ProjectTasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -108,7 +108,7 @@ public interface ProjectTaskApi {
   );
 
   @ApiOperation(value = "Update project task", nickname = "UpdateProjectTask",
-      response = ProjectData.class, tags = {"Project, Task, Update",})
+      response = ProjectData.class, tags = {"ProjectTasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -130,7 +130,7 @@ public interface ProjectTaskApi {
   );
 
   @ApiOperation(value = "Complete project task", nickname = "CompleteProjectTask",
-      response = ProjectData.class, tags = {"Project, Task, Complete",})
+      response = ProjectData.class, tags = {"ProjectTasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -151,7 +151,7 @@ public interface ProjectTaskApi {
   );
 
   @ApiOperation(value = "Get all undone tasks", nickname = "GetAllUndoneTasks",
-      response = ProjectData.class, tags = {"Project, Task, Get, Undode",})
+      response = ProjectData.class, tags = {"ProjectTasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -171,7 +171,7 @@ public interface ProjectTaskApi {
   );
 
   @ApiOperation(value = "Get last five done tasks", nickname = "getLastFiveDoneTasks",
-      response = ProjectData.class, tags = {"Project, Task, Get, Undode",})
+      response = ProjectData.class, tags = {"ProjectTasks",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),

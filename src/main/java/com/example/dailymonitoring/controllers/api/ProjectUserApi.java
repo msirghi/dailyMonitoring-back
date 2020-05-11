@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Api
+@Api(value = "ProjectUsers")
 @Validated
 public interface ProjectUserApi {
 
   @ApiOperation(value = "Add user in project", nickname = "addProjectUser",
-      response = ProjectUserData.class, tags = {"Project, User, Add",})
+      response = ProjectUserData.class, tags = {"ProjectUsers",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectUserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -41,7 +41,7 @@ public interface ProjectUserApi {
   );
 
   @ApiOperation(value = "Delete a user from the project", nickname = "deleteProjectUser",
-      response = ProjectUserData.class, tags = {"Project, User, Delete",})
+      response = ProjectUserData.class, tags = {"ProjectUsers",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok"),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -61,7 +61,7 @@ public interface ProjectUserApi {
   );
 
   @ApiOperation(value = "Get all project users", nickname = "getAllProjectUsers",
-      response = ProjectUserData.class, tags = {"Project, User, Get, All",})
+      response = ProjectUserData.class, tags = {"ProjectUsers",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectUserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),

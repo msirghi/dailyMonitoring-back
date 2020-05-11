@@ -19,13 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-
-@Api
+@Api(value = "Users")
 @Validated
 public interface UserApi {
 
   @ApiOperation(value = "Create User", nickname = "userCreate",
-      response = UserData.class, tags = {"Create, User",})
+      response = UserData.class, tags = {"Users",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = UserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -44,7 +43,7 @@ public interface UserApi {
   );
 
   @ApiOperation(value = "Get User", nickname = "userGet",
-      response = UserData.class, tags = {"Get, User",})
+      response = UserData.class, tags = {"Users",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = UserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -62,7 +61,7 @@ public interface UserApi {
   );
 
   @ApiOperation(value = "Delete User", nickname = "userDelete",
-      response = UserData.class, tags = {"Delete, User",})
+      response = UserData.class, tags = {"Users",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = UserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -80,7 +79,7 @@ public interface UserApi {
   );
 
   @ApiOperation(value = "Update User", nickname = "userUpdate",
-      response = UserData.class, tags = {"Update, User",})
+      response = UserData.class, tags = {"Users",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = UserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -99,7 +98,7 @@ public interface UserApi {
   );
 
   @ApiOperation(value = "Update User Password Only", nickname = "userUpdatePasswordOnly",
-      response = UserData.class, tags = {"Update, User,Password",})
+      response = UserData.class, tags = {"Users",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = UserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -118,7 +117,7 @@ public interface UserApi {
   );
 
   @ApiOperation(value = "Update User Email Only", nickname = "userUpdateEmailOnly",
-      response = UserData.class, tags = {"Update, User,Email",})
+      response = UserData.class, tags = {"Users",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = UserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -137,7 +136,7 @@ public interface UserApi {
   );
 
   @ApiOperation(value = "Update User Username Only", nickname = "userUpdateUsernameOnly",
-      response = UserData.class, tags = {"Update, User,Username",})
+      response = UserData.class, tags = {"Users",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = UserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),

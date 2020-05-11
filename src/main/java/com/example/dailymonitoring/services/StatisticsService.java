@@ -11,4 +11,8 @@ public interface StatisticsService {
   StatisticsData getTasksCurrentYearStatistics();
 
   StatisticsData getTasksStatisticsForSelectedYear(int year);
+
+  StatisticsData getProjectsCurrentYearStatistics();
+
+  StatisticsData getProjectsSelectedYearStatistics(int year);
 }

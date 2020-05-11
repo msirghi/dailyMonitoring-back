@@ -29,6 +29,7 @@ dependencies {
 //    implementation 'de.codecentric:spring-boot-admin-starter-client'
 //    implementation 'de.codecentric:spring-boot-admin-starter-server'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compileOnly 'org.projectlombok:lombok'
     compileClasspath 'io.swagger:swagger-annotations:1.5.0'
     runtimeOnly 'com.h2database:h2'

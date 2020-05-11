@@ -130,4 +130,54 @@ class StatisticsControllerTest {
             "getTasksStatistics.selectedYear: must be greater than or equal to 2020",
             new HashSet<>()));
   }
+
+  @Test
+  @Order(7)
+  public void getProjectsStatisticsForYearUnder2020() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(get(baseUrl + "/projects?year={year}", 2018)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)))
+        .hasCause(new ConstraintViolationException(
+            "getProjectsStatistics.selectedYear: must be greater than or equal to 2020",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(8)
+  public void getProjectsStatisticsForNextYear() throws Exception {
+    int nextYear = Calendar.getInstance().get(Calendar.YEAR) + 1;
+    mockMvc.perform(get(baseUrl + "/projects?year={year}", nextYear)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.year").value(nextYear))
+        .andExpect(jsonPath("$.total").value(0))
+        .andExpect(jsonPath("$.progression").value(0.0))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @Order(9)
+  public void getProjectsStatisticsForCurrentYear() throws Exception {
+    mockMvc.perform(get(baseUrl + "/projects")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.year").value(Calendar.getInstance().get(Calendar.YEAR)))
+        .andExpect(jsonPath("$.total").value(6))
+        .andExpect(jsonPath("$.progression").value(0.0))
+        .andExpect(jsonPath("$.perMonth").exists())
+        .andExpect(jsonPath("$.perMonth.january").exists())
+        .andExpect(jsonPath("$.perMonth.february").exists())
+        .andExpect(jsonPath("$.perMonth.march").exists())
+        .andExpect(jsonPath("$.perMonth.april").exists())
+        .andExpect(jsonPath("$.perMonth.may").exists())
+        .andExpect(jsonPath("$.perMonth.june").exists())
+        .andExpect(jsonPath("$.perMonth.july").exists())
+        .andExpect(jsonPath("$.perMonth.august").exists())
+        .andExpect(jsonPath("$.perMonth.september").exists())
+        .andExpect(jsonPath("$.perMonth.october").exists())
+        .andExpect(jsonPath("$.perMonth.november").exists())
+        .andExpect(jsonPath("$.perMonth.december").exists())
+        .andExpect(status().isOk());
+  }
 }

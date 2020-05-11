@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Api
+@Api(value = "Projects")
 @Validated
 public interface ProjectApi {
 
   @ApiOperation(value = "Create project", nickname = "projectCreate",
-      response = ProjectData.class, tags = {"Project, Create",})
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -42,7 +42,7 @@ public interface ProjectApi {
   );
 
   @ApiOperation(value = "Get project", nickname = "getProject",
-      response = ProjectData.class, tags = {"Get, Project",})
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -61,7 +61,7 @@ public interface ProjectApi {
   );
 
   @ApiOperation(value = "Get list of projects", nickname = "getProjectsByUser",
-      response = ProjectData.class, tags = {"Get, User",})
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -79,7 +79,7 @@ public interface ProjectApi {
   );
 
   @ApiOperation(value = "Delete project by id", nickname = "deleteProject",
-      response = ProjectData.class, tags = {"Delete, Project",})
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
@@ -98,7 +98,7 @@ public interface ProjectApi {
   );
 
   @ApiOperation(value = "Update project by id", nickname = "updateProject",
-      response = ProjectData.class, tags = {"Update, Project",})
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
