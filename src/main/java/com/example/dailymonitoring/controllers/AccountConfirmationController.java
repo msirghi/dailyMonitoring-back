@@ -13,8 +13,7 @@ public class AccountConfirmationController implements AccountConfirmationApi {
   private AccountConfirmationService accountConfirmationService;
 
   @Override
-  public void activateAccount(String token,
-      HttpServletResponse httpServletResponse) {
+  public void activateAccount(String token, HttpServletResponse httpServletResponse) {
     String result = accountConfirmationService.confirmRegistration(token);
 
     // TODO: implement redirect logic when FE is ready

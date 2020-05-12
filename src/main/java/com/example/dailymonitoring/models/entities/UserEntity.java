@@ -39,8 +39,8 @@ public class UserEntity extends BaseEntity {
 
   @Column(name = "FULL_NAME")
   @NotNull
-  @Pattern(regexp = Constants.FULLNAME_REGEX,
-           message = Constants.FULLNAME_ERROR)
+//  @Pattern(regexp = Constants.FULLNAME_REGEX,
+//           message = Constants.FULLNAME_ERROR)
   private String fullName;
 
   @Column(name = "EMAIL")
@@ -56,6 +56,6 @@ public class UserEntity extends BaseEntity {
   private StatusType status;
 
   @Column(name = "ENABLED")
-  private boolean enabled;
+  private Boolean enabled;
 
 }

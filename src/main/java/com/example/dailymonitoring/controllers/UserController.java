@@ -29,10 +29,16 @@ public class UserController implements UserApi {
   @Override
   public ResponseEntity<?> userCreate(@Valid UserData userData, HttpServletRequest request) {
     UserData result = this.userService.createUser(userData);
-
+    String error = "";
     if (result.getId() != null) {
       eventPublisher.publishEvent(new OnRegistrationCompleteEvent(result,
           request.getLocale(), request.getContextPath()));
+    }
+
+    if (result.getEmail().equals("taken") && result.getUsername().equals("skip")) {
+      error = "Email is already taken.";
+    } else if (result.getUsername().equals("taken") && result.getEmail().equals("skip")) {
+      error = "Username is already taken.";
     }
 
     return result.getId() != null
@@ -42,7 +48,7 @@ public class UserController implements UserApi {
                 .builder()
                 .code(400)
                 .message("Failed to created user.")
-                .description("Username or email is already taken.")
+                .description(error)
                 .build());
   }
 

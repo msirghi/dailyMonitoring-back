@@ -33,9 +33,10 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserData createUser(UserData userData) {
-    if (userRepository.getUserByUsername(userData.getUsername()).isPresent()
-        || userRepository.getUserByEmail(userData.getEmail()).isPresent()) {
-      return UserData.builder().build();
+    if (userRepository.getUserByUsername(userData.getUsername()).isPresent()) {
+      return UserData.builder().username("taken").email("skip").build();
+    } else if (userRepository.getUserByEmail(userData.getEmail()).isPresent()) {
+      return UserData.builder().email("taken").username("skip").build();
     }
     userData.setPassword(passwordEncoder.encode(userData.getPassword()));
 

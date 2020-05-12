@@ -5,7 +5,6 @@ import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.events.OnRegistrationCompleteEvent;
 import com.example.dailymonitoring.services.AccountConfirmationService;
 import com.example.dailymonitoring.services.MailService;
-import com.example.dailymonitoring.services.UserService;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

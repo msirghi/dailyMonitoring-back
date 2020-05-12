@@ -49,5 +49,4 @@ public class TaskData {
   @JsonProperty("status")
   private TaskStatusType status;
 
-
 }
