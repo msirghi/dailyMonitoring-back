@@ -1,7 +1,7 @@
 plugins {
-    id 'org.springframework.boot' version '2.2.5.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'java'
+	id 'org.springframework.boot' version '2.2.5.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
 }
 
 group = 'com.example'
@@ -9,27 +9,26 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
 }
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 ext {
-    set('springBootAdminVersion', "2.2.1")
+	set('springBootAdminVersion', "2.2.1")
 }
 
 dependencies {
-//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 //    implementation 'de.codecentric:spring-boot-admin-starter-client'
 //    implementation 'de.codecentric:spring-boot-admin-starter-server'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compileOnly 'org.projectlombok:lombok'
     compileClasspath 'io.swagger:swagger-annotations:1.5.0'
     runtimeOnly 'com.h2database:h2'
@@ -37,22 +36,22 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile('org.springframework.boot:spring-boot-starter-security')
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.2.6.RELEASE'
-//    compile group: 'de.codecentric', name: 'spring-boot-admin-starter-server', version: '2.1.0'
-//    compile group: 'de.codecentric', name: 'spring-boot-admin-server', version: '2.2.2'
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-
-
 }
 
 dependencyManagement {
-    imports {
-        mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
-    }
+	imports {
+		mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
+	}
 }
 
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
