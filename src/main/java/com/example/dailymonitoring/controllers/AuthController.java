@@ -48,13 +48,12 @@ public class AuthController implements AuthApi {
     UserDetails userDetails = userDetailsService
         .loadUserByUsername(authenticationRequestData.getUsername());
     final String jwt = jwtUtil.generateToken(userDetails);
-
-    Cookie cookie = new Cookie("tkn", jwt);
+//    Cookie cookie = new Cookie("tkn", jwt);
     // 7 days
-    cookie.setMaxAge(7 * 24 * 60 * 60);
-    cookie.setSecure(true);
-    cookie.setHttpOnly(true);
-    response.addCookie(cookie);
+//    cookie.setMaxAge(7 * 24 * 60 * 60);
+//    cookie.setSecure(true);
+//    cookie.setHttpOnly(true);
+//    response.addCookie(cookie);
 
     return ResponseEntity.ok(new AuthenticationResponseData(jwt));
   }

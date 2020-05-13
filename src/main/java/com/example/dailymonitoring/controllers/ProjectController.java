@@ -1,7 +1,9 @@
 package com.example.dailymonitoring.controllers;
 
+import com.example.dailymonitoring.configs.utils.CustomUserDetails;
 import com.example.dailymonitoring.controllers.api.ProjectApi;
 import com.example.dailymonitoring.models.ProjectData;
+import com.example.dailymonitoring.models.entities.UserEntity;
 import com.example.dailymonitoring.services.ProjectService;
 import java.util.List;
 import javax.validation.Valid;
@@ -9,6 +11,9 @@ import javax.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

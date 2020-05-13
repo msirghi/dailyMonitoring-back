@@ -1,5 +1,6 @@
 package com.example.dailymonitoring.configs.logger;
 
+
 import com.example.dailymonitoring.constants.Constants;
 import java.io.IOException;
 import java.util.Arrays;
@@ -28,34 +29,19 @@ import org.springframework.web.servlet.HandlerMapping;
 
 @Component
 @Aspect
-@Profile("prod")
-public class Logging extends AbstractLogging {
+@Profile("dev")
+public class LoggingDev extends AbstractLogging {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
   private final Environment env;
 
-  public Logging(Environment env) {
+  public LoggingDev(Environment env) {
     this.env = env;
   }
 
   @Pointcut("execution(public * com.example.dailymonitoring.controllers.*.*(..))")
   public void controllerExecutionLogger() {
-  }
-
-  @Around("controllerExecutionLogger()")
-  public Object userIdRequestParamHandler(ProceedingJoinPoint joinPoint) throws Throwable {
-    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-        .currentRequestAttributes()).getRequest();
-    Map<String, String> requestAttributes =
-        (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-    final String userIdAttr = requestAttributes.get("userId");
-
-    if (userIdAttr != null && !Long.valueOf(userIdAttr).equals(Constants.getCurrentUserId())) {
-      return ResponseEntity.status(403).build();
-    }
-
-    return joinPoint.proceed();
   }
 
   @Before("controllerExecutionLogger()")

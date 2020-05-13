@@ -1,5 +1,7 @@
 package com.example.dailymonitoring.services.impl;
 
+import com.example.dailymonitoring.constants.Constants;
+import com.example.dailymonitoring.exceptions.ForbiddenException;
 import com.example.dailymonitoring.models.ProjectData;
 import com.example.dailymonitoring.models.entities.ProjectEntity;
 import com.example.dailymonitoring.models.entities.UserEntity;
@@ -8,7 +10,6 @@ import com.example.dailymonitoring.respositories.ProjectRepository;
 import com.example.dailymonitoring.respositories.UserProjectRepository;
 import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.services.ProjectService;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +35,17 @@ public class ProjectServiceImpl implements ProjectService {
     return userRepository.getActiveUser(userId).orElse(UserEntity.builder().build());
   }
 
+//  private void validateUser(Long userId) {
+//    if (!Constants.getCurrentUserId().equals(userId)) {
+//      throw new ForbiddenException();
+//    }
+//  }
+
   @Override
   public ProjectData projectCreate(ProjectData projectData, Long userId) {
-    UserEntity user = getUserById(userId);
-    if (user.getId() == null) {
-      return ProjectData.builder().build();
-    }
+//    validateUser(userId);
 
+    UserEntity user = getUserById(userId);
     ProjectEntity projectEntity = conversionService.convert(projectData, ProjectEntity.class);
     projectEntity.setDeleted(false);
     projectData.setId(projectRepository.save(projectEntity).getId());
@@ -51,10 +56,7 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public ProjectData getProjectById(Long userId, Long projectId) {
-    UserEntity user = getUserById(userId);
-    if (user.getId() == null) {
-      return ProjectData.builder().build();
-    }
+//    validateUser(userId);
 
     return projectRepository
         .findById(projectId)
@@ -65,10 +67,7 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public List<ProjectData> getProjectsByUser(Long userId) {
-    UserEntity user = getUserById(userId);
-    if (user.getId() == null) {
-      return new ArrayList<>();
-    }
+//    validateUser(userId);
 
     return userProjectRepository
         .getProjectsByUser(userId)
@@ -79,10 +78,7 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public ProjectData projectDelete(Long userId, Long projectId) {
-    UserEntity user = getUserById(userId);
-    if (user.getId() == null) {
-      return ProjectData.builder().build();
-    }
+//    validateUser(userId);
 
     return projectRepository
         .getActiveProjectById(projectId)
@@ -95,10 +91,7 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public ProjectData projectUpdate(Long userId, Long projectId, ProjectData projectData) {
-    UserEntity user = getUserById(userId);
-    if (user.getId() == null) {
-      return ProjectData.builder().build();
-    }
+//    validateUser(userId);
 
     return projectRepository
         .getActiveProjectById(projectId)

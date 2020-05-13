@@ -1,5 +1,6 @@
 package com.example.dailymonitoring.services.impl;
 
+import com.example.dailymonitoring.configs.utils.CustomUserDetails;
 import com.example.dailymonitoring.respositories.UserRepository;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +22,10 @@ public class MyUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    if (username.equalsIgnoreCase("foo")) {
-      return new User("foo",
-          passwordEncoder.encode("foo"),
-          new ArrayList<>());
-    }
-
     return userRepository
-        .findUserByUsername(username)
-        .map(user -> new User(user.getUsername(), user.getPassword(), new ArrayList<>()))
+        .getUserByUsername(username)
+        .map(user -> new CustomUserDetails(user.getEmail(), user.getUsername(), user.getPassword(),
+           true, new ArrayList<>(), user.getId()))
         .orElse(null);
   }
 }

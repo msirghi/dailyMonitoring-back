@@ -1,5 +1,6 @@
 package com.example.dailymonitoring.configs.utils;
 
+import com.example.dailymonitoring.models.entities.UserEntity;
 import com.example.dailymonitoring.respositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -48,13 +49,13 @@ public class JwtUtil {
   }
 
   private String createToken(Map<String, Object> claims, String subject) {
-    final Long id = userRepository.findUserByUsername(subject).get().getId();
+    final UserEntity user = userRepository.findUserByUsername(subject).get();
     return Jwts.builder()
         .setClaims(claims)
         .setSubject(subject)
         .setClaims(new HashMap<String, Object>() {{
-          put("username", subject);
-          put("id", id);
+          put("sub", user.getUsername());
+          put("id", user.getId());
         }})
         .setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))

@@ -1,5 +1,8 @@
 package com.example.dailymonitoring.constants;
 
+import com.example.dailymonitoring.configs.utils.CustomUserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 public class Constants {
 
   public static final String USERNAME_ERROR = "Username can contain only "
@@ -34,4 +37,14 @@ public class Constants {
   public static final String TOKEN_VALID = "Token is valid";
 
   public static final String EMAIL_CONFIRMATION_SUBJECT = "Registration Confirmation";
+
+  public static Long getCurrentUserId() {
+    try {
+      return ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+          .getPrincipal()).getId();
+    } catch (NullPointerException e) {
+      return 0L;
+    }
+  }
+
 }

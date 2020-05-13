@@ -33,8 +33,8 @@ public class UserController implements UserApi {
     UserData result = this.userService.createUser(userData);
     String error = "";
     if (result.getId() != null) {
-      eventPublisher.publishEvent(new OnRegistrationCompleteEvent(result,
-          request.getLocale(), request.getContextPath()));
+//      eventPublisher.publishEvent(new OnRegistrationCompleteEvent(result,
+//          request.getLocale(), request.getContextPath()));
     }
 
     if (result.getEmail().equals("taken") && result.getUsername().equals("skip")) {
