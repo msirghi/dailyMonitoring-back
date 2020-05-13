@@ -18,7 +18,7 @@ public class AccountConfirmationController implements AccountConfirmationApi {
 
     // TODO: implement redirect logic when FE is ready
     System.out.println(result);
-    httpServletResponse.setHeader("Location", "https://www.google.com/");
+    httpServletResponse.setHeader("Location", "http://localhost:4200/login?activated=true");
     httpServletResponse.setStatus(302);
   }
 }

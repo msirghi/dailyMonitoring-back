@@ -13,6 +13,7 @@ import com.example.dailymonitoring.services.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -142,5 +143,10 @@ public class UserServiceImpl implements UserService {
             return true;
           }
         }).orElse(false);
+  }
+
+  @Override
+  public UserEntity getUserByUsername(String username) {
+    return userRepository.getUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(""));
   }
 }
