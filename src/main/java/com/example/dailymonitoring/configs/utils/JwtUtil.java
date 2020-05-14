@@ -6,6 +6,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,8 @@ public class JwtUtil {
   @Autowired
   private UserRepository userRepository;
 
-  private String SECRET_KEY = "secret";
+  @Value("app.secretKey")
+  private String SECRET_KEY;
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);

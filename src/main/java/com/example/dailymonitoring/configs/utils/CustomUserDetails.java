@@ -39,27 +39,6 @@ public class CustomUserDetails implements UserDetails {
     this.authorities = authorities;
   }
 
-  public CustomUserDetails(String email, String displayName, String password, String username,
-      Boolean enabled, Boolean accountNonExpired, Boolean accountNonLocked,
-      boolean credentialsNonExpired, Collection<? extends GrantedAuthority> authorities) {
-    this.authorities = authorities;
-    this.email = email;
-    this.password = password;
-    this.username = username;
-    this.enabled = enabled;
-    this.accountNonExpired = accountNonExpired;
-    this.accountNonLocked = accountNonLocked;
-    this.credentialsNonExpired = credentialsNonExpired;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return authorities;

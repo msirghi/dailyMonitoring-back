@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -33,8 +31,8 @@ public class UserController implements UserApi {
     UserData result = this.userService.createUser(userData);
     String error = "";
     if (result.getId() != null) {
-//      eventPublisher.publishEvent(new OnRegistrationCompleteEvent(result,
-//          request.getLocale(), request.getContextPath()));
+      eventPublisher.publishEvent(new OnRegistrationCompleteEvent(result,
+          request.getLocale(), request.getContextPath()));
     }
 
     if (result.getEmail().equals("taken") && result.getUsername().equals("skip")) {
