@@ -6,18 +6,22 @@ import com.example.dailymonitoring.respositories.EmailTemplateRepository;
 import com.example.dailymonitoring.services.EmailTemplateService;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailTemplateServiceImpl implements EmailTemplateService {
 
-  @Autowired
-  private ConversionService conversionService;
+  private final ConversionService conversionService;
 
-  @Autowired
-  private EmailTemplateRepository emailTemplateRepository;
+  private final EmailTemplateRepository emailTemplateRepository;
+
+  public EmailTemplateServiceImpl(
+      ConversionService conversionService,
+      EmailTemplateRepository emailTemplateRepository) {
+    this.conversionService = conversionService;
+    this.emailTemplateRepository = emailTemplateRepository;
+  }
 
   @Override
   public EmailTemplateData createTemplate(EmailTemplateData emailTemplateData) {

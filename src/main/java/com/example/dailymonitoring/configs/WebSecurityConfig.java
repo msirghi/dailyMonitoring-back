@@ -2,7 +2,6 @@ package com.example.dailymonitoring.configs;
 
 import com.example.dailymonitoring.configs.filters.JwtRequestFilter;
 import com.example.dailymonitoring.services.impl.MyUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
@@ -19,6 +18,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Profile("prod")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+  private final MyUserDetailsService myUserDetailsService;
+
+  private final JwtRequestFilter jwtRequestFilter;
+
+  public WebSecurityConfig(
+      MyUserDetailsService myUserDetailsService,
+      JwtRequestFilter jwtRequestFilter) {
+    this.myUserDetailsService = myUserDetailsService;
+    this.jwtRequestFilter = jwtRequestFilter;
+  }
+
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
@@ -30,11 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return super.authenticationManagerBean();
   }
 
-  @Autowired
-  private MyUserDetailsService myUserDetailsService;
-
-  @Autowired
-  private JwtRequestFilter jwtRequestFilter;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {

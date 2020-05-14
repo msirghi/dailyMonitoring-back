@@ -5,7 +5,6 @@ import com.example.dailymonitoring.respositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,11 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
 
-  @Autowired
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
+
+  public JwtUtil(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   @Value("app.secretKey")
   private String SECRET_KEY;

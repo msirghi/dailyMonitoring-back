@@ -1,7 +1,5 @@
 package com.example.dailymonitoring.services.impl;
 
-import com.example.dailymonitoring.constants.Constants;
-import com.example.dailymonitoring.exceptions.ForbiddenException;
 import com.example.dailymonitoring.models.ProjectData;
 import com.example.dailymonitoring.models.entities.ProjectEntity;
 import com.example.dailymonitoring.models.entities.UserEntity;
@@ -12,24 +10,29 @@ import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.services.ProjectService;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
-  @Autowired
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
 
-  @Autowired
-  private ProjectRepository projectRepository;
+  private final ProjectRepository projectRepository;
 
-  @Autowired
-  private UserProjectRepository userProjectRepository;
+  private final UserProjectRepository userProjectRepository;
 
-  @Autowired
-  private ConversionService conversionService;
+  private final ConversionService conversionService;
+
+  public ProjectServiceImpl(UserRepository userRepository,
+      ProjectRepository projectRepository,
+      UserProjectRepository userProjectRepository,
+      ConversionService conversionService) {
+    this.userRepository = userRepository;
+    this.projectRepository = projectRepository;
+    this.userProjectRepository = userProjectRepository;
+    this.conversionService = conversionService;
+  }
 
   private UserEntity getUserById(Long userId) {
     return userRepository.getActiveUser(userId).orElse(UserEntity.builder().build());

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javassist.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -22,23 +21,30 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectUserServiceImpl implements ProjectUserService {
 
-  @Autowired
-  private UserProjectRepository userProjectRepository;
+  private final UserProjectRepository userProjectRepository;
 
-  @Autowired
-  private ProjectRepository projectRepository;
+  private final ProjectRepository projectRepository;
 
-  @Autowired
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
 
-  @Autowired
-  private MailService mailService;
+  private final MailService mailService;
 
-  @Autowired
-  private Environment environment;
+  private final Environment environment;
 
-  @Autowired
-  private ConversionService conversionService;
+  private final ConversionService conversionService;
+
+  public ProjectUserServiceImpl(
+      UserProjectRepository userProjectRepository,
+      ProjectRepository projectRepository,
+      UserRepository userRepository, MailService mailService,
+      Environment environment, ConversionService conversionService) {
+    this.userProjectRepository = userProjectRepository;
+    this.projectRepository = projectRepository;
+    this.userRepository = userRepository;
+    this.mailService = mailService;
+    this.environment = environment;
+    this.conversionService = conversionService;
+  }
 
   @Override
   public ProjectUserData addProjectUser(ProjectUserData projectUserData) {

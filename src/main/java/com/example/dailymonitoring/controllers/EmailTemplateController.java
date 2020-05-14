@@ -6,7 +6,6 @@ import com.example.dailymonitoring.services.EmailTemplateService;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EmailTemplateController implements EmailTemplateApi {
 
-  @Autowired
-  private EmailTemplateService emailTemplateService;
+  private final EmailTemplateService emailTemplateService;
+
+  public EmailTemplateController(
+      EmailTemplateService emailTemplateService) {
+    this.emailTemplateService = emailTemplateService;
+  }
 
   @Override
   public ResponseEntity<EmailTemplateData> addTemplate(@Valid EmailTemplateData emailTemplateData) {

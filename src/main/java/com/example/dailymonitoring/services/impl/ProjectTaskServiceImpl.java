@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javassist.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -26,20 +25,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectTaskServiceImpl implements ProjectTaskService {
 
-  @Autowired
-  private TaskRepository taskRepository;
+  private final TaskRepository taskRepository;
 
-  @Autowired
-  private ConversionService conversionService;
+  private final ConversionService conversionService;
 
-  @Autowired
-  private ProjectTaskRepository projectTaskRepository;
+  private final ProjectTaskRepository projectTaskRepository;
 
-  @Autowired
-  private UserProjectRepository userProjectRepository;
+  private final UserProjectRepository userProjectRepository;
 
-  @Autowired
-  private ProjectRepository projectRepository;
+  private final ProjectRepository projectRepository;
+
+  public ProjectTaskServiceImpl(
+      TaskRepository taskRepository,
+      ConversionService conversionService,
+      ProjectTaskRepository projectTaskRepository,
+      UserProjectRepository userProjectRepository,
+      ProjectRepository projectRepository) {
+    this.taskRepository = taskRepository;
+    this.conversionService = conversionService;
+    this.projectTaskRepository = projectTaskRepository;
+    this.userProjectRepository = userProjectRepository;
+    this.projectRepository = projectRepository;
+  }
 
   @Override
   public TaskData projectTaskCreate(TaskData taskData, Long userId, Long projectId) {

@@ -5,13 +5,10 @@ import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.UsernameData;
 import com.example.dailymonitoring.models.entities.UserEntity;
-import com.example.dailymonitoring.models.entities.VerificationTokenEntity;
 import com.example.dailymonitoring.models.enums.StatusType;
 import com.example.dailymonitoring.respositories.UserRepository;
-import com.example.dailymonitoring.respositories.VerificationTokenRepository;
 import com.example.dailymonitoring.services.UserService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,17 +17,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-  @Autowired
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
 
-  @Autowired
-  private ConversionService conversionService;
+  private final ConversionService conversionService;
 
-  @Autowired
-  private BCryptPasswordEncoder passwordEncoder;
+  private final BCryptPasswordEncoder passwordEncoder;
 
-  @Autowired
-  private VerificationTokenRepository verificationTokenRepository;
+  public UserServiceImpl(UserRepository userRepository,
+      ConversionService conversionService,
+      BCryptPasswordEncoder passwordEncoder) {
+    this.userRepository = userRepository;
+    this.conversionService = conversionService;
+    this.passwordEncoder = passwordEncoder;
+  }
 
   @Override
   public UserData createUser(UserData userData) {
@@ -147,6 +146,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserEntity getUserByUsername(String username) {
-    return userRepository.getUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(""));
+    return userRepository.getUserByUsername(username)
+        .orElseThrow(() -> new UsernameNotFoundException(""));
   }
 }

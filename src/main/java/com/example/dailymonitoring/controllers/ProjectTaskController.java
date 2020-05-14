@@ -8,7 +8,6 @@ import java.util.List;
 import javassist.NotFoundException;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProjectTaskController implements ProjectTaskApi {
 
-  @Autowired
-  private ProjectTaskService projectTaskService;
+  private final ProjectTaskService projectTaskService;
+
+  public ProjectTaskController(
+      ProjectTaskService projectTaskService) {
+    this.projectTaskService = projectTaskService;
+  }
 
   @Override
   public ResponseEntity<TaskData> projectTaskCreate(@Valid TaskData projectData,

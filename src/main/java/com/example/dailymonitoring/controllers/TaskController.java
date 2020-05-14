@@ -17,8 +17,7 @@ public class TaskController implements TaskApi {
   public TaskController(TaskServiceImpl taskServiceImpl) {
     this.taskServiceImpl = taskServiceImpl;
   }
-
-
+  
   @Override
   public ResponseEntity<?> taskCreate(@Valid TaskData taskData, @Valid @Min(1) Long userId) {
     TaskData result = this.taskServiceImpl.createTask(taskData, userId);

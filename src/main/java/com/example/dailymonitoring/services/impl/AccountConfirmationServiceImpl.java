@@ -8,21 +8,26 @@ import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.respositories.VerificationTokenRepository;
 import com.example.dailymonitoring.services.AccountConfirmationService;
 import java.util.Calendar;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccountConfirmationServiceImpl implements AccountConfirmationService {
 
-  @Autowired
-  private VerificationTokenRepository verificationTokenRepository;
+  private final VerificationTokenRepository verificationTokenRepository;
 
-  @Autowired
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
 
-  @Autowired
-  private ConversionService conversionService;
+  private final ConversionService conversionService;
+
+  public AccountConfirmationServiceImpl(
+      VerificationTokenRepository verificationTokenRepository,
+      UserRepository userRepository,
+      ConversionService conversionService) {
+    this.verificationTokenRepository = verificationTokenRepository;
+    this.userRepository = userRepository;
+    this.conversionService = conversionService;
+  }
 
   @Override
   public String confirmRegistration(String token) {

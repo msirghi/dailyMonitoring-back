@@ -3,14 +3,17 @@ package com.example.dailymonitoring.controllers;
 import com.example.dailymonitoring.controllers.api.AccountConfirmationApi;
 import com.example.dailymonitoring.services.AccountConfirmationService;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AccountConfirmationController implements AccountConfirmationApi {
 
-  @Autowired
-  private AccountConfirmationService accountConfirmationService;
+  private final AccountConfirmationService accountConfirmationService;
+
+  public AccountConfirmationController(
+      AccountConfirmationService accountConfirmationService) {
+    this.accountConfirmationService = accountConfirmationService;
+  }
 
   @Override
   public void activateAccount(String token, HttpServletResponse httpServletResponse) {

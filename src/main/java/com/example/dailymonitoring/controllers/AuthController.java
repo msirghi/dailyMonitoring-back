@@ -4,9 +4,7 @@ import com.example.dailymonitoring.configs.utils.JwtUtil;
 import com.example.dailymonitoring.controllers.api.AuthApi;
 import com.example.dailymonitoring.models.auth.AuthenticationRequestData;
 import com.example.dailymonitoring.models.auth.AuthenticationResponseData;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,14 +17,20 @@ import com.example.dailymonitoring.models.Error;
 @RestController
 public class AuthController implements AuthApi {
 
-  @Autowired
-  private AuthenticationManager authenticationManager;
+  private final AuthenticationManager authenticationManager;
 
-  @Autowired
-  private UserDetailsService userDetailsService;
+  private final UserDetailsService userDetailsService;
 
-  @Autowired
-  private JwtUtil jwtUtil;
+  private final JwtUtil jwtUtil;
+
+  public AuthController(
+      AuthenticationManager authenticationManager,
+      UserDetailsService userDetailsService,
+      JwtUtil jwtUtil) {
+    this.authenticationManager = authenticationManager;
+    this.userDetailsService = userDetailsService;
+    this.jwtUtil = jwtUtil;
+  }
 
   @Override
   public ResponseEntity<?> authenticate(AuthenticationRequestData authenticationRequestData,

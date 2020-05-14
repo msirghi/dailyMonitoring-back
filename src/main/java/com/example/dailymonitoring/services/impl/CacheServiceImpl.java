@@ -2,7 +2,6 @@ package com.example.dailymonitoring.services.impl;
 
 import com.example.dailymonitoring.services.CacheService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -11,8 +10,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class CacheServiceImpl implements CacheService {
 
-  @Autowired
-  private CacheManager cacheManager;
+  private final CacheManager cacheManager;
+
+  public CacheServiceImpl(CacheManager cacheManager) {
+    this.cacheManager = cacheManager;
+  }
 
   // every day at 6am
   @Scheduled(cron = "0 0 6 * * *")

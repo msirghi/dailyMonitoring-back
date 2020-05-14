@@ -2,7 +2,6 @@ package com.example.dailymonitoring.configs.filters;
 
 import com.example.dailymonitoring.configs.utils.JwtUtil;
 import com.example.dailymonitoring.services.impl.MyUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,11 +18,16 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-  @Autowired
-  private MyUserDetailsService userDetailsService;
+  private final MyUserDetailsService userDetailsService;
 
-  @Autowired
-  private JwtUtil jwtUtil;
+  private final JwtUtil jwtUtil;
+
+  public JwtRequestFilter(
+      MyUserDetailsService userDetailsService,
+      JwtUtil jwtUtil) {
+    this.userDetailsService = userDetailsService;
+    this.jwtUtil = jwtUtil;
+  }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,

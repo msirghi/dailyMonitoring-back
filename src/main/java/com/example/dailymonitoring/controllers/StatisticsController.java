@@ -4,15 +4,18 @@ import com.example.dailymonitoring.controllers.api.StatisticsApi;
 import com.example.dailymonitoring.models.statistics.StatisticsData;
 import com.example.dailymonitoring.services.StatisticsService;
 import javax.validation.constraints.Min;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class StatisticsController implements StatisticsApi {
 
-  @Autowired
-  private StatisticsService statisticsService;
+  private final StatisticsService statisticsService;
+
+  public StatisticsController(
+      StatisticsService statisticsService) {
+    this.statisticsService = statisticsService;
+  }
 
   @Override
   public ResponseEntity<StatisticsData> getUsersStatistics(@Min(2020) Long selectedYear) {

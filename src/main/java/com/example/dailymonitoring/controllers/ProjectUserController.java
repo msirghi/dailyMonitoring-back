@@ -7,7 +7,6 @@ import com.example.dailymonitoring.services.ProjectUserService;
 import java.util.List;
 import javassist.NotFoundException;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProjectUserController implements ProjectUserApi {
 
-  @Autowired
-  private ProjectUserService projectUserService;
+  private final ProjectUserService projectUserService;
+
+  public ProjectUserController(
+      ProjectUserService projectUserService) {
+    this.projectUserService = projectUserService;
+  }
 
   @Override
   public ResponseEntity<ProjectUserData> addProjectUser(@Valid ProjectUserData projectUserData) {

@@ -11,7 +11,6 @@ import com.example.dailymonitoring.models.events.OnRegistrationCompleteEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController implements UserApi {
 
-  @Autowired
-  private UserService userService;
+  private final UserService userService;
 
-  @Autowired
-  private ApplicationEventPublisher eventPublisher;
+  private final ApplicationEventPublisher eventPublisher;
+
+  public UserController(UserService userService,
+      ApplicationEventPublisher eventPublisher) {
+    this.userService = userService;
+    this.eventPublisher = eventPublisher;
+  }
 
   @Override
   public ResponseEntity<?> userCreate(@Valid UserData userData, HttpServletRequest request) {

@@ -12,7 +12,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +20,20 @@ public class StatisticsServiceImpl implements StatisticsService {
 
   private List<Long> monthValues = new ArrayList<>();
 
-  @Autowired
   private UserRepository userRepository;
 
-  @Autowired
   private TaskRepository taskRepository;
 
-  @Autowired
   private ProjectRepository projectRepository;
+
+  public StatisticsServiceImpl(
+      UserRepository userRepository,
+      TaskRepository taskRepository,
+      ProjectRepository projectRepository) {
+    this.userRepository = userRepository;
+    this.taskRepository = taskRepository;
+    this.projectRepository = projectRepository;
+  }
 
   @Override
   @Cacheable("usersStatisticsForCurrentYear")

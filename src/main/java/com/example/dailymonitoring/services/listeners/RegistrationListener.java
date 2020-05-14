@@ -6,18 +6,22 @@ import com.example.dailymonitoring.models.events.OnRegistrationCompleteEvent;
 import com.example.dailymonitoring.services.AccountConfirmationService;
 import com.example.dailymonitoring.services.MailService;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
 
-  @Autowired
-  private AccountConfirmationService accountConfirmationService;
+  private final AccountConfirmationService accountConfirmationService;
 
-  @Autowired
-  private MailService mailService;
+  private final MailService mailService;
+
+  public RegistrationListener(
+      AccountConfirmationService accountConfirmationService,
+      MailService mailService) {
+    this.accountConfirmationService = accountConfirmationService;
+    this.mailService = mailService;
+  }
 
   @Override
   public void onApplicationEvent(OnRegistrationCompleteEvent event) {
