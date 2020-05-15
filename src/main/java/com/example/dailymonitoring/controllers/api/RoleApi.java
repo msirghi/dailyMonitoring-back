@@ -7,12 +7,13 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.validation.Valid;
 
 @Api("ROLE")
 @Validated
@@ -28,12 +29,12 @@ public interface RoleApi {
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
       @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
-      value = "users/{id}/grantRole",
+      value = "roles/grantUser",
       method = RequestMethod.POST,
       consumes = "application/json;charset=utf-8",
       produces = "application/json;charset=utf-8"
   )
-  ResponseEntity<RoleData> addProjectUser(
+  ResponseEntity<RoleData> changeUserRole(
       @ApiParam(required = true) @RequestBody @Valid RoleData roleData
   );
 

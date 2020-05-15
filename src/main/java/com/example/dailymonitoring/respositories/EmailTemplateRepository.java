@@ -1,8 +1,10 @@
 package com.example.dailymonitoring.respositories;
 
 import com.example.dailymonitoring.models.entities.EmailTemplateEntity;
+
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

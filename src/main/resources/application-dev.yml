@@ -19,6 +19,7 @@ mail:
 management:
   security:
     enabled: false
+
 security:
   basic:
     enabled: false

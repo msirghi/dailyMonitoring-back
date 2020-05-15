@@ -1,9 +1,11 @@
 package com.example.dailymonitoring.configs.utils;
 
-import java.util.Collection;
+import com.example.dailymonitoring.models.entities.RoleEntity;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 
 @ToString
 public class CustomUserDetails implements UserDetails {
@@ -26,9 +28,12 @@ public class CustomUserDetails implements UserDetails {
 
   private boolean credentialsNonExpired;
 
+  private RoleEntity role;
+
   public CustomUserDetails(String email, String username, String password, Boolean enabled,
-      Collection<? extends GrantedAuthority> authorities, Long id) {
+                           Collection<? extends GrantedAuthority> authorities, Long id, RoleEntity role) {
     this.email = email;
+    this.role = role;
     this.id = id;
     this.enabled = enabled;
     this.username = username;

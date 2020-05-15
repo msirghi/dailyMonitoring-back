@@ -2,7 +2,6 @@ package com.example.dailymonitoring.controllers.api;
 
 import com.example.dailymonitoring.models.Error;
 import com.example.dailymonitoring.models.ProjectData;
-import com.example.dailymonitoring.models.ProjectTaskData;
 import com.example.dailymonitoring.models.TaskData;
 import com.example.dailymonitoring.models.UserTaskData;
 import io.swagger.annotations.Api;

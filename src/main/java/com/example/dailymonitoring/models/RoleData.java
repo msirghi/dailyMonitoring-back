@@ -1,11 +1,12 @@
 package com.example.dailymonitoring.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -13,10 +14,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RoleData {
 
-  @JsonProperty("id")
-  private Long id;
-
   @JsonProperty("name")
   @NotNull
   private String name;
+
+  @JsonProperty("userId")
+  @NotNull
+  private Long userId;
+
 }
