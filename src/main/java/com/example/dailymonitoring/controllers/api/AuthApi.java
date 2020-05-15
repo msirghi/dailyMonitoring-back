@@ -19,8 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 public interface AuthApi {
 
-  @ApiOperation(value = "Create User", nickname = "userCreate",
-      response = UserData.class, tags = {"Create, User",})
+  @ApiOperation(value = "Authenticate User", nickname = "userAuthenticate",
+      response = UserData.class, tags = {"Authenticate, User",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = UserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),

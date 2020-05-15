@@ -32,4 +32,8 @@ public class ProjectTaskEntity extends BaseEntity {
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "PROJECT_ID", nullable = false)
   ProjectEntity project;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "USER_ID")
+  UserEntity tasksDoneBy;
 }

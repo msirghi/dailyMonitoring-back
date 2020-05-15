@@ -7,9 +7,10 @@ import com.example.dailymonitoring.models.entities.VerificationTokenEntity;
 import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.respositories.VerificationTokenRepository;
 import com.example.dailymonitoring.services.AccountConfirmationService;
-import java.util.Calendar;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+
+import java.util.Calendar;
 
 @Service
 public class AccountConfirmationServiceImpl implements AccountConfirmationService {

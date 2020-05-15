@@ -44,10 +44,8 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
   @Modifying
   @Query("UPDATE TaskEntity tsk "
       + "SET tsk.status = 'DONE' "
-      + "WHERE tsk.user.id = :userId "
-      + "AND tsk.id = :taskId")
-  int markAsDone(
-      @Param("userId") Long userId,
+      + "WHERE tsk.id = :taskId")
+  void markAsDone(
       @Param("taskId") Long taskId
   );
 

@@ -1,15 +1,17 @@
 package com.example.dailymonitoring.respositories;
 
 import com.example.dailymonitoring.models.entities.ProjectTaskEntity;
-import java.util.List;
-import java.util.Optional;
-import javax.transaction.Transactional;
+import com.example.dailymonitoring.models.entities.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProjectTaskRepository extends JpaRepository<ProjectTaskEntity, Long> {
@@ -38,15 +40,33 @@ public interface ProjectTaskRepository extends JpaRepository<ProjectTaskEntity, 
   );
 
   @Query("SELECT pte FROM ProjectTaskEntity pte "
-      + "WHERE pte.task.status = 'INPROGRESS' AND pte.project.id = :projectId")
+      + "WHERE pte.task.status = 'INPROGRESS' "
+      + "AND pte.project.id = :projectId")
   Optional<List<ProjectTaskEntity>> getAllInProgressProjectTasks(
       @Param("projectId") Long projectId
   );
 
   @Query("SELECT pte FROM ProjectTaskEntity pte "
-      + "WHERE pte.task.status = 'DONE' AND pte.project.id = :projectId "
+      + "WHERE pte.task.status = 'DONE'"
+      + " AND pte.project.id = :projectId "
       + "ORDER BY pte.task.updatedAt desc")
   Optional<List<ProjectTaskEntity>> getLastDoneTasks(
       @Param("projectId") Long projectId, Pageable pageable
+  );
+
+  @Query("SELECT pte FROM ProjectTaskEntity pte "
+      + "WHERE pte.project.id = :projectId AND pte.task.status = 'DONE'")
+  Optional<List<ProjectTaskEntity>> getAllTasksByProjectId(
+      @Param("projectId") Long projectId
+  );
+
+  @Transactional
+  @Modifying
+  @Query("UPDATE ProjectTaskEntity tsk "
+      + "SET tsk.tasksDoneBy = :user "
+      + "WHERE tsk.id = :taskId")
+  void setDoneBy(
+      @Param("taskId") Long taskId,
+      @Param("user") UserEntity user
   );
 }

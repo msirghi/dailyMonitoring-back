@@ -2,15 +2,20 @@ package com.example.dailymonitoring.services.impl;
 
 import com.example.dailymonitoring.models.ProjectData;
 import com.example.dailymonitoring.models.entities.ProjectEntity;
+import com.example.dailymonitoring.models.entities.ProjectTaskEntity;
 import com.example.dailymonitoring.models.entities.UserEntity;
 import com.example.dailymonitoring.models.entities.UserProjectEntity;
+import com.example.dailymonitoring.models.enums.TaskStatusType;
+import com.example.dailymonitoring.models.statistics.ProjectTaskStatisticsData;
 import com.example.dailymonitoring.respositories.ProjectRepository;
+import com.example.dailymonitoring.respositories.ProjectTaskRepository;
 import com.example.dailymonitoring.respositories.UserProjectRepository;
 import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.services.ProjectService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,14 +30,18 @@ public class ProjectServiceImpl implements ProjectService {
 
   private final ConversionService conversionService;
 
+  private final ProjectTaskRepository projectTaskRepository;
+
   public ProjectServiceImpl(UserRepository userRepository,
                             ProjectRepository projectRepository,
                             UserProjectRepository userProjectRepository,
-                            ConversionService conversionService) {
+                            ConversionService conversionService,
+                            ProjectTaskRepository projectTaskRepository) {
     this.userRepository = userRepository;
     this.projectRepository = projectRepository;
     this.userProjectRepository = userProjectRepository;
     this.conversionService = conversionService;
+    this.projectTaskRepository = projectTaskRepository;
   }
 
   private UserEntity getUserById(Long userId) {
@@ -118,5 +127,46 @@ public class ProjectServiceImpl implements ProjectService {
           return projectData;
         })
         .orElse(ProjectData.builder().build());
+  }
+
+  @Override
+  public List<ProjectTaskStatisticsData> getTasksStatistics(Long userId, Long projectId) {
+    ProjectEntity projectEntity = projectRepository.getActiveProjectById(projectId).orElse(null);
+
+    if (projectEntity == null) {
+      // TODO: 15.05.2020 Create custom exception and handle this with 404
+    }
+
+    // TODO: 15.05.2020 Exception handling
+    List<ProjectTaskEntity> allProjectTasks =
+        projectTaskRepository.getAllTasksByProjectId(projectId).orElseThrow(() -> new IllegalArgumentException());
+
+    int allTasksCount = allProjectTasks.size();
+    List<ProjectTaskStatisticsData> statisticsData = new ArrayList<>();
+
+    List<UserProjectEntity> usersInProject =
+        userProjectRepository.getProjectUsers(projectId).orElse(null);
+
+
+    // TODO: 16.05.2020 Check for null
+    usersInProject.forEach(userProjectEntity -> {
+      List<ProjectTaskEntity> projectTaskEntities =
+          allProjectTasks
+              .stream()
+              .filter(task ->
+                  task.getTask().getStatus().equals(TaskStatusType.DONE)
+                      && task.getTasksDoneBy() != null
+                      && task.getTasksDoneBy().equals(userProjectEntity.getUser()))
+              .collect(Collectors.toList());
+      statisticsData.add(ProjectTaskStatisticsData
+          .builder()
+          .fullName(userProjectEntity.getUser().getFullName())
+          .userId(userProjectEntity.getUser().getId())
+          .tasksDone((long) projectTaskEntities.size())
+          .taskPercentage((long) ((projectTaskEntities.size() * 100) / allTasksCount))
+          .build());
+    });
+
+    return statisticsData;
   }
 }

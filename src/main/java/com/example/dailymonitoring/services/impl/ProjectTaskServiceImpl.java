@@ -12,15 +12,16 @@ import com.example.dailymonitoring.respositories.ProjectTaskRepository;
 import com.example.dailymonitoring.respositories.TaskRepository;
 import com.example.dailymonitoring.respositories.UserProjectRepository;
 import com.example.dailymonitoring.services.ProjectTaskService;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import javassist.NotFoundException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectTaskServiceImpl implements ProjectTaskService {
@@ -133,7 +134,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
   @Override
   public TaskData updateProjectTask(TaskData taskData, Long userId, Long projectId,
-      Long taskId) {
+                                    Long taskId) {
     if (!userProjectRepository.getProjectByUserIdAndProjectId(userId, projectId).isPresent()) {
       return TaskData.builder().build();
     }
@@ -152,10 +153,15 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
   @Override
   public int markProjectTaskAsDone(Long userId, Long projectId, Long taskId) {
-    if (!userProjectRepository.getProjectByUserIdAndProjectId(userId, projectId).isPresent()) {
+    UserProjectEntity userProject = userProjectRepository.getProjectByUserIdAndProjectId(userId,
+        projectId).orElse(null);
+    if (userProject == null) {
       return 0;
     }
-    return taskRepository.markAsDone(userId, taskId);
+    // FIXME: 16.05.2020 status code
+    taskRepository.markAsDone(taskId);
+    projectTaskRepository.setDoneBy(taskId, userProject.getUser());
+    return 1;
   }
 
   @Override

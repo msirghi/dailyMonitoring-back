@@ -1,6 +1,7 @@
 package com.example.dailymonitoring.configs;
 
-import java.io.IOException;
+import org.springframework.stereotype.Component;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -9,7 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
+import java.io.IOException;
 
 @Component
 public class CORSFilter implements Filter {
@@ -29,7 +30,7 @@ public class CORSFilter implements Filter {
     response.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
     response.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
 
-    chain.doFilter(servletRequest,  response);
+    chain.doFilter(servletRequest, response);
   }
 
   @Override

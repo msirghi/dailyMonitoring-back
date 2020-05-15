@@ -28,6 +28,7 @@ public class TaskData {
   private Long id;
 
   @JsonProperty("name")
+  // FIXME: 16.05.2020 Not null
   private String name;
 
   @JsonProperty("description")
