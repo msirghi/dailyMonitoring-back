@@ -5,18 +5,20 @@ import com.example.dailymonitoring.models.ProjectUserData;
 import com.example.dailymonitoring.models.entities.ProjectEntity;
 import com.example.dailymonitoring.models.entities.UserEntity;
 import com.example.dailymonitoring.models.entities.UserProjectEntity;
+import com.example.dailymonitoring.models.events.OnAddAndDeleteProjectUserEvent;
 import com.example.dailymonitoring.respositories.ProjectRepository;
 import com.example.dailymonitoring.respositories.UserProjectRepository;
 import com.example.dailymonitoring.respositories.UserRepository;
-import com.example.dailymonitoring.services.MailService;
 import com.example.dailymonitoring.services.ProjectUserService;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import javassist.NotFoundException;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectUserServiceImpl implements ProjectUserService {
@@ -27,23 +29,25 @@ public class ProjectUserServiceImpl implements ProjectUserService {
 
   private final UserRepository userRepository;
 
-  private final MailService mailService;
-
   private final Environment environment;
 
   private final ConversionService conversionService;
 
+  private final ApplicationEventPublisher eventPublisher;
+
   public ProjectUserServiceImpl(
       UserProjectRepository userProjectRepository,
       ProjectRepository projectRepository,
-      UserRepository userRepository, MailService mailService,
-      Environment environment, ConversionService conversionService) {
+      UserRepository userRepository,
+      Environment environment,
+      ConversionService conversionService,
+      ApplicationEventPublisher eventPublisher) {
     this.userProjectRepository = userProjectRepository;
     this.projectRepository = projectRepository;
     this.userRepository = userRepository;
-    this.mailService = mailService;
     this.environment = environment;
     this.conversionService = conversionService;
+    this.eventPublisher = eventPublisher;
   }
 
   @Override
@@ -75,7 +79,11 @@ public class ProjectUserServiceImpl implements ProjectUserService {
       String emailSubject = String.format(Constants.PROJECT_USER_SUBJECT, project.getName());
       String emailBody = Constants.PROJECT_USER_ADD_BODY;
 
-      mailService.sendMessage(environment.getProperty("mail.username"), emailSubject, emailBody);
+      eventPublisher.publishEvent(new OnAddAndDeleteProjectUserEvent(
+          user.getEmail(),
+          project.getName(),
+          emailSubject,
+          emailBody));
     }
     projectUserData.setMessage(Constants.EMAIL_SENT_SUCCESS);
     return projectUserData;
@@ -92,12 +100,16 @@ public class ProjectUserServiceImpl implements ProjectUserService {
 
     userProjectRepository.deleteUserFromProject(userId, projectId);
     if (!environment.getProperty("app.env").equals("test")) {
-      String emailSubject =
-          String.format(Constants.PROJECT_USER_DELETED_SUBJECT,
-              userProjectEntity.getProject().getName());
+      String emailSubject = String.format(Constants.PROJECT_USER_DELETED_SUBJECT,
+          userProjectEntity.getProject().getName());
       String emailBody = String.format(Constants.PROJECT_USER_DELETED_BODY,
           userProjectEntity.getProject().getName());
-      mailService.sendMessage(environment.getProperty("mail.username"), emailSubject, emailBody);
+
+      eventPublisher.publishEvent(new OnAddAndDeleteProjectUserEvent(
+          userProjectEntity.getUser().getEmail(),
+          userProjectEntity.getProject().getName(),
+          emailSubject,
+          emailBody));
     }
     return 1;
   }

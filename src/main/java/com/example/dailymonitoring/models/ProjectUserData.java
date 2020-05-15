@@ -16,17 +16,16 @@ public class ProjectUserData {
   @JsonProperty("id")
   private Long id;
 
-  @JsonProperty("userEmail")
+  @JsonProperty("email")
   @NotNull
   private String userEmail;
 
-  @JsonProperty("userFullName")
+  @JsonProperty("fullName")
   private String userFullName;
 
   @JsonProperty("projectId")
   @NotNull
   private Long projectId;
-
 
   @JsonProperty("message")
   private String message;

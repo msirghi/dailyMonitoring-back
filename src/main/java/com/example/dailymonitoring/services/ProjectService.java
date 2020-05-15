@@ -1,6 +1,7 @@
 package com.example.dailymonitoring.services;
 
 import com.example.dailymonitoring.models.ProjectData;
+
 import java.util.List;
 
 public interface ProjectService {
@@ -14,4 +15,6 @@ public interface ProjectService {
   ProjectData projectDelete(Long userId, Long projectId);
 
   ProjectData projectUpdate(Long userId, Long projectId, ProjectData projectData);
+
+  ProjectData updateProjectName(Long userId, Long projectId, ProjectData projectData);
 }

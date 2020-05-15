@@ -11,6 +11,7 @@ public class ProjectUserDataConverter implements Converter<UserProjectEntity, Pr
   @Override
   public ProjectUserData convert(UserProjectEntity source) {
     return ProjectUserData.builder()
+        .id(source.getUser().getId())
         .projectId(source.getProject().getId())
         .userEmail(source.getUser().getEmail())
         .userFullName(source.getUser().getFullName())

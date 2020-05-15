@@ -20,7 +20,7 @@ public class Constants {
       + "\\s{1}[a-zA-Z]{3,}\\s{1}[a-zA-Z]{1,})$";
   public static final String EMAIL_REGEX = ".+@.+\\..+";
 
-  public static final String USER_EMAIL_NOT_FOUND = "User with such email was not found";
+  public static final String USER_EMAIL_NOT_FOUND = "User with such email was not found in our system.";
   public static final String PROJECT_USER_ADD_BODY = "Check daily-monitoring.net for more info!";
   public static final String PROJECT_USER_SUBJECT = "You were invited to the %s project";
   public static final String EMAIL_SENT_SUCCESS = "Email sent successfully";

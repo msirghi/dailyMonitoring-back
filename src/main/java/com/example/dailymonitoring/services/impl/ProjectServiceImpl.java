@@ -8,10 +8,11 @@ import com.example.dailymonitoring.respositories.ProjectRepository;
 import com.example.dailymonitoring.respositories.UserProjectRepository;
 import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.services.ProjectService;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -25,9 +26,9 @@ public class ProjectServiceImpl implements ProjectService {
   private final ConversionService conversionService;
 
   public ProjectServiceImpl(UserRepository userRepository,
-      ProjectRepository projectRepository,
-      UserProjectRepository userProjectRepository,
-      ConversionService conversionService) {
+                            ProjectRepository projectRepository,
+                            UserProjectRepository userProjectRepository,
+                            ConversionService conversionService) {
     this.userRepository = userRepository;
     this.projectRepository = projectRepository;
     this.userProjectRepository = userProjectRepository;
@@ -102,6 +103,19 @@ public class ProjectServiceImpl implements ProjectService {
           project.setDescription(projectData.getDescription());
           project.setName(projectData.getName());
           return conversionService.convert(projectRepository.save(project), ProjectData.class);
+        })
+        .orElse(ProjectData.builder().build());
+  }
+
+  @Override
+  public ProjectData updateProjectName(Long userId, Long projectId, ProjectData projectData) {
+    return projectRepository
+        .getActiveProjectById(projectId)
+        .map(projectEntity -> {
+          projectEntity.setName(projectData.getName());
+          projectRepository.save(projectEntity);
+          projectData.setId(projectEntity.getId());
+          return projectData;
         })
         .orElse(ProjectData.builder().build());
   }

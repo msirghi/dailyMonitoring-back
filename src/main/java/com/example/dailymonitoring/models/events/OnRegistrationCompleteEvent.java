@@ -1,10 +1,11 @@
 package com.example.dailymonitoring.models.events;
 
 import com.example.dailymonitoring.models.UserData;
-import java.util.Locale;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.context.ApplicationEvent;
+
+import java.util.Locale;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
