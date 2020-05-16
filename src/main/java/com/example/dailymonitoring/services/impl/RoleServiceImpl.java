@@ -1,5 +1,6 @@
 package com.example.dailymonitoring.services.impl;
 
+import com.example.dailymonitoring.exceptions.ResourceNotFoundException;
 import com.example.dailymonitoring.models.RoleData;
 import com.example.dailymonitoring.models.entities.RoleEntity;
 import com.example.dailymonitoring.models.entities.UserEntity;
@@ -22,17 +23,11 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   public RoleData changeUserRole(RoleData roleData) {
-    UserEntity userEntity = userRepository.getActiveUser(roleData.getUserId()).orElse(null);
+    UserEntity userEntity = userRepository.getActiveUser(roleData.getUserId())
+        .orElseThrow(ResourceNotFoundException::new);
 
-    if (userEntity == null) {
-      return RoleData.builder().build();
-    }
-
-    RoleEntity roleEntity = roleRepository.findByName(RoleType.fromValue(roleData.getName())).orElse(null);
-
-    if (roleEntity == null) {
-      return RoleData.builder().build();
-    }
+    RoleEntity roleEntity = roleRepository.findByName(RoleType.fromValue(roleData.getName()))
+        .orElseThrow(ResourceNotFoundException::new);
 
     userEntity.setRole(roleEntity);
     userRepository.save(userEntity);

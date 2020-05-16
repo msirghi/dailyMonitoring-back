@@ -37,6 +37,8 @@ public class Constants {
   public static final String TOKEN_VALID = "Token is valid";
 
   public static final String EMAIL_CONFIRMATION_SUBJECT = "Registration Confirmation";
+  public static final String NO_USER_WITH_SUCH_PROJECT = "No user with such project";
+  public static final String NO_USER_FOUND = "No user fount with this id";
 
   public static Long getCurrentUserId() {
     try {

@@ -77,11 +77,11 @@ public class ProjectUserControllerTest {
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$", hasSize(2)))
-        .andExpect(jsonPath("$.[0].userFullName").value(IsNull.notNullValue()))
-        .andExpect(jsonPath("$.[0].userEmail").value(IsNull.notNullValue()))
-        .andExpect(jsonPath("$.[1].userFullName").value(IsNull.notNullValue()))
-        .andExpect(jsonPath("$.[1].userEmail").value(IsNull.notNullValue()))
+        .andExpect(jsonPath("$", hasSize(3)))
+        .andExpect(jsonPath("$.[0].fullName").value(IsNull.notNullValue()))
+        .andExpect(jsonPath("$.[0].email").value(IsNull.notNullValue()))
+        .andExpect(jsonPath("$.[1].fullName").value(IsNull.notNullValue()))
+        .andExpect(jsonPath("$.[1].email").value(IsNull.notNullValue()))
         .andExpect(status().isOk());
   }
 
@@ -202,16 +202,16 @@ public class ProjectUserControllerTest {
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$", hasSize(1)))
-        .andExpect(jsonPath("$.[0].userFullName").value(IsNull.notNullValue()))
-        .andExpect(jsonPath("$.[0].userEmail").value(IsNull.notNullValue()))
+        .andExpect(jsonPath("$", hasSize(2)))
+        .andExpect(jsonPath("$.[0].fullName").value(IsNull.notNullValue()))
+        .andExpect(jsonPath("$.[0].email").value(IsNull.notNullValue()))
         .andExpect(status().isOk());
   }
 
   @Test
   @Order(11)
   public void deleteAlreadyDeletedUserFromAnExistingProject() throws Exception {
-    mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 1, 2)
+    mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 1, 6)
         .accept(MediaType.APPLICATION_JSON)
         .header("Origin", "*")
         .header("Content-type", "application/json")
@@ -233,7 +233,7 @@ public class ProjectUserControllerTest {
   @Test
   @Order(13)
   public void deleteNonRelatedUserFromAnExistingProject() throws Exception {
-    mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 1, 2)
+    mockMvc.perform(delete("/projects/{projectId}/users/{userId}", 2, 2)
         .accept(MediaType.APPLICATION_JSON)
         .header("Origin", "*")
         .header("Content-type", "application/json")

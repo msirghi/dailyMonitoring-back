@@ -88,7 +88,7 @@ class StatisticsControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.year").value(Calendar.getInstance().get(Calendar.YEAR)))
-        .andExpect(jsonPath("$.total").value(7))
+        .andExpect(jsonPath("$.total").value(6))
         .andExpect(jsonPath("$.progression").value(0.0))
         .andExpect(jsonPath("$.perMonth").exists())
         .andExpect(jsonPath("$.perMonth.january").exists())

@@ -25,37 +25,37 @@ public interface ProjectTaskRepository extends JpaRepository<ProjectTaskEntity, 
   @Transactional
   @Modifying
   @Query("UPDATE ProjectTaskEntity task "
-      + "SET task.deleted = true "
+      + "SET task.deleted = true, task.status = 'DELETED'"
       + "WHERE task.id = :taskId")
   void markAsDeleted(
       @Param("taskId") Long id
   );
 
   @Query("SELECT task FROM ProjectTaskEntity task "
-      + "WHERE task.task.id = :taskId "
-      + "AND task.task.deleted = false"
+      + "WHERE task.id = :taskId "
+      + "AND task.deleted = false"
   )
   Optional<ProjectTaskEntity> findNotDeletedTaskById(
       @Param("taskId") Long id
   );
 
   @Query("SELECT pte FROM ProjectTaskEntity pte "
-      + "WHERE pte.task.status = 'INPROGRESS' "
+      + "WHERE pte.status = 'INPROGRESS' "
       + "AND pte.project.id = :projectId")
   Optional<List<ProjectTaskEntity>> getAllInProgressProjectTasks(
       @Param("projectId") Long projectId
   );
 
   @Query("SELECT pte FROM ProjectTaskEntity pte "
-      + "WHERE pte.task.status = 'DONE'"
+      + "WHERE pte.status = 'DONE'"
       + " AND pte.project.id = :projectId "
-      + "ORDER BY pte.task.updatedAt desc")
+      + "ORDER BY pte.updatedAt desc")
   Optional<List<ProjectTaskEntity>> getLastDoneTasks(
       @Param("projectId") Long projectId, Pageable pageable
   );
 
   @Query("SELECT pte FROM ProjectTaskEntity pte "
-      + "WHERE pte.project.id = :projectId AND pte.task.status = 'DONE'")
+      + "WHERE pte.project.id = :projectId AND pte.status = 'DONE'")
   Optional<List<ProjectTaskEntity>> getAllTasksByProjectId(
       @Param("projectId") Long projectId
   );
@@ -63,10 +63,16 @@ public interface ProjectTaskRepository extends JpaRepository<ProjectTaskEntity, 
   @Transactional
   @Modifying
   @Query("UPDATE ProjectTaskEntity tsk "
-      + "SET tsk.tasksDoneBy = :user "
+      + "SET tsk.tasksDoneBy = :user, tsk.status = 'DONE' "
       + "WHERE tsk.id = :taskId")
-  void setDoneBy(
+  int markAsDone(
       @Param("taskId") Long taskId,
       @Param("user") UserEntity user
+  );
+
+  @Query("SELECT tsk FROM ProjectTaskEntity tsk" +
+      " WHERE tsk.status is not 'DONE' AND tsk.id = :id")
+  Optional<ProjectTaskEntity> getUndoneTaskById(
+      @Param("id") Long taskId
   );
 }

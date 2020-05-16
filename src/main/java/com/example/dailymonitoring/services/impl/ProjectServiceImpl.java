@@ -1,5 +1,8 @@
 package com.example.dailymonitoring.services.impl;
 
+import com.example.dailymonitoring.constants.Constants;
+import com.example.dailymonitoring.exceptions.BadRequestException;
+import com.example.dailymonitoring.exceptions.ResourceNotFoundException;
 import com.example.dailymonitoring.models.ProjectData;
 import com.example.dailymonitoring.models.entities.ProjectEntity;
 import com.example.dailymonitoring.models.entities.ProjectTaskEntity;
@@ -45,7 +48,8 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   private UserEntity getUserById(Long userId) {
-    return userRepository.getActiveUser(userId).orElse(UserEntity.builder().build());
+    return userRepository.getActiveUser(userId).orElseThrow(() ->
+        new BadRequestException(Constants.NO_USER_FOUND));
   }
 
 //  private void validateUser(Long userId) {
@@ -84,9 +88,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     return userProjectRepository
         .getProjectsByUser(userId)
-        .stream()
-        .map(project -> conversionService.convert(project, ProjectData.class))
-        .collect(Collectors.toList());
+        .map(list -> list
+            .stream()
+            .map(project -> conversionService.convert(project, ProjectData.class))
+            .collect(Collectors.toList()))
+        .orElseThrow(ResourceNotFoundException::new);
   }
 
   @Override
@@ -131,33 +137,27 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public List<ProjectTaskStatisticsData> getTasksStatistics(Long userId, Long projectId) {
-    ProjectEntity projectEntity = projectRepository.getActiveProjectById(projectId).orElse(null);
+    projectRepository.getActiveProjectById(projectId).orElseThrow(ResourceNotFoundException::new);
 
-    if (projectEntity == null) {
-      // TODO: 15.05.2020 Create custom exception and handle this with 404
-    }
-
-    // TODO: 15.05.2020 Exception handling
     List<ProjectTaskEntity> allProjectTasks =
-        projectTaskRepository.getAllTasksByProjectId(projectId).orElseThrow(() -> new IllegalArgumentException());
+        projectTaskRepository.getAllTasksByProjectId(projectId).orElse(new ArrayList<>());
+
+    List<UserProjectEntity> usersInProject =
+        userProjectRepository.getProjectUsers(projectId).orElseThrow(BadRequestException::new);
 
     int allTasksCount = allProjectTasks.size();
     List<ProjectTaskStatisticsData> statisticsData = new ArrayList<>();
 
-    List<UserProjectEntity> usersInProject =
-        userProjectRepository.getProjectUsers(projectId).orElse(null);
-
-
-    // TODO: 16.05.2020 Check for null
     usersInProject.forEach(userProjectEntity -> {
       List<ProjectTaskEntity> projectTaskEntities =
           allProjectTasks
               .stream()
               .filter(task ->
-                  task.getTask().getStatus().equals(TaskStatusType.DONE)
+                  task.getStatus().equals(TaskStatusType.DONE)
                       && task.getTasksDoneBy() != null
                       && task.getTasksDoneBy().equals(userProjectEntity.getUser()))
               .collect(Collectors.toList());
+
       statisticsData.add(ProjectTaskStatisticsData
           .builder()
           .fullName(userProjectEntity.getUser().getFullName())

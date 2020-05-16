@@ -8,11 +8,12 @@ import com.example.dailymonitoring.models.entities.UserEntity;
 import com.example.dailymonitoring.models.enums.StatusType;
 import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.services.UserService;
-import java.util.List;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,8 +25,8 @@ public class UserServiceImpl implements UserService {
   private final BCryptPasswordEncoder passwordEncoder;
 
   public UserServiceImpl(UserRepository userRepository,
-      ConversionService conversionService,
-      BCryptPasswordEncoder passwordEncoder) {
+                         ConversionService conversionService,
+                         BCryptPasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.conversionService = conversionService;
     this.passwordEncoder = passwordEncoder;

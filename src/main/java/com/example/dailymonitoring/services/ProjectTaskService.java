@@ -13,7 +13,7 @@ public interface ProjectTaskService {
 
   TaskData getProjectTaskById(Long userId, Long projectId, Long taskId);
 
-  List<TaskData> getAllTasksByProjectId(Long userId, Long projectId) throws NotFoundException;
+  List<TaskData> getAllTasksByProjectId(Long userId, Long projectId);
 
   TaskData deleteProjectTask(Long userId, Long projectId, Long taskId);
 

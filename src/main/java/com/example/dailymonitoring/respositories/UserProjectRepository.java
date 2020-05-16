@@ -17,7 +17,7 @@ public interface UserProjectRepository extends JpaRepository<UserProjectEntity, 
   @Query("SELECT up FROM UserProjectEntity up "
       + "WHERE up.user.id = :userId "
       + "AND up.project.deleted = false")
-  List<UserProjectEntity> getProjectsByUser(
+  Optional<List<UserProjectEntity>> getProjectsByUser(
       @Param("userId") Long userId
   );
 

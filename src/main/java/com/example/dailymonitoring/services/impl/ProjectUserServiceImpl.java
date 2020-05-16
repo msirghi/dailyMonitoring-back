@@ -1,6 +1,7 @@
 package com.example.dailymonitoring.services.impl;
 
 import com.example.dailymonitoring.constants.Constants;
+import com.example.dailymonitoring.exceptions.BadRequestException;
 import com.example.dailymonitoring.models.ProjectUserData;
 import com.example.dailymonitoring.models.entities.ProjectEntity;
 import com.example.dailymonitoring.models.entities.UserEntity;
@@ -52,24 +53,16 @@ public class ProjectUserServiceImpl implements ProjectUserService {
 
   @Override
   public ProjectUserData addProjectUser(ProjectUserData projectUserData) {
-    ProjectEntity project =
-        projectRepository.getActiveProjectById(projectUserData.getProjectId()).orElse(null);
+    ProjectEntity project = projectRepository.getActiveProjectById(projectUserData.getProjectId())
+        .orElseThrow(() -> new BadRequestException(Constants.NO_SUCH_PROJECT));
 
-    if (project == null) {
-      return ProjectUserData.builder().message(Constants.NO_SUCH_PROJECT).build();
-    }
+    UserEntity user = userRepository.getUserByEmail(projectUserData.getUserEmail())
+        .orElseThrow(() -> new BadRequestException(Constants.USER_EMAIL_NOT_FOUND));
 
-    UserEntity user = userRepository.getUserByEmail(projectUserData.getUserEmail()).orElse(null);
+    UserProjectEntity userInProject =
+        userProjectRepository.getProjectByUserIdAndProjectId(user.getId(), project.getId()).orElse(null);
 
-    if (user == null) {
-      return ProjectUserData.builder().message(Constants.USER_EMAIL_NOT_FOUND).build();
-    }
-
-    UserProjectEntity userProjectEntity =
-        userProjectRepository.getProjectByUserIdAndProjectId(user.getId(), project.getId())
-            .orElse(null);
-
-    if (userProjectEntity != null) {
+    if (userInProject != null) {
       return ProjectUserData.builder().message(Constants.PROJECT_USER_ALREADY_EXISTS).build();
     }
 

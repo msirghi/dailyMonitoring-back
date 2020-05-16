@@ -1,0 +1,18 @@
+package com.example.dailymonitoring.exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+/**
+ * @author Sirghi Mihail
+ */
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class ResourceNotFoundException extends RuntimeException {
+
+  public ResourceNotFoundException() {
+  }
+
+  public ResourceNotFoundException(String message) {
+    super(message);
+  }
+}

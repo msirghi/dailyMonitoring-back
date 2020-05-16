@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
+import com.example.dailymonitoring.constants.Constants;
 import com.example.dailymonitoring.models.TaskData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,6 +63,8 @@ public class ProjectTaskControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
+        .andExpect(jsonPath("$.code").value(400))
+        .andExpect(jsonPath("$.message").value(Constants.NO_USER_WITH_SUCH_PROJECT))
         .andExpect(status().isBadRequest());
   }
 
@@ -92,6 +95,8 @@ public class ProjectTaskControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
+        .andExpect(jsonPath("$.code").value(400))
+        .andExpect(jsonPath("$.message").value(Constants.NO_USER_WITH_SUCH_PROJECT))
         .andExpect(status().isBadRequest());
   }
 
@@ -104,6 +109,8 @@ public class ProjectTaskControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
+        .andExpect(jsonPath("$.code").value(400))
+        .andExpect(jsonPath("$.message").value(Constants.NO_USER_WITH_SUCH_PROJECT))
         .andExpect(status().isBadRequest());
   }
 
@@ -127,9 +134,8 @@ public class ProjectTaskControllerTest {
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.id").value(IsNull.notNullValue()))
         .andExpect(jsonPath("$.name").value("Task 1"))
-        .andExpect(jsonPath("$.description").value("Description 1"))
+        .andExpect(jsonPath("$.description").exists())
         .andExpect(jsonPath("$.dates").value(IsNull.nullValue()))
-        .andExpect(jsonPath("$.categoryId").exists())
         .andExpect(jsonPath("$.status").value("INPROGRESS"))
         .andExpect(status().isOk());
   }
@@ -173,7 +179,15 @@ public class ProjectTaskControllerTest {
   @Test
   @Order(11)
   public void markProjectTaskAsDone() throws Exception {
-    mockMvc.perform(put(baseUrl + "/{taskId}/complete", 1, 1, 1)
+    String json = generateJson(createTaskData());
+
+    mockMvc.perform(post(baseUrl, 1, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isCreated());
+
+    mockMvc.perform(put(baseUrl + "/{taskId}/complete", 1, 1, 8)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
@@ -185,7 +199,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(put(baseUrl + "/{taskId}/complete", 1, 1, 99)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -217,7 +231,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(get(baseUrl + "/lastDone", 1, 99)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
 
@@ -227,7 +241,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(get(baseUrl + "/lastDone", 99, 1)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -246,7 +260,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(get(baseUrl + "/inprogress", 1, 99)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -255,7 +269,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(get(baseUrl + "/inprogress", 99, 1)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -264,7 +278,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(put(baseUrl + "/{taskId}/complete", 1, 99, 1)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -273,7 +287,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(put(baseUrl + "/{taskId}/complete", 99, 1, 1)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -282,7 +296,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(put(baseUrl + "/{taskId}/complete", 99, 99, 1)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -291,7 +305,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(put(baseUrl + "/{taskId}/complete", 2, 1, 1)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -300,7 +314,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(put(baseUrl + "/{taskId}/complete", 1, 2, 1)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -309,7 +323,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(get(baseUrl + "/lastDone", 99, 99)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -346,7 +360,7 @@ public class ProjectTaskControllerTest {
     mockMvc.perform(put(baseUrl + "/{taskId}/complete", 99, 99, 1)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -385,7 +399,7 @@ public class ProjectTaskControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -399,7 +413,7 @@ public class ProjectTaskControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -413,7 +427,7 @@ public class ProjectTaskControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -427,7 +441,7 @@ public class ProjectTaskControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -441,7 +455,7 @@ public class ProjectTaskControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -474,7 +488,7 @@ public class ProjectTaskControllerTest {
   @Test
   @Order(37)
   public void getAllProjectTasksForNonExistingRelationOfUserAndProject() throws Exception {
-    mockMvc.perform(get(baseUrl, 2, 1)
+    mockMvc.perform(get(baseUrl, 2, 2)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
