@@ -39,13 +39,13 @@ public class AccountConfirmationServiceImpl implements AccountConfirmationServic
   public void createVerificationToken(UserData user, String token) {
     UserEntity userEntity = conversionService.convert(user, UserEntity.class);
     userEntity.setId(user.getId());
-    VerificationTokenEntity tokenEntity = new VerificationTokenEntity(token, userEntity);
-    verificationTokenRepository.save(tokenEntity);
+    verificationTokenRepository.save(new VerificationTokenEntity(token, userEntity));
   }
 
   public String validateVerificationToken(String token) {
     final VerificationTokenEntity verificationToken = verificationTokenRepository
         .findByToken(token);
+
     if (verificationToken == null) {
       return Constants.TOKEN_INVALID;
     }

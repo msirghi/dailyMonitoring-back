@@ -1,6 +1,7 @@
 package com.example.dailymonitoring.configs.logger;
 
 import com.example.dailymonitoring.constants.Constants;
+import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -9,10 +10,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -29,15 +27,8 @@ import java.util.Map;
 @Component
 @Aspect
 @Profile("prod")
+@Log4j2
 public class Logging extends AbstractLogging {
-
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-
-  private final Environment env;
-
-  public Logging(Environment env) {
-    this.env = env;
-  }
 
   @Pointcut("execution(public * com.example.dailymonitoring.controllers.*.*(..))")
   public void controllerExecutionLogger() {
@@ -71,26 +62,26 @@ public class Logging extends AbstractLogging {
       headers.put(key, value);
     }
 
-    logger.info(this.generateTitle("Request"));
-    logger.info("Ip:  {}", request.getRemoteAddr());
-    logger.info("Headers: " + headers);
-    logger.info("Content-Type Header: {}", request.getHeader("Content-Type"));
-    logger.info("HTTP method: {}", request.getMethod());
-    logger.info("Path: {}", request.getServletPath());
-    logger.info("Arguments:  {}{}", Arrays.toString(joinPoint.getArgs()), nl);
+    log.info(this.generateTitle("Request"));
+    log.info("Ip:  {}", request.getRemoteAddr());
+    log.info("Headers: " + headers);
+    log.info("Content-Type Header: {}", request.getHeader("Content-Type"));
+    log.info("HTTP method: {}", request.getMethod());
+    log.info("Path: {}", request.getServletPath());
+    log.info("Arguments:  {}{}", Arrays.toString(joinPoint.getArgs()), nl);
   }
 
   @AfterReturning(pointcut = "controllerExecutionLogger()", returning = "response")
   public void afterReturningControllerAdvice(
       JoinPoint joinPoint, ResponseEntity response) throws IOException {
-    logger.info(this.generateTitle("Response"));
-    logger.info("Response status: " + response.getStatusCodeValue());
-    logger.info("Response body: {}{}", response.getBody(), nl);
+    log.info(this.generateTitle("Response"));
+    log.info("Response status: " + response.getStatusCodeValue());
+    log.info("Response body: {}{}", response.getBody(), nl);
   }
 
   @AfterThrowing(pointcut = "controllerExecutionLogger()", throwing = "e")
   public void throwException(JoinPoint joinPoint, Throwable e) {
     e.setStackTrace(new StackTraceElement[0]);
-    logger.warn("Exception", e);
+    log.warn("Exception", e);
   }
 }

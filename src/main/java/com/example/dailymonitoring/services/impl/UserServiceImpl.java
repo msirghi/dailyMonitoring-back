@@ -1,5 +1,6 @@
 package com.example.dailymonitoring.services.impl;
 
+import com.example.dailymonitoring.exceptions.UserCreationException;
 import com.example.dailymonitoring.models.EmailData;
 import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
@@ -36,10 +37,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserData createUser(UserData userData) {
     if (userRepository.getUserByUsername(userData.getUsername()).isPresent()) {
-      return UserData.builder().username("taken").email("skip").build();
+      throw new UserCreationException("Username is already taken.");
     } else if (userRepository.getUserByEmail(userData.getEmail()).isPresent()) {
-      return UserData.builder().email("taken").username("skip").build();
+      throw new UserCreationException("Email is already taken.");
     }
+
     userData.setPassword(passwordEncoder.encode(userData.getPassword()));
 
     UserEntity userEntity = conversionService.convert(userData, UserEntity.class);

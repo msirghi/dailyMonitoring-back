@@ -53,9 +53,11 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
         .orElseThrow(() -> new BadRequestException(Constants.NO_USER_WITH_SUCH_PROJECT));
 
     ProjectTaskEntity newTask = conversionService.convert(taskData, ProjectTaskEntity.class);
+
     if (newTask.getDate() != null) {
       newTask.setDate(taskData.getDates().get(0));
     }
+
     newTask.setStatus(TaskStatusType.INPROGRESS);
     newTask.setDeleted(false);
     newTask.setTaskCreator(userProjectEntity.getUser());
@@ -150,7 +152,6 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
         projectId).orElseThrow(ResourceNotFoundException::new);
 
     projectTaskRepository.getUndoneTaskById(taskId).orElseThrow(ResourceNotFoundException::new);
-
     return projectTaskRepository.markAsDone(taskId, userProject.getUser());
   }
 

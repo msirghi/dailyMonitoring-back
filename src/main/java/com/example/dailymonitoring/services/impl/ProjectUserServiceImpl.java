@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,7 +69,7 @@ public class ProjectUserServiceImpl implements ProjectUserService {
 
     userProjectRepository.save(UserProjectEntity.builder().project(project).user(user).build());
 
-    if (!environment.getProperty("app.env").equals("test")) {
+    if (!Objects.equals(environment.getProperty("app.env"), "test")) {
       String emailSubject = String.format(Constants.PROJECT_USER_SUBJECT, project.getName());
       String emailBody = Constants.PROJECT_USER_ADD_BODY;
 
@@ -110,12 +111,8 @@ public class ProjectUserServiceImpl implements ProjectUserService {
   @Override
   public List<ProjectUserData> getAllProjectUsers(Long userId, Long projectId)
       throws NotFoundException {
-    UserProjectEntity userProjectEntity =
-        userProjectRepository.getProjectByUserIdAndProjectId(userId, projectId).orElse(null);
-
-    if (userProjectEntity == null) {
-      throw new NotFoundException(Constants.PROJECT_NOT_FOUND);
-    }
+    userProjectRepository.getProjectByUserIdAndProjectId(userId, projectId)
+        .orElseThrow(() -> new NotFoundException(Constants.PROJECT_NOT_FOUND));
 
     return userProjectRepository.getProjectUsers(projectId)
         .map(userProjectEntities ->

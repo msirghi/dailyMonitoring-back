@@ -49,11 +49,12 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   private UserEntity getUserById(Long userId) {
-    return userRepository.getActiveUser(userId).orElseThrow(() ->
-        new BadRequestException(Constants.NO_USER_FOUND));
+    return userRepository.getActiveUser(userId)
+        .orElseThrow(() -> new BadRequestException(Constants.NO_USER_FOUND));
   }
 
   @Override
+  @Transactional(rollbackOn = Exception.class)
   public ProjectData projectCreate(ProjectData projectData, Long userId) {
     UserEntity user = getUserById(userId);
     ProjectEntity projectEntity = conversionService.convert(projectData, ProjectEntity.class);
