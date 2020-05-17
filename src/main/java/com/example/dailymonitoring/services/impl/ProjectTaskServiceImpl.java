@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -124,6 +125,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
   }
 
   @Override
+  @Transactional
   public TaskData updateProjectTask(TaskData taskData, Long userId, Long projectId,
                                     Long taskId) {
     if (!userProjectRepository.getProjectByUserIdAndProjectId(userId, projectId).isPresent()) {
@@ -136,7 +138,8 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
         .map(task -> {
           task.setName(taskData.getName());
           task.setDescription(taskData.getDescription());
-          return conversionService.convert(projectTaskRepository.save(task), TaskData.class);
+          taskData.setId(task.getId());
+          return taskData;
         })
         .orElseThrow(ResourceNotFoundException::new);
   }

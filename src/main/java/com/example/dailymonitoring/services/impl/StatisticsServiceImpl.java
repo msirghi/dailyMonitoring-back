@@ -6,14 +6,15 @@ import com.example.dailymonitoring.respositories.ProjectRepository;
 import com.example.dailymonitoring.respositories.TaskRepository;
 import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.services.StatisticsService;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
 
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
@@ -97,7 +98,7 @@ public class StatisticsServiceImpl implements StatisticsService {
   }
 
   private StatisticsData getYearStatistics(int selectedYear, Long total,
-      List<Map<Object, Object>> mapToParse) {
+                                           List<Map<Object, Object>> mapToParse) {
 
     Map<String, String> finalMap = new HashMap<>();
 

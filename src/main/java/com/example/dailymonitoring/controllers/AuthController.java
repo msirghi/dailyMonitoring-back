@@ -2,9 +2,9 @@ package com.example.dailymonitoring.controllers;
 
 import com.example.dailymonitoring.configs.utils.JwtUtil;
 import com.example.dailymonitoring.controllers.api.AuthApi;
+import com.example.dailymonitoring.models.Error;
 import com.example.dailymonitoring.models.auth.AuthenticationRequestData;
 import com.example.dailymonitoring.models.auth.AuthenticationResponseData;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,7 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.dailymonitoring.models.Error;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class AuthController implements AuthApi {
@@ -34,7 +35,7 @@ public class AuthController implements AuthApi {
 
   @Override
   public ResponseEntity<?> authenticate(AuthenticationRequestData authenticationRequestData,
-      HttpServletResponse response) {
+                                        HttpServletResponse response) {
     try {
       authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(authenticationRequestData.getUsername(),

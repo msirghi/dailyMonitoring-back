@@ -18,6 +18,7 @@ import com.example.dailymonitoring.services.ProjectService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,16 +53,8 @@ public class ProjectServiceImpl implements ProjectService {
         new BadRequestException(Constants.NO_USER_FOUND));
   }
 
-//  private void validateUser(Long userId) {
-//    if (!Constants.getCurrentUserId().equals(userId)) {
-//      throw new ForbiddenException();
-//    }
-//  }
-
   @Override
   public ProjectData projectCreate(ProjectData projectData, Long userId) {
-//    validateUser(userId);
-
     UserEntity user = getUserById(userId);
     ProjectEntity projectEntity = conversionService.convert(projectData, ProjectEntity.class);
     projectEntity.setDeleted(false);
@@ -73,8 +66,6 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public ProjectData getProjectById(Long userId, Long projectId) {
-//    validateUser(userId);
-
     return projectRepository
         .findById(projectId)
         .filter(project -> !project.getDeleted())
@@ -84,8 +75,6 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public List<ProjectData> getProjectsByUser(Long userId) {
-//    validateUser(userId);
-
     return userProjectRepository
         .getProjectsByUser(userId)
         .map(list -> list
@@ -97,8 +86,6 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public ProjectData projectDelete(Long userId, Long projectId) {
-//    validateUser(userId);
-
     return projectRepository
         .getActiveProjectById(projectId)
         .map(project -> {
@@ -109,26 +96,26 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
+  @Transactional
   public ProjectData projectUpdate(Long userId, Long projectId, ProjectData projectData) {
-//    validateUser(userId);
-
     return projectRepository
         .getActiveProjectById(projectId)
         .map(project -> {
           project.setDescription(projectData.getDescription());
           project.setName(projectData.getName());
-          return conversionService.convert(projectRepository.save(project), ProjectData.class);
+          projectData.setId(project.getId());
+          return projectData;
         })
         .orElse(ProjectData.builder().build());
   }
 
   @Override
+  @Transactional
   public ProjectData updateProjectName(Long userId, Long projectId, ProjectData projectData) {
     return projectRepository
         .getActiveProjectById(projectId)
         .map(projectEntity -> {
           projectEntity.setName(projectData.getName());
-          projectRepository.save(projectEntity);
           projectData.setId(projectEntity.getId());
           return projectData;
         })
@@ -158,13 +145,15 @@ public class ProjectServiceImpl implements ProjectService {
                       && task.getTasksDoneBy().equals(userProjectEntity.getUser()))
               .collect(Collectors.toList());
 
-      statisticsData.add(ProjectTaskStatisticsData
-          .builder()
-          .fullName(userProjectEntity.getUser().getFullName())
-          .userId(userProjectEntity.getUser().getId())
-          .tasksDone((long) projectTaskEntities.size())
-          .taskPercentage((long) ((projectTaskEntities.size() * 100) / allTasksCount))
-          .build());
+      if (allTasksCount != 0) {
+        statisticsData.add(ProjectTaskStatisticsData
+            .builder()
+            .fullName(userProjectEntity.getUser().getFullName())
+            .userId(userProjectEntity.getUser().getId())
+            .tasksDone((long) projectTaskEntities.size())
+            .taskPercentage((long) ((projectTaskEntities.size() * 100) / allTasksCount))
+            .build());
+      }
     });
 
     return statisticsData;

@@ -10,6 +10,8 @@ import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.services.RoleService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class RoleServiceImpl implements RoleService {
 
@@ -22,6 +24,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
+  @Transactional
   public RoleData changeUserRole(RoleData roleData) {
     UserEntity userEntity = userRepository.getActiveUser(roleData.getUserId())
         .orElseThrow(ResourceNotFoundException::new);
@@ -30,8 +33,6 @@ public class RoleServiceImpl implements RoleService {
         .orElseThrow(ResourceNotFoundException::new);
 
     userEntity.setRole(roleEntity);
-    userRepository.save(userEntity);
-
     return roleData;
   }
 }

@@ -2,16 +2,16 @@ package com.example.dailymonitoring.controllers;
 
 import com.example.dailymonitoring.controllers.api.AccountConfirmationApi;
 import com.example.dailymonitoring.services.AccountConfirmationService;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class AccountConfirmationController implements AccountConfirmationApi {
 
   private final AccountConfirmationService accountConfirmationService;
 
-  public AccountConfirmationController(
-      AccountConfirmationService accountConfirmationService) {
+  public AccountConfirmationController(AccountConfirmationService accountConfirmationService) {
     this.accountConfirmationService = accountConfirmationService;
   }
 

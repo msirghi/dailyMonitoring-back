@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-final class MutableHttpServletRequest extends HttpServletRequestWrapper {
+public final class MutableHttpServletRequest extends HttpServletRequestWrapper {
 
   private final Map<String, String> customHeaders;
 

@@ -4,10 +4,12 @@ import com.example.dailymonitoring.models.EmailTemplateData;
 import com.example.dailymonitoring.models.entities.EmailTemplateEntity;
 import com.example.dailymonitoring.respositories.EmailTemplateRepository;
 import com.example.dailymonitoring.services.EmailTemplateService;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmailTemplateServiceImpl implements EmailTemplateService {
@@ -64,6 +66,7 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
   }
 
   @Override
+  @Transactional
   public EmailTemplateData updateTemplate(Long templateId, EmailTemplateData emailTemplateData) {
     return emailTemplateRepository
         .getNotDeletedTemplateById(templateId)
@@ -71,7 +74,6 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
           emailTemplateEntity.setDescription(emailTemplateData.getDescription());
           emailTemplateEntity.setName(emailTemplateData.getName());
           emailTemplateEntity.setTemplate(emailTemplateData.getTemplate());
-          emailTemplateRepository.save(emailTemplateEntity);
           emailTemplateData.setId(emailTemplateEntity.getId());
           return emailTemplateData;
         })

@@ -62,7 +62,7 @@ public class UserEntity extends BaseEntity {
   @Column(name = "ENABLED")
   private Boolean enabled;
 
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "ROLE_ID", referencedColumnName = "id")
   private RoleEntity role;
 

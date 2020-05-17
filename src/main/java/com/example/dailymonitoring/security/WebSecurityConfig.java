@@ -1,4 +1,4 @@
-package com.example.dailymonitoring.configs;
+package com.example.dailymonitoring.security;
 
 import com.example.dailymonitoring.configs.filters.JwtRequestFilter;
 import com.example.dailymonitoring.services.impl.MyUserDetailsService;

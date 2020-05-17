@@ -1,4 +1,4 @@
-package com.example.dailymonitoring.configs;
+package com.example.dailymonitoring.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;

@@ -1,5 +1,6 @@
-package com.example.dailymonitoring.configs;
+package com.example.dailymonitoring.security;
 
+import com.example.dailymonitoring.configs.MutableHttpServletRequest;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.Filter;

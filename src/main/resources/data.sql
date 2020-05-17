@@ -23,19 +23,19 @@ values
 ('Project 3', 'Desc', '2020-06-04 15:07:39.154493', false),
 ('Project 4', 'Desc', '2020-05-04 15:07:39.154493', true);
 
-insert into USER_PROJECT(USER_ID, PROJECT_ID)
+insert into USER_PROJECTS(USER_ID, PROJECT_ID)
 values
 (1, 1),
 (2, 1),
 (1, 3),
 (1, 4);
 
-insert into PROJECT_TASKS(PROJECT_ID, CREATOR_USER_ID, NAME, DESCRIPTION, STATUS, CREATED_AT, UPDATED_AT, DELETED)
+insert into PROJECT_TASKS(PROJECT_ID, CREATOR_USER_ID, NAME, DESCRIPTION, STATUS, CREATED_AT, UPDATED_AT, DELETED, DONE_BY_USER_ID)
 values
-(1, 1, 'Task 1', 'Desc 1', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false),
-(1, 1,'Task 2', 'Desc 2', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false),
-(1, 1,'Task 3', 'Desc 3', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false),
-(1, 1,'Task 4', 'Desc 4', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false),
-(1, 1,'Task 5', 'Desc 5', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false),
-(1, 1,'Task 6', 'Desc 6', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false);
+(1, 1, 'Task 1', 'Desc 1', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false, 1),
+(1, 1,'Task 2', 'Desc 2', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false, 1),
+(1, 1,'Task 3', 'Desc 3', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false, 1),
+(1, 1,'Task 4', 'Desc 4', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false, 2),
+(1, 1,'Task 5', 'Desc 5', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false, 2),
+(1, 1,'Task 6', 'Desc 6', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false, 2);
 

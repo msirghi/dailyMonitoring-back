@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ProjectTaskDataConverter implements Converter<ProjectTaskEntity, TaskData> {
+
   @Override
   public TaskData convert(ProjectTaskEntity source) {
     return TaskData
@@ -17,6 +18,7 @@ public class ProjectTaskDataConverter implements Converter<ProjectTaskEntity, Ta
         .id(source.getId())
         .name(source.getName())
         .description(source.getDescription())
+        .updatedAt(source.getUpdatedAt())
         .status(source.getStatus())
         .categoryId(source.getCategoryId())
         .build();

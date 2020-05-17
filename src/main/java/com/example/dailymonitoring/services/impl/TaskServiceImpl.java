@@ -7,11 +7,12 @@ import com.example.dailymonitoring.models.enums.TaskStatusType;
 import com.example.dailymonitoring.respositories.TaskRepository;
 import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.services.TaskService;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Service;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -21,7 +22,7 @@ public class TaskServiceImpl implements TaskService {
   private final UserRepository userRepository;
 
   public TaskServiceImpl(TaskRepository taskRepository,
-      ConversionService conversionService, UserRepository userRepository) {
+                         ConversionService conversionService, UserRepository userRepository) {
     this.taskRepository = taskRepository;
     this.conversionService = conversionService;
     this.userRepository = userRepository;

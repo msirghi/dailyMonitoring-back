@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -72,6 +73,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public UserData updateUser(Long userId, UserData userData) {
     return userRepository
         .getActiveUser(userId)
@@ -84,7 +86,7 @@ public class UserServiceImpl implements UserService {
             user.setFullName(userData.getFullName());
             user.setUsername(userData.getUsername());
             userData.setId(userId);
-            return conversionService.convert(userRepository.save(user), UserData.class);
+            return userData;
           }
 
           for (UserEntity userEntity : userList) {
@@ -99,6 +101,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public boolean updateUserPasswordOnly(Long userId, PasswordData passwordData) {
     return userRepository
         .getActiveUser(userId)
@@ -108,13 +111,13 @@ public class UserServiceImpl implements UserService {
           }
           passwordEncoder.matches(passwordData.getPassword(), user.getPassword());
           user.setPassword(passwordEncoder.encode(passwordData.getPassword()));
-          userRepository.save(user);
           return true;
         })
         .orElse(false);
   }
 
   @Override
+  @Transactional
   public boolean updateUserEmailOnly(Long userId, EmailData emailData) {
     return userRepository
         .getActiveUser(userId)
@@ -123,14 +126,13 @@ public class UserServiceImpl implements UserService {
             return false;
           } else {
             user.setEmail(emailData.getEmail());
-            userRepository.save(user);
             return true;
           }
         }).orElse(false);
-
   }
 
   @Override
+  @Transactional
   public boolean updateUserUsernameOnly(Long userId, UsernameData usernameData) {
     return userRepository
         .getActiveUser(userId)
@@ -139,7 +141,6 @@ public class UserServiceImpl implements UserService {
             return false;
           } else {
             user.setUsername(usernameData.getUsername());
-            userRepository.save(user);
             return true;
           }
         }).orElse(false);
