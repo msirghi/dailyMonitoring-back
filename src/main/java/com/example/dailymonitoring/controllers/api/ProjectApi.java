@@ -90,7 +90,7 @@ public interface ProjectApi {
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
       @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
   @RequestMapping(
-      value = "users/{userId}/projects/{projectId}",
+      value = "/users/{userId}/projects/{projectId}",
       method = RequestMethod.DELETE,
       produces = "application/json;charset=utf-8"
   )
@@ -109,7 +109,7 @@ public interface ProjectApi {
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
       @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
   @RequestMapping(
-      value = "users/{userId}/projects/{projectId}",
+      value = "/users/{userId}/projects/{projectId}",
       method = RequestMethod.PUT,
       produces = "application/json;charset=utf-8"
   )
@@ -119,7 +119,6 @@ public interface ProjectApi {
       @ApiParam(required = true) @RequestBody @Valid ProjectData projectData
   );
 
-  // TODO: Tests
   @ApiOperation(value = "Update project name", nickname = "updateProjectName",
       response = ProjectData.class, tags = { "Projects", })
   @ApiResponses(value = {

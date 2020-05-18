@@ -7,9 +7,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.util.List;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,19 +14,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import java.util.List;
+
 @Api(value = "EmailTemplates")
 @Validated
 public interface EmailTemplateApi {
 
   @ApiOperation(value = "Add email template", nickname = "addTemplate",
-      response = EmailTemplateData.class, tags = {"EmailTemplates",})
+      response = EmailTemplateData.class, tags = { "EmailTemplates", })
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = EmailTemplateData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
   @RequestMapping(
       value = "/templates",
       method = RequestMethod.POST,
@@ -41,14 +42,14 @@ public interface EmailTemplateApi {
   );
 
   @ApiOperation(value = "Get email template by id", nickname = "getTemplateById",
-      response = EmailTemplateData.class, tags = {"EmailTemplates",})
+      response = EmailTemplateData.class, tags = { "EmailTemplates", })
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = EmailTemplateData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
   @RequestMapping(
       value = "/templates/{templateId}",
       method = RequestMethod.GET,
@@ -60,14 +61,14 @@ public interface EmailTemplateApi {
   );
 
   @ApiOperation(value = "Get email templates", nickname = "getTemplates",
-      response = EmailTemplateData.class, tags = {"EmailTemplates",})
+      response = EmailTemplateData.class, tags = { "EmailTemplates", })
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = EmailTemplateData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
   @RequestMapping(
       value = "/templates",
       method = RequestMethod.GET,
@@ -77,14 +78,14 @@ public interface EmailTemplateApi {
   ResponseEntity<List<EmailTemplateData>> getTemplates();
 
   @ApiOperation(value = "Delete email template by id", nickname = "deleteTemplateById",
-      response = EmailTemplateData.class, tags = {"EmailTemplates",})
+      response = EmailTemplateData.class, tags = { "EmailTemplates", })
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = EmailTemplateData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
   @RequestMapping(
       value = "/templates/{templateId}",
       method = RequestMethod.DELETE,
@@ -96,14 +97,14 @@ public interface EmailTemplateApi {
   );
 
   @ApiOperation(value = "Update email template by id", nickname = "updateTemplateById",
-      response = EmailTemplateData.class, tags = {"EmailTemplates",})
+      response = EmailTemplateData.class, tags = { "EmailTemplates", })
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = EmailTemplateData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
   @RequestMapping(
       value = "/templates/{templateId}",
       method = RequestMethod.PUT,

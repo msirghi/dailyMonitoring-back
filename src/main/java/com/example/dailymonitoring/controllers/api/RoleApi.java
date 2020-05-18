@@ -20,14 +20,14 @@ import javax.validation.Valid;
 public interface RoleApi {
 
   @ApiOperation(value = "Grant user a role", nickname = "grantUserARole",
-      response = RoleData.class, tags = {"Role",})
+      response = RoleData.class, tags = { "Role", })
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = RoleData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
   @RequestMapping(
       value = "roles/grantUser",
       method = RequestMethod.POST,

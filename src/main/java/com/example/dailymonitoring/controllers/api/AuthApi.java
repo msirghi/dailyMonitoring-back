@@ -20,14 +20,14 @@ import javax.servlet.http.HttpServletResponse;
 public interface AuthApi {
 
   @ApiOperation(value = "Authenticate User", nickname = "userAuthenticate",
-      response = UserData.class, tags = {"Authenticate, User",})
+      response = UserData.class, tags = { "Authenticate", })
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = UserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
   @RequestMapping(
       value = "/authenticate",
       method = RequestMethod.POST,

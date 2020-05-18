@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -16,6 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.validation.ConstraintViolationException;
+import java.util.HashSet;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -243,4 +247,150 @@ public class ProjectControllerTest {
         .andExpect(jsonPath("$", hasSize(4)))
         .andExpect(status().isOk());
   }
+
+  @Test
+  @Order(17)
+  public void changeProjectName() throws Exception {
+    ProjectData model = createProjectData();
+    model.setName("New name");
+    String json = generateJson(model);
+    mockMvc.perform(put(baseUrl + "/{projectId}/name", 1, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @Order(18)
+  public void getProjectAfterNameChange() throws Exception {
+    mockMvc.perform(get(baseUrl + "/{projectId}", 1, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.name").value("New name"))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @Order(19)
+  public void createProjectForUserWithNegativeId() throws Exception {
+    String json = generateJson(createProjectData());
+
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(post(baseUrl, -1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(json)))
+        .hasCause(new ConstraintViolationException(
+            "projectCreate.userId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(20)
+  public void getProjectForUserWithNegativeId() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(get(baseUrl + "/{projectId}", -1, 1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)))
+        .hasCause(new ConstraintViolationException(
+            "getProjectById.userId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(21)
+  public void getProjectWithNegativeId() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(get(baseUrl + "/{projectId}", 1, -1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)))
+        .hasCause(new ConstraintViolationException(
+            "getProjectById.projectId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(22)
+  public void getListOfProjectsForUserWithNegativeId() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(get(baseUrl, -1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)))
+        .hasCause(new ConstraintViolationException(
+            "getProjectsByUser.userId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(23)
+  public void deleteProjectForUserWithNegativeId() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(delete(baseUrl + "/{projectId}", -1, 1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)))
+        .hasCause(new ConstraintViolationException(
+            "projectDelete.userId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(24)
+  public void deleteProjectForUserWithNegativeProjectId() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(delete(baseUrl + "/{projectId}", 1, -1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)))
+        .hasCause(new ConstraintViolationException(
+            "projectDelete.projectId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+//  @Test
+//  @Order(25)
+//  public void updateProjectForUserWithNegativeProjectId() {
+//    Assertions.assertThatThrownBy(() ->
+//        mockMvc.perform(put(baseUrl + "/{projectId}", 1, -1)
+//            .accept(MediaType.APPLICATION_JSON)
+//            .contentType(MediaType.APPLICATION_JSON)))
+//        .hasCause(new ConstraintViolationException(
+//            "projectUpdate.projectId: must be greater than or equal to 1",
+//            new HashSet<>()));
+//  }
+//
+//  @Test
+//  @Order(26)
+//  public void updateProjectForUserWithNegativeId() {
+//    Assertions.assertThatThrownBy(() ->
+//        mockMvc.perform(put(baseUrl + "/{projectId}", -1, 1)
+//            .accept(MediaType.APPLICATION_JSON)
+//            .contentType(MediaType.APPLICATION_JSON)))
+//        .hasCause(new ConstraintViolationException(
+//            "projectUpdate.userId: must be greater than or equal to 1",
+//            new HashSet<>()));
+//  }
+//
+//  @Test
+//  @Order(27)
+//  public void changeNameForProjectWithNegativeUserId() {
+//    Assertions.assertThatThrownBy(() ->
+//        mockMvc.perform(put(baseUrl + "/{projectId}/name", -1, 1)
+//            .accept(MediaType.APPLICATION_JSON)
+//            .contentType(MediaType.APPLICATION_JSON)))
+//        .hasCause(new ConstraintViolationException(
+//            "updateProjectName.userId: must be greater than or equal to 1",
+//            new HashSet<>()));
+//  }
+//
+//  @Test
+//  @Order(28)
+//  public void changeNameForProjectWithNegativeProjectId() {
+//    Assertions.assertThatThrownBy(() ->
+//        mockMvc.perform(put(baseUrl + "/{projectId}/name", 1, -1)
+//            .accept(MediaType.APPLICATION_JSON)
+//            .contentType(MediaType.APPLICATION_JSON)))
+//        .hasCause(new ConstraintViolationException(
+//            "updateProjectName.projectId: must be greater than or equal to 1",
+//            new HashSet<>()));
+//  }
 }
