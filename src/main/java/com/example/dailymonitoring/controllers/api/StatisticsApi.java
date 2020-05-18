@@ -1,7 +1,7 @@
 package com.example.dailymonitoring.controllers.api;
 
 import com.example.dailymonitoring.models.Error;
-import com.example.dailymonitoring.models.statistics.StatisticsData;
+import com.example.dailymonitoring.models.statistics.PieStatisticsData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -19,9 +19,9 @@ import javax.validation.constraints.Min;
 public interface StatisticsApi {
 
   @ApiOperation(value = "Get users statistics", nickname = "getUsersStatistics",
-      response = StatisticsData.class, tags = { "Statistics", })
+      response = PieStatisticsData.class, tags = { "Statistics", })
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = StatisticsData.class),
+      @ApiResponse(code = 200, message = "Ok", response = PieStatisticsData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
@@ -33,14 +33,14 @@ public interface StatisticsApi {
       consumes = "application/json;charset=utf-8",
       produces = "application/json;charset=utf-8"
   )
-  ResponseEntity<StatisticsData> getUsersStatistics(
+  ResponseEntity<PieStatisticsData> getUsersStatistics(
       @RequestParam(name = "year", required = false) @Min(2020) Long selectedYear
   );
 
   @ApiOperation(value = "Get tasks statistics", nickname = "getTasksStatistics",
-      response = StatisticsData.class, tags = { "Statistics", })
+      response = PieStatisticsData.class, tags = { "Statistics", })
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = StatisticsData.class),
+      @ApiResponse(code = 200, message = "Ok", response = PieStatisticsData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
@@ -52,14 +52,14 @@ public interface StatisticsApi {
       consumes = "application/json;charset=utf-8",
       produces = "application/json;charset=utf-8"
   )
-  ResponseEntity<StatisticsData> getTasksStatistics(
+  ResponseEntity<PieStatisticsData> getTasksStatistics(
       @RequestParam(name = "year", required = false) @Min(2020) Long selectedYear
   );
 
   @ApiOperation(value = "Get projects statistics", nickname = "getProjectsStatistics",
-      response = StatisticsData.class, tags = { "Statistics", })
+      response = PieStatisticsData.class, tags = { "Statistics", })
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = StatisticsData.class),
+      @ApiResponse(code = 200, message = "Ok", response = PieStatisticsData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
@@ -71,7 +71,7 @@ public interface StatisticsApi {
       consumes = "application/json;charset=utf-8",
       produces = "application/json;charset=utf-8"
   )
-  ResponseEntity<StatisticsData> getProjectsStatistics(
+  ResponseEntity<PieStatisticsData> getProjectsStatistics(
       @RequestParam(name = "year", required = false) @Min(2020) Long selectedYear
   );
 }

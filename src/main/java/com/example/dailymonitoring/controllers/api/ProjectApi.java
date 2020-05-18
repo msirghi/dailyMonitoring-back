@@ -2,7 +2,7 @@ package com.example.dailymonitoring.controllers.api;
 
 import com.example.dailymonitoring.models.Error;
 import com.example.dailymonitoring.models.ProjectData;
-import com.example.dailymonitoring.models.statistics.ProjectTaskStatisticsData;
+import com.example.dailymonitoring.models.statistics.StatisticsData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -150,12 +150,12 @@ public interface ProjectApi {
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
       @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
   @RequestMapping(
-      value = "users/{userId}/projects/{projectId}/statistics/tasksByUser",
+      value = "users/{userId}/projects/{projectId}/statistics",
       method = RequestMethod.GET,
       consumes = "application/json;charset=utf-8",
       produces = "application/json;charset=utf-8"
   )
-  ResponseEntity<List<ProjectTaskStatisticsData>> getTasksStatistics(
+  ResponseEntity<StatisticsData> getTasksStatistics(
       @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
       @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId
   );

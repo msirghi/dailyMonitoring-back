@@ -3,6 +3,7 @@ package com.example.dailymonitoring.controllers;
 import com.example.dailymonitoring.controllers.api.ProjectApi;
 import com.example.dailymonitoring.models.ProjectData;
 import com.example.dailymonitoring.models.statistics.ProjectTaskStatisticsData;
+import com.example.dailymonitoring.models.statistics.StatisticsData;
 import com.example.dailymonitoring.services.ProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +69,7 @@ public class ProjectController implements ProjectApi {
   }
 
   @Override
-  public ResponseEntity<List<ProjectTaskStatisticsData>> getTasksStatistics(@Min(1) Long userId, @Min(1) Long projectId) {
+  public ResponseEntity<StatisticsData> getTasksStatistics(@Min(1) Long userId, @Min(1) Long projectId) {
     return ResponseEntity.ok(projectService.getTasksStatistics(userId, projectId));
   }
 }

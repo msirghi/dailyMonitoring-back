@@ -1,18 +1,18 @@
 package com.example.dailymonitoring.services;
 
-import com.example.dailymonitoring.models.statistics.StatisticsData;
+import com.example.dailymonitoring.models.statistics.PieStatisticsData;
 
 public interface StatisticsService {
 
-  StatisticsData getUsersCurrentYearStatistics();
+  PieStatisticsData getUsersCurrentYearStatistics();
 
-  StatisticsData getUsersStatisticsForSelectedYear(int year);
+  PieStatisticsData getUsersStatisticsForSelectedYear(int year);
 
-  StatisticsData getTasksCurrentYearStatistics();
+  PieStatisticsData getTasksCurrentYearStatistics();
 
-  StatisticsData getTasksStatisticsForSelectedYear(int year);
+  PieStatisticsData getTasksStatisticsForSelectedYear(int year);
 
-  StatisticsData getProjectsCurrentYearStatistics();
+  PieStatisticsData getProjectsCurrentYearStatistics();
 
-  StatisticsData getProjectsSelectedYearStatistics(int year);
+  PieStatisticsData getProjectsSelectedYearStatistics(int year);
 }

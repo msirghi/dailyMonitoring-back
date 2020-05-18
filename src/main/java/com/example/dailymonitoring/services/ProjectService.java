@@ -2,6 +2,7 @@ package com.example.dailymonitoring.services;
 
 import com.example.dailymonitoring.models.ProjectData;
 import com.example.dailymonitoring.models.statistics.ProjectTaskStatisticsData;
+import com.example.dailymonitoring.models.statistics.StatisticsData;
 
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface ProjectService {
 
   ProjectData updateProjectName(Long userId, Long projectId, ProjectData projectData);
 
-  List<ProjectTaskStatisticsData> getTasksStatistics(Long userId, Long projectId);
+  StatisticsData getTasksStatistics(Long userId, Long projectId);
 }

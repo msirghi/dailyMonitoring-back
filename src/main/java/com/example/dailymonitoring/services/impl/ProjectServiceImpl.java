@@ -10,6 +10,7 @@ import com.example.dailymonitoring.models.entities.UserEntity;
 import com.example.dailymonitoring.models.entities.UserProjectEntity;
 import com.example.dailymonitoring.models.enums.TaskStatusType;
 import com.example.dailymonitoring.models.statistics.ProjectTaskStatisticsData;
+import com.example.dailymonitoring.models.statistics.StatisticsData;
 import com.example.dailymonitoring.respositories.ProjectRepository;
 import com.example.dailymonitoring.respositories.ProjectTaskRepository;
 import com.example.dailymonitoring.respositories.UserProjectRepository;
@@ -124,39 +125,63 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  public List<ProjectTaskStatisticsData> getTasksStatistics(Long userId, Long projectId) {
+  public StatisticsData getTasksStatistics(Long userId, Long projectId) {
+    userProjectRepository.getProjectByUserIdAndProjectId(userId, projectId).orElseThrow(ResourceNotFoundException::new);
     projectRepository.getActiveProjectById(projectId).orElseThrow(ResourceNotFoundException::new);
 
     List<ProjectTaskEntity> allProjectTasks =
         projectTaskRepository.getAllTasksByProjectId(projectId).orElse(new ArrayList<>());
 
-    List<UserProjectEntity> usersInProject =
-        userProjectRepository.getProjectUsers(projectId).orElseThrow(BadRequestException::new);
-
+    long allUndoneTasks = getAllUndoneTasks(allProjectTasks);
     int allTasksCount = allProjectTasks.size();
+
     List<ProjectTaskStatisticsData> statisticsData = new ArrayList<>();
+    List<UserProjectEntity> usersInProject = userProjectRepository.getProjectUsers(projectId)
+        .orElseThrow(BadRequestException::new);
 
     usersInProject.forEach(userProjectEntity -> {
-      List<ProjectTaskEntity> projectTaskEntities =
-          allProjectTasks
-              .stream()
-              .filter(task ->
-                  task.getStatus().equals(TaskStatusType.DONE)
-                      && task.getTasksDoneBy() != null
-                      && task.getTasksDoneBy().equals(userProjectEntity.getUser()))
-              .collect(Collectors.toList());
-
       if (allTasksCount != 0) {
-        statisticsData.add(ProjectTaskStatisticsData
-            .builder()
-            .fullName(userProjectEntity.getUser().getFullName())
-            .userId(userProjectEntity.getUser().getId())
-            .tasksDone((long) projectTaskEntities.size())
-            .taskPercentage((long) ((projectTaskEntities.size() * 100) / allTasksCount))
-            .build());
+        statisticsData.add(
+            getProjectTasksStatisticsObject(
+                userProjectEntity, this.getListOfDoneTasks(allProjectTasks, userProjectEntity).size(), allTasksCount)
+        );
       }
     });
 
-    return statisticsData;
+    return StatisticsData
+        .builder()
+        .pieStatisticsData(statisticsData)
+        .allProjectTaskCount((long) allTasksCount)
+        .allUnDoneProjectTasks(allUndoneTasks)
+        .allDoneProjectTasks(allTasksCount - allUndoneTasks)
+        .build();
+  }
+
+  private List<ProjectTaskEntity> getListOfDoneTasks(List<ProjectTaskEntity> list, UserProjectEntity userProjectEntity) {
+    return list
+        .stream()
+        .filter(task ->
+            task.getStatus().equals(TaskStatusType.DONE)
+                && task.getTasksDoneBy() != null
+                && task.getTasksDoneBy().equals(userProjectEntity.getUser()))
+        .collect(Collectors.toList());
+  }
+
+  private ProjectTaskStatisticsData getProjectTasksStatisticsObject(UserProjectEntity userProjectEntity, int tasksDone,
+                                                                    int totalTasks) {
+    return ProjectTaskStatisticsData
+        .builder()
+        .fullName(userProjectEntity.getUser().getFullName())
+        .userId(userProjectEntity.getUser().getId())
+        .tasksDone((long) tasksDone)
+        .taskPercentage((long) ((tasksDone * 100) / totalTasks))
+        .build();
+  }
+
+  private long getAllUndoneTasks(List<ProjectTaskEntity> list) {
+    return list
+        .stream()
+        .filter(projectTaskEntity -> projectTaskEntity.getStatus().equals(TaskStatusType.INPROGRESS))
+        .count();
   }
 }

@@ -1,7 +1,7 @@
 package com.example.dailymonitoring.services.impl;
 
 import com.example.dailymonitoring.models.statistics.MonthsData;
-import com.example.dailymonitoring.models.statistics.StatisticsData;
+import com.example.dailymonitoring.models.statistics.PieStatisticsData;
 import com.example.dailymonitoring.respositories.ProjectRepository;
 import com.example.dailymonitoring.respositories.TaskRepository;
 import com.example.dailymonitoring.respositories.UserRepository;
@@ -38,7 +38,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
   @Override
   @Cacheable("usersStatisticsForCurrentYear")
-  public StatisticsData getUsersCurrentYearStatistics() {
+  public PieStatisticsData getUsersCurrentYearStatistics() {
     int currentYear = Calendar.getInstance().get(Calendar.YEAR);
     return getYearStatistics(currentYear,
         (long) userRepository.countUsersByYear(currentYear), getUsers(currentYear));
@@ -46,13 +46,13 @@ public class StatisticsServiceImpl implements StatisticsService {
 
   @Override
   @Cacheable("usersStatisticsForSelectedYear")
-  public StatisticsData getUsersStatisticsForSelectedYear(int year) {
+  public PieStatisticsData getUsersStatisticsForSelectedYear(int year) {
     return getYearStatistics(year, (long) userRepository.countUsersByYear(year), getUsers(year));
   }
 
   @Override
   @Cacheable("tasksStatisticsForCurrentYear")
-  public StatisticsData getTasksCurrentYearStatistics() {
+  public PieStatisticsData getTasksCurrentYearStatistics() {
     int currentYear = Calendar.getInstance().get(Calendar.YEAR);
     return getYearStatistics(currentYear, (long) taskRepository.countTaskByYear(currentYear),
         getTasks(currentYear));
@@ -60,13 +60,13 @@ public class StatisticsServiceImpl implements StatisticsService {
 
   @Override
   @Cacheable("tasksStatisticsForSelectedYear")
-  public StatisticsData getTasksStatisticsForSelectedYear(int year) {
+  public PieStatisticsData getTasksStatisticsForSelectedYear(int year) {
     return getYearStatistics(year, (long) taskRepository.countTaskByYear(year), getTasks(year));
   }
 
   @Override
   @Cacheable("projectsStatisticsForCurrentYear")
-  public StatisticsData getProjectsCurrentYearStatistics() {
+  public PieStatisticsData getProjectsCurrentYearStatistics() {
     int currentYear = Calendar.getInstance().get(Calendar.YEAR);
     return getYearStatistics(currentYear,
         (long) projectRepository.countProjectsByYear(currentYear), getProjects(currentYear));
@@ -74,7 +74,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
   @Override
   @Cacheable("projectsStatisticsForSelectedYear")
-  public StatisticsData getProjectsSelectedYearStatistics(int year) {
+  public PieStatisticsData getProjectsSelectedYearStatistics(int year) {
     return getYearStatistics(year,
         (long) projectRepository.countProjectsByYear(year), getProjects(year));
   }
@@ -97,8 +97,8 @@ public class StatisticsServiceImpl implements StatisticsService {
         Date.valueOf(selectedYear + "-12-31"));
   }
 
-  private StatisticsData getYearStatistics(int selectedYear, Long total,
-                                           List<Map<Object, Object>> mapToParse) {
+  private PieStatisticsData getYearStatistics(int selectedYear, Long total,
+                                              List<Map<Object, Object>> mapToParse) {
 
     Map<String, String> finalMap = new HashMap<>();
 
@@ -122,7 +122,7 @@ public class StatisticsServiceImpl implements StatisticsService {
       }
     });
 
-    return StatisticsData
+    return PieStatisticsData
         .builder()
         .total(total)
         .year((long) selectedYear)

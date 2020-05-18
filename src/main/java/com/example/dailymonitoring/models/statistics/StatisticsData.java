@@ -6,22 +6,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class StatisticsData {
 
-  @JsonProperty("year")
-  private Long year;
+  @JsonProperty("pieStatistics")
+  private List<ProjectTaskStatisticsData> pieStatisticsData;
 
-  @JsonProperty("total")
-  private Long total;
+  @JsonProperty("projectTaskCount")
+  private Long allProjectTaskCount;
 
-  @JsonProperty("perMonth")
-  private MonthsData perMonth;
+  @JsonProperty("doneProjectTaskCount")
+  private Long allDoneProjectTasks;
 
-  @JsonProperty("progression")
-  private Float progression;
-
+  @JsonProperty("undoneProjectTaskCount")
+  private Long allUnDoneProjectTasks;
 }

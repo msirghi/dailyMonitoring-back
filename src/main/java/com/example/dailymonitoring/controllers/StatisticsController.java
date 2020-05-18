@@ -1,7 +1,7 @@
 package com.example.dailymonitoring.controllers;
 
 import com.example.dailymonitoring.controllers.api.StatisticsApi;
-import com.example.dailymonitoring.models.statistics.StatisticsData;
+import com.example.dailymonitoring.models.statistics.PieStatisticsData;
 import com.example.dailymonitoring.services.StatisticsService;
 import javax.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class StatisticsController implements StatisticsApi {
   }
 
   @Override
-  public ResponseEntity<StatisticsData> getUsersStatistics(@Min(2020) Long selectedYear) {
+  public ResponseEntity<PieStatisticsData> getUsersStatistics(@Min(2020) Long selectedYear) {
     return selectedYear == null
         ? ResponseEntity.ok(statisticsService.getUsersCurrentYearStatistics())
         : ResponseEntity.ok(statisticsService.getUsersStatisticsForSelectedYear(
@@ -26,7 +26,7 @@ public class StatisticsController implements StatisticsApi {
   }
 
   @Override
-  public ResponseEntity<StatisticsData> getTasksStatistics(@Min(2020) Long selectedYear) {
+  public ResponseEntity<PieStatisticsData> getTasksStatistics(@Min(2020) Long selectedYear) {
     return selectedYear == null
         ? ResponseEntity.ok(statisticsService.getTasksCurrentYearStatistics())
         : ResponseEntity.ok(statisticsService.getTasksStatisticsForSelectedYear(
@@ -34,7 +34,7 @@ public class StatisticsController implements StatisticsApi {
   }
 
   @Override
-  public ResponseEntity<StatisticsData> getProjectsStatistics(@Min(2020) Long selectedYear) {
+  public ResponseEntity<PieStatisticsData> getProjectsStatistics(@Min(2020) Long selectedYear) {
     return selectedYear == null
         ? ResponseEntity.ok(statisticsService.getProjectsCurrentYearStatistics())
         : ResponseEntity.ok(statisticsService.getProjectsSelectedYearStatistics(

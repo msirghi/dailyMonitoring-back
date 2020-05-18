@@ -346,51 +346,116 @@ public class ProjectControllerTest {
             new HashSet<>()));
   }
 
-//  @Test
-//  @Order(25)
-//  public void updateProjectForUserWithNegativeProjectId() {
-//    Assertions.assertThatThrownBy(() ->
-//        mockMvc.perform(put(baseUrl + "/{projectId}", 1, -1)
-//            .accept(MediaType.APPLICATION_JSON)
-//            .contentType(MediaType.APPLICATION_JSON)))
-//        .hasCause(new ConstraintViolationException(
-//            "projectUpdate.projectId: must be greater than or equal to 1",
-//            new HashSet<>()));
-//  }
-//
-//  @Test
-//  @Order(26)
-//  public void updateProjectForUserWithNegativeId() {
-//    Assertions.assertThatThrownBy(() ->
-//        mockMvc.perform(put(baseUrl + "/{projectId}", -1, 1)
-//            .accept(MediaType.APPLICATION_JSON)
-//            .contentType(MediaType.APPLICATION_JSON)))
-//        .hasCause(new ConstraintViolationException(
-//            "projectUpdate.userId: must be greater than or equal to 1",
-//            new HashSet<>()));
-//  }
-//
-//  @Test
-//  @Order(27)
-//  public void changeNameForProjectWithNegativeUserId() {
-//    Assertions.assertThatThrownBy(() ->
-//        mockMvc.perform(put(baseUrl + "/{projectId}/name", -1, 1)
-//            .accept(MediaType.APPLICATION_JSON)
-//            .contentType(MediaType.APPLICATION_JSON)))
-//        .hasCause(new ConstraintViolationException(
-//            "updateProjectName.userId: must be greater than or equal to 1",
-//            new HashSet<>()));
-//  }
-//
-//  @Test
-//  @Order(28)
-//  public void changeNameForProjectWithNegativeProjectId() {
-//    Assertions.assertThatThrownBy(() ->
-//        mockMvc.perform(put(baseUrl + "/{projectId}/name", 1, -1)
-//            .accept(MediaType.APPLICATION_JSON)
-//            .contentType(MediaType.APPLICATION_JSON)))
-//        .hasCause(new ConstraintViolationException(
-//            "updateProjectName.projectId: must be greater than or equal to 1",
-//            new HashSet<>()));
-//  }
+  @Test
+  @Order(25)
+  public void updateProjectForUserWithNegativeProjectId() throws Exception {
+    mockMvc.perform(put(baseUrl + "/{projectId}", 1, -1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().is4xxClientError());
+  }
+
+  @Test
+  @Order(26)
+  public void updateProjectForUserWithNegativeId() throws Exception {
+    mockMvc.perform(put(baseUrl + "/{projectId}", -1, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().is4xxClientError());
+  }
+
+  @Test
+  @Order(27)
+  public void changeNameForProjectWithNegativeUserId() throws Exception {
+    mockMvc.perform(put(baseUrl + "/{projectId}/name", -1, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().is4xxClientError());
+  }
+
+  @Test
+  @Order(28)
+  public void changeNameForProjectWithNegativeProjectId() throws Exception {
+    mockMvc.perform(put(baseUrl + "/{projectId}/name", 1, -1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().is4xxClientError());
+  }
+
+  @Test
+  @Order(29)
+  public void getProjectStatistics() throws Exception {
+    mockMvc.perform(get(baseUrl + "/{projectId}/statistics", 1, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.pieStatistics").isArray())
+        .andExpect(jsonPath("$.pieStatistics[0].userId").value(IsNull.notNullValue()))
+        .andExpect(jsonPath("$.pieStatistics[0].fullName").value(IsNull.notNullValue()))
+        .andExpect(jsonPath("$.pieStatistics[0].tasksDone").isNumber())
+        .andExpect(jsonPath("$.pieStatistics[0].taskPercentage").isNumber())
+        .andExpect(jsonPath("$.projectTaskCount").isNumber())
+        .andExpect(jsonPath("$.doneProjectTaskCount").isNumber())
+        .andExpect(jsonPath("$.undoneProjectTaskCount").isNumber())
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @Order(30)
+  public void getProjectTasksStatisticsForNonExistingUser() throws Exception {
+    mockMvc.perform(get(baseUrl + "/{projectId}/statistics", 99, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Order(31)
+  public void getProjectTasksStatisticsForNonExistingProject() throws Exception {
+    mockMvc.perform(get(baseUrl + "/{projectId}/statistics", 1, 99)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Order(32)
+  public void getProjectTasksStatisticsForUserWithNegativeId() throws Exception {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(get(baseUrl + "/{projectId}/statistics", -1, 1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)))
+        .hasCause(new ConstraintViolationException(
+            "getTasksStatistics.userId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(33)
+  public void getProjectTasksStatisticsForProjectWithNegativeId() throws Exception {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(get(baseUrl + "/{projectId}/statistics", 1, -1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)))
+        .hasCause(new ConstraintViolationException(
+            "getTasksStatistics.projectId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(34)
+  public void getProjectStatisticsForDeletedProject() throws Exception {
+    mockMvc.perform(get(baseUrl + "/{projectId}/statistics", 1, 2)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Order(35)
+  public void getProjectStatisticsForUserWithNonRelatedProject() throws Exception {
+    mockMvc.perform(get(baseUrl + "/{projectId}/statistics", 1, 4)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
 }
