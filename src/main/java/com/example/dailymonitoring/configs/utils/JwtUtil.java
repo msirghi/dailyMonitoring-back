@@ -6,13 +6,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @Service
@@ -26,6 +26,9 @@ public class JwtUtil {
 
   @Value("app.secretKey")
   private String SECRET_KEY;
+
+  @Value("app.secretRefreshKey")
+  private String SECRET_REFRESH_KEY;
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
@@ -63,12 +66,24 @@ public class JwtUtil {
           put("id", user.getId());
         }})
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+        .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5)))
         .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
   }
 
   public Boolean validateToken(String token, UserDetails userDetails) {
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+  }
+
+  public String createRefreshToken(String username) {
+    final UserEntity user = userRepository.findUserByUsername(username).get();
+    return Jwts.builder()
+        .setClaims(new HashMap<String, Object>() {{
+          put("sub", user.getUsername());
+          put("id", user.getId());
+        }})
+        .setIssuedAt(new Date(System.currentTimeMillis()))
+        .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)))
+        .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
   }
 }

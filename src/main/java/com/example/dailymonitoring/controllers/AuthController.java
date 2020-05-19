@@ -11,10 +11,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 @RestController
 public class AuthController implements AuthApi {
@@ -47,20 +48,42 @@ public class AuthController implements AuthApi {
           .badRequest()
           .body(Error.builder()
               .code(400)
-              .message("Incorrect username or password")
+              .message("Incorrect username or password.")
               .build());
     }
 
     UserDetails userDetails = userDetailsService
         .loadUserByUsername(authenticationRequestData.getUsername());
     final String jwt = jwtUtil.generateToken(userDetails);
-//    Cookie cookie = new Cookie("tkn", jwt);
-    // 7 days
-//    cookie.setMaxAge(7 * 24 * 60 * 60);
-//    cookie.setSecure(true);
-//    cookie.setHttpOnly(true);
-//    response.addCookie(cookie);
+    final String refreshToken = jwtUtil.createRefreshToken(authenticationRequestData.getUsername());
 
-    return ResponseEntity.ok(new AuthenticationResponseData(jwt));
+    Cookie cookie = new Cookie("jit", refreshToken);
+    cookie.setMaxAge(7 * 24 * 60 * 60);
+    cookie.setSecure(true);
+    cookie.setHttpOnly(true);
+    response.addCookie(cookie);
+
+    return ResponseEntity.ok(new AuthenticationResponseData(jwt, refreshToken));
+  }
+
+  @Override
+  public ResponseEntity<?> renewToken(AuthenticationResponseData authData, HttpServletResponse response) {
+    String username = jwtUtil.extractUsername(authData.getRefreshToken());
+    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+    String refreshToken = authData.getRefreshToken();
+
+    String token = jwtUtil.generateToken(userDetails);
+    Date expiration = jwtUtil.extractExpiration(refreshToken);
+
+    if (expiration.before(new Date())) {
+      refreshToken = jwtUtil.createRefreshToken(username);
+    }
+
+    return ResponseEntity.ok(
+        AuthenticationResponseData
+            .builder()
+            .jwt(token)
+            .refreshToken(refreshToken)
+            .build());
   }
 }

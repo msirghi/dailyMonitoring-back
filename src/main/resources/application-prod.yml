@@ -1,6 +1,7 @@
 app:
   env: test
   secretKey: :op?<dsJd_F?YK1["C9nx%n%}z79`E;#Pi6-"N@irL7JkKHBc$4{9vO`B<V|asM
+  secretRefreshKey: 7E2F8C97049E837E6E55441CAB0AD184E8DF2D98425F7CC714F3DC9EB571AC66
 
 mail:
   debug: true

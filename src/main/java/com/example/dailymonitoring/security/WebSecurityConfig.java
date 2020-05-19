@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     http
         .authorizeRequests()
-        .antMatchers("/authenticate", "/createUser").permitAll()
+        .antMatchers("/authenticate", "/createUser", "/renewToken").permitAll()
         .anyRequest().authenticated();
 
     http

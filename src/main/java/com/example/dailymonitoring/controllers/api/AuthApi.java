@@ -3,6 +3,7 @@ package com.example.dailymonitoring.controllers.api;
 import com.example.dailymonitoring.models.Error;
 import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.auth.AuthenticationRequestData;
+import com.example.dailymonitoring.models.auth.AuthenticationResponseData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -36,6 +37,26 @@ public interface AuthApi {
   )
   ResponseEntity<?> authenticate(
       @RequestBody AuthenticationRequestData authenticationRequestData,
+      HttpServletResponse response
+  );
+
+  @ApiOperation(value = "Refresh auth token", nickname = "refreshAuthToken",
+      response = UserData.class, tags = { "Authenticate", })
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Ok", response = UserData.class),
+      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
+      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
+      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
+      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
+  @RequestMapping(
+      value = "/renewToken",
+      method = RequestMethod.POST,
+      consumes = "application/json;charset=utf-8",
+      produces = "application/json;charset=utf-8"
+  )
+  ResponseEntity<?> renewToken(
+      @RequestBody AuthenticationResponseData authData,
       HttpServletResponse response
   );
 }
