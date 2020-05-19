@@ -54,6 +54,7 @@ public class ProjectUserServiceImpl implements ProjectUserService {
 
   @Override
   public ProjectUserData addProjectUser(ProjectUserData projectUserData) {
+    System.out.println("SAL BRO");
     ProjectEntity project = projectRepository.getActiveProjectById(projectUserData.getProjectId())
         .orElseThrow(() -> new BadRequestException(Constants.NO_SUCH_PROJECT));
 
@@ -73,11 +74,11 @@ public class ProjectUserServiceImpl implements ProjectUserService {
       String emailSubject = String.format(Constants.PROJECT_USER_SUBJECT, project.getName());
       String emailBody = Constants.PROJECT_USER_ADD_BODY;
 
-      eventPublisher.publishEvent(new OnAddAndDeleteProjectUserEvent(
-          user.getEmail(),
-          project.getName(),
-          emailSubject,
-          emailBody));
+//      eventPublisher.publishEvent(new OnAddAndDeleteProjectUserEvent(
+//          user.getEmail(),
+//          project.getName(),
+//          emailSubject,
+//          emailBody));
     }
     projectUserData.setMessage(Constants.EMAIL_SENT_SUCCESS);
     return projectUserData;

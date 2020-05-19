@@ -33,10 +33,10 @@ public class UserController implements UserApi {
   public ResponseEntity<?> userCreate(@Valid UserData userData, HttpServletRequest request) {
     UserData result = this.userService.createUser(userData);
     String error = "";
-    if (result.getId() != null) {
-      eventPublisher.publishEvent(new OnRegistrationCompleteEvent(result,
-          request.getLocale(), request.getContextPath()));
-    }
+//    if (result.getId() != null) {
+//      eventPublisher.publishEvent(new OnRegistrationCompleteEvent(result,
+//          request.getLocale(), request.getContextPath()));
+//    }
 
     if (result.getEmail().equals("taken") && result.getUsername().equals("skip")) {
       error = "Email is already taken.";

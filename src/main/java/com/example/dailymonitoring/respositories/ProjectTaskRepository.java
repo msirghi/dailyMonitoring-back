@@ -55,7 +55,7 @@ public interface ProjectTaskRepository extends JpaRepository<ProjectTaskEntity, 
   );
 
   @Query("SELECT pte FROM ProjectTaskEntity pte "
-      + "WHERE pte.project.id = :projectId AND pte.status = 'DONE'")
+      + "WHERE pte.project.id = :projectId")
   Optional<List<ProjectTaskEntity>> getAllTasksByProjectId(
       @Param("projectId") Long projectId
   );

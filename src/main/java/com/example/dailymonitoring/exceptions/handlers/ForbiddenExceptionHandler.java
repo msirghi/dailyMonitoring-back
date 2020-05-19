@@ -10,6 +10,6 @@ public class ForbiddenExceptionHandler {
 
   @ExceptionHandler(ForbiddenException.class)
   public ResponseEntity forbiddenHandler() {
-    return ResponseEntity.status(403).build();
+    return ResponseEntity.status(402).build();
   }
 }

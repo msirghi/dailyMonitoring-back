@@ -174,7 +174,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
                 }
               });
               list.add(UserTaskData.builder()
-                  .user(conversionService.convert(task, UserData.class))
+                  .user(conversionService.convert(task.getTaskCreator(), UserData.class))
                   .task(taskData)
                   .build());
               return taskData;

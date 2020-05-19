@@ -42,9 +42,9 @@ public class Logging extends AbstractLogging {
         (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
     final String userIdAttr = requestAttributes.get("userId");
 
-    if (userIdAttr != null && !Long.valueOf(userIdAttr).equals(Constants.getCurrentUserId())) {
-      return ResponseEntity.status(403).build();
-    }
+//    if (userIdAttr != null && !Long.valueOf(userIdAttr).equals(Constants.getCurrentUserId())) {
+//      return ResponseEntity.status(403).build();
+//    }
 
     return joinPoint.proceed();
   }

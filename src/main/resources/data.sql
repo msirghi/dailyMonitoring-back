@@ -4,7 +4,7 @@ values
 ('user1', 'Nicolae Savastin', 'password', 'user1@email.com', 'ACTIVE', '2020-06-04 15:07:39.154493'),
 ('user1', 'Dima Sokolovschii', 'password', 'user1@email.com', 'ACTIVE', '2020-06-04 15:07:39.154493'),
 ('user1', 'Full Name', 'password', 'user1@email.com', 'ACTIVE', '2020-07-04 15:07:39.154493'),
-('user1', 'Full Name', 'password', 'mr.serven@yahoo.com', 'ACTIVE', '2020-05-04 15:07:39.154493'),
+('user1', 'Full Name', 'password', 'mr.serven1@yahoo.com', 'ACTIVE', '2020-05-04 15:07:39.154493'),
 ('user2', 'Full Name2', 'password', 'user2@email.com', 'ACTIVE', '2020-05-03 15:07:39.154493');
 
 insert into TASKS(USER_ID, NAME, DESCRIPTION, STATUS, CREATED_AT, UPDATED_AT, DELETED)
@@ -39,3 +39,6 @@ values
 (1, 1,'Task 5', 'Desc 5', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false, 2),
 (1, 1,'Task 6', 'Desc 6', 'DONE', '2020-05-04 15:07:39.154493', '2020-05-04 15:07:39.154493', false, 2);
 
+insert into EMAIL_TEMPLATES(NAME, DESCRIPTION, TEMPLATE, DELETED)
+values
+('Template 1', 'Description 1', 'HTML', FALSE)

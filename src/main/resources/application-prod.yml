@@ -1,0 +1,47 @@
+app:
+  env: test
+  secretKey: :op?<dsJd_F?YK1["C9nx%n%}z79`E;#Pi6-"N@irL7JkKHBc$4{9vO`B<V|asM
+
+mail:
+  debug: true
+  host: smtp.gmail.com
+  password: ${EMAIL_PWD}
+  smtp:
+    auth: true
+    ssl:
+      trust: smtp.gmail.com
+    starttls:
+      enable: true
+  transport:
+    protocol: smtp
+  username: ${EMAIL_USERNAME}
+
+management:
+  security:
+    enabled: false
+
+security:
+  basic:
+    enabled: false
+
+server:
+  port: 8182
+
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    password: ''
+    url: jdbc:h2:mem:testdb
+    username: sa
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+  output:
+    ansi:
+      enabled: ALWAYS

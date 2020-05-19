@@ -29,7 +29,7 @@ public interface RoleApi {
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
       @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
   @RequestMapping(
-      value = "roles/grantUser",
+      value = "/roles/grantUser",
       method = RequestMethod.POST,
       consumes = "application/json;charset=utf-8",
       produces = "application/json;charset=utf-8"

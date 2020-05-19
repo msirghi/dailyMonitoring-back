@@ -28,12 +28,12 @@ public class CustomUserDetails implements UserDetails {
 
   private boolean credentialsNonExpired;
 
-  private RoleEntity role;
+//  private RoleEntity role;
 
   public CustomUserDetails(String email, String username, String password, Boolean enabled,
-                           Collection<? extends GrantedAuthority> authorities, Long id, RoleEntity role) {
+                           Collection<? extends GrantedAuthority> authorities, Long id) {
     this.email = email;
-    this.role = role;
+//    this.role = role;
     this.id = id;
     this.enabled = enabled;
     this.username = username;

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,7 +84,7 @@ public class ProjectServiceImpl implements ProjectService {
             .stream()
             .map(project -> conversionService.convert(project, ProjectData.class))
             .collect(Collectors.toList()))
-        .orElseThrow(ResourceNotFoundException::new);
+        .orElse(new ArrayList<>());
   }
 
   @Override
@@ -132,7 +133,7 @@ public class ProjectServiceImpl implements ProjectService {
     List<ProjectTaskEntity> allProjectTasks =
         projectTaskRepository.getAllTasksByProjectId(projectId).orElse(new ArrayList<>());
 
-    long allUndoneTasks = getAllUndoneTasks(allProjectTasks);
+    long allUndoneTasks = getUndoneTaskCount(allProjectTasks);
     int allTasksCount = allProjectTasks.size();
 
     List<ProjectTaskStatisticsData> statisticsData = new ArrayList<>();
@@ -178,7 +179,7 @@ public class ProjectServiceImpl implements ProjectService {
         .build();
   }
 
-  private long getAllUndoneTasks(List<ProjectTaskEntity> list) {
+  private long getUndoneTaskCount(List<ProjectTaskEntity> list) {
     return list
         .stream()
         .filter(projectTaskEntity -> projectTaskEntity.getStatus().equals(TaskStatusType.INPROGRESS))
