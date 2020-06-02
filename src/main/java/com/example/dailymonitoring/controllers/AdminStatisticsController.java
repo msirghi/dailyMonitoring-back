@@ -1,6 +1,6 @@
 package com.example.dailymonitoring.controllers;
 
-import com.example.dailymonitoring.controllers.api.StatisticsApi;
+import com.example.dailymonitoring.controllers.api.AdminStatisticsApi;
 import com.example.dailymonitoring.models.statistics.PieStatisticsData;
 import com.example.dailymonitoring.services.StatisticsService;
 import javax.validation.constraints.Min;
@@ -8,11 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class StatisticsController implements StatisticsApi {
+public class AdminStatisticsController implements AdminStatisticsApi {
 
   private final StatisticsService statisticsService;
 
-  public StatisticsController(
+  public AdminStatisticsController(
       StatisticsService statisticsService) {
     this.statisticsService = statisticsService;
   }

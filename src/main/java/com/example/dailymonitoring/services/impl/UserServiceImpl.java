@@ -1,5 +1,6 @@
 package com.example.dailymonitoring.services.impl;
 
+import com.example.dailymonitoring.exceptions.BadRequestException;
 import com.example.dailymonitoring.exceptions.UserCreationException;
 import com.example.dailymonitoring.models.EmailData;
 import com.example.dailymonitoring.models.PasswordData;
@@ -15,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -80,25 +80,16 @@ public class UserServiceImpl implements UserService {
     return userRepository
         .getActiveUser(userId)
         .map(user -> {
-          List<UserEntity> userList =
-              userRepository.getUserByUsernameOrEmail(userData.getUsername(),
-                  userData.getEmail());
-          if (userList.size() == 0) {
+          UserEntity userInDb = userRepository.getUserByEmail(userData.getEmail())
+              .orElse(UserEntity.builder().build());
+
+          if (userInDb.getId() == null) {
             user.setEmail(userData.getEmail());
             user.setFullName(userData.getFullName());
-            user.setUsername(userData.getUsername());
             userData.setId(userId);
             return userData;
           }
-
-          for (UserEntity userEntity : userList) {
-            if (userEntity.getUsername().equalsIgnoreCase(userData.getUsername())) {
-              return UserData.builder().id(-2L).build();
-            } else if (userEntity.getEmail().equalsIgnoreCase(userData.getEmail())) {
-              return UserData.builder().id(-1L).build();
-            }
-          }
-          return UserData.builder().build();
+          throw new BadRequestException("Email is already taken");
         }).orElse(UserData.builder().build());
   }
 

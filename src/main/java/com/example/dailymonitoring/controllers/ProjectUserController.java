@@ -4,12 +4,13 @@ import com.example.dailymonitoring.constants.Constants;
 import com.example.dailymonitoring.controllers.api.ProjectUserApi;
 import com.example.dailymonitoring.models.ProjectUserData;
 import com.example.dailymonitoring.services.ProjectUserService;
-import java.util.List;
-import javassist.NotFoundException;
-import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import java.util.List;
 
 @RestController
 public class ProjectUserController implements ProjectUserApi {
@@ -41,11 +42,6 @@ public class ProjectUserController implements ProjectUserApi {
 
   @Override
   public ResponseEntity<List<ProjectUserData>> getAllProjectUsers(Long userId, Long projectId) {
-    try {
-      List<ProjectUserData> result = projectUserService.getAllProjectUsers(userId, projectId);
-      return ResponseEntity.ok(result);
-    } catch (NotFoundException e) {
-      return ResponseEntity.notFound().build();
-    }
+    return ResponseEntity.ok(projectUserService.getAllProjectUsers(userId, projectId));
   }
 }

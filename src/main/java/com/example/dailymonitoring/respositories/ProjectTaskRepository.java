@@ -17,6 +17,18 @@ import java.util.Optional;
 public interface ProjectTaskRepository extends JpaRepository<ProjectTaskEntity, Long> {
 
   @Query("SELECT pt FROM ProjectTaskEntity pt "
+      + "WHERE pt.project.id IN (:ids) "
+      + "ORDER BY pt.updatedAt DESC")
+  Optional<List<ProjectTaskEntity>> getProjectLastActivity(
+      @Param("ids") List<Long> projectList,
+      Pageable pageable
+  );
+
+  Optional<List<ProjectTaskEntity>> findAllByTaskCreatorId(
+      @Param("userId") Long userId
+  );
+
+  @Query("SELECT pt FROM ProjectTaskEntity pt "
       + "WHERE pt.project.id = :projectId")
   Optional<List<ProjectTaskEntity>> getTasksByProjectId(
       @Param("projectId") Long projectId
@@ -63,7 +75,7 @@ public interface ProjectTaskRepository extends JpaRepository<ProjectTaskEntity, 
   @Transactional
   @Modifying
   @Query("UPDATE ProjectTaskEntity tsk "
-      + "SET tsk.tasksDoneBy = :user, tsk.status = 'DONE' "
+      + "SET tsk.taskDoneBy = :user, tsk.status = 'DONE' "
       + "WHERE tsk.id = :taskId")
   int markAsDone(
       @Param("taskId") Long taskId,

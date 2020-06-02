@@ -4,6 +4,7 @@ import com.example.dailymonitoring.configs.filters.JwtRequestFilter;
 import com.example.dailymonitoring.services.impl.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -48,10 +49,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable();
     http.cors();
+    http.headers().frameOptions().disable();
 
     http
         .authorizeRequests()
-        .antMatchers("/authenticate", "/createUser", "/renewToken").permitAll()
+        .antMatchers("/authenticate",
+            "/createUser",
+            "/renewToken",
+            "/h2-console/**",
+            "/admin/**",
+            "/actuator/**",
+            "/instances/**",
+            "/registrationConfirm/**").permitAll()
+        .antMatchers(HttpMethod.POST, "/users").permitAll()
         .anyRequest().authenticated();
 
     http

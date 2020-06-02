@@ -16,7 +16,7 @@ import javax.validation.constraints.Min;
 
 @Api(value = "Statistics")
 @Validated
-public interface StatisticsApi {
+public interface AdminStatisticsApi {
 
   @ApiOperation(value = "Get users statistics", nickname = "getUsersStatistics",
       response = PieStatisticsData.class, tags = { "Statistics", })

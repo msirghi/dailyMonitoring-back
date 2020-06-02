@@ -30,4 +30,7 @@ public class ProjectEntity extends BaseEntity {
 
   @Column(name = "DELETED")
   private Boolean deleted;
+
+  @Column(name = "COLOR")
+  private String color;
 }

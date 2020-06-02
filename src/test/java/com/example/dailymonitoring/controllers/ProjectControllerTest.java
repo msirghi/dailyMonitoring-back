@@ -22,7 +22,11 @@ import javax.validation.ConstraintViolationException;
 import java.util.HashSet;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,7 +62,7 @@ public class ProjectControllerTest {
   public void projectCreate() throws Exception {
     String json = generateJson(createProjectData());
 
-    mockMvc.perform(post(baseUrl, 1)
+    mockMvc.perform(post(baseUrl, 2)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(json))
@@ -244,7 +248,7 @@ public class ProjectControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$", hasSize(4)))
+        .andExpect(jsonPath("$", hasSize(3)))
         .andExpect(status().isOk());
   }
 
@@ -457,5 +461,210 @@ public class ProjectControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Order(36)
+  public void getProjectsWithOrderNumber() throws Exception {
+    mockMvc.perform(get(baseUrl, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.[0].orderNumber").value(1))
+        .andExpect(jsonPath("$.[0].id").value(1))
+        .andExpect(jsonPath("$.[1].orderNumber").value(2))
+        .andExpect(jsonPath("$.[1].id").value(3))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @Order(37)
+  public void switchProjectNumbers() throws Exception {
+    mockMvc.perform(patch(baseUrl + "/reorder?firstProject=1&secondProject=3", 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @Order(38)
+  public void getProjectsAfterOrderChange() throws Exception {
+    mockMvc.perform(get(baseUrl, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.[0].orderNumber").value(1))
+        .andExpect(jsonPath("$.[0].id").value(3))
+        .andExpect(jsonPath("$.[1].orderNumber").value(2))
+        .andExpect(jsonPath("$.[1].id").value(1))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @Order(39)
+  public void switchProjectsForNonExistingUser() throws Exception {
+    mockMvc.perform(patch(baseUrl + "/reorder?firstProject=1&secondProject=3", 99)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(40)
+  public void switchProjectsForNonFirstProject() throws Exception {
+    mockMvc.perform(patch(baseUrl + "/reorder?firstProject=99&secondProject=3", 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(41)
+  public void switchProjectsForNonExistingSecondProject() throws Exception {
+    mockMvc.perform(patch(baseUrl + "/reorder?firstProject=1&secondProject=99", 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(42)
+  public void switchProjectsWithNegativeIdForFirstProject() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(patch(baseUrl + "/reorder?firstProject=-1&secondProject=1", 1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest()))
+        .hasCause(new ConstraintViolationException(
+            "changeProjectOrder.firstProject: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(43)
+  public void switchProjectsWithNegativeIdForSecondProject() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(patch(baseUrl + "/reorder?firstProject=1&secondProject=-1", 1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest()))
+        .hasCause(new ConstraintViolationException(
+            "changeProjectOrder.secondProject: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(44)
+  public void switchProjectsWithNegativeUserId() {
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(patch(baseUrl + "/reorder?firstProject=1&secondProject=1", -1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest()))
+        .hasCause(new ConstraintViolationException(
+            "changeProjectOrder.userId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(45)
+  public void deleteProjectBeforeSwitching() throws Exception {
+    mockMvc.perform(delete(baseUrl + "/{projectId}", 1, 3)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNoContent());
+  }
+
+  @Test
+  @Order(46)
+  public void switchProjectsWithOneOfThemDeleted() throws Exception {
+    mockMvc.perform(patch(baseUrl + "/reorder?firstProject=1&secondProject=3", 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(47)
+  public void changeProjectColor() throws Exception {
+    ProjectData model = createProjectData();
+    model.setColor("#fff");
+    String json = generateJson(model);
+    mockMvc.perform(patch(baseUrl + "/{projectId}/color", 1, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(jsonPath("$.color").value("#fff"))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @Order(48)
+  public void changeProjectColorForNonExistingUser() throws Exception {
+    ProjectData model = createProjectData();
+    model.setColor("#fff");
+    String json = generateJson(model);
+    mockMvc.perform(patch(baseUrl + "/{projectId}/color", 99, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(49)
+  public void changeProjectColorForNonExistingProject() throws Exception {
+    ProjectData model = createProjectData();
+    model.setColor("#fff");
+    String json = generateJson(model);
+    mockMvc.perform(patch(baseUrl + "/{projectId}/color", 1, 99)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @Order(50)
+  public void changeProjectColorForUserWithNegativeId() throws Exception {
+    ProjectData model = createProjectData();
+    model.setColor("#fff");
+    String json = generateJson(model);
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(patch(baseUrl + "/{projectId}/color", -1, 4)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(json)))
+        .hasCause(new ConstraintViolationException(
+            "updateProjectColor.userId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(51)
+  public void changeProjectColorForProjectWithNegativeId() throws Exception {
+    ProjectData model = createProjectData();
+    model.setColor("#fff");
+    String json = generateJson(model);
+    Assertions.assertThatThrownBy(() ->
+        mockMvc.perform(patch(baseUrl + "/{projectId}/color", 1, -1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(json)))
+        .hasCause(new ConstraintViolationException(
+            "updateProjectColor.projectId: must be greater than or equal to 1",
+            new HashSet<>()));
+  }
+
+  @Test
+  @Order(52)
+  public void changeProjectColorWithNullNameInDTO() throws Exception {
+    ProjectData model = createProjectData();
+    model.setName(null);
+    model.setColor("#fff");
+    String json = generateJson(model);
+    mockMvc.perform(patch(baseUrl + "/{projectId}/color", 1, 1)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andExpect(status().isBadRequest());
   }
 }

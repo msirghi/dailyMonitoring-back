@@ -1,16 +1,17 @@
 package com.example.dailymonitoring.respositories;
 
 import com.example.dailymonitoring.models.entities.UserEntity;
-import java.sql.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
+import java.sql.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
@@ -27,7 +28,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
       @Param("username") String username
   );
 
-  @Query("SELECT status FROM UserEntity usr "
+  @Query("SELECT usr.status FROM UserEntity usr "
       + "WHERE usr.id = :id")
   Optional<String> checkStatus(
       @Param("id") Long id

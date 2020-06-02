@@ -6,15 +6,16 @@ import com.example.dailymonitoring.models.Error;
 import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.UsernameData;
-import com.example.dailymonitoring.services.UserService;
 import com.example.dailymonitoring.models.events.OnRegistrationCompleteEvent;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import com.example.dailymonitoring.services.UserService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @RestController
 public class UserController implements UserApi {
@@ -24,7 +25,7 @@ public class UserController implements UserApi {
   private final ApplicationEventPublisher eventPublisher;
 
   public UserController(UserService userService,
-      ApplicationEventPublisher eventPublisher) {
+                        ApplicationEventPublisher eventPublisher) {
     this.userService = userService;
     this.eventPublisher = eventPublisher;
   }
@@ -47,12 +48,12 @@ public class UserController implements UserApi {
     return result.getId() != null
         ? ResponseEntity.status(HttpStatus.CREATED).body(result)
         : ResponseEntity.badRequest()
-            .body(Error
-                .builder()
-                .code(400)
-                .message("Failed to created user.")
-                .description(error)
-                .build());
+        .body(Error
+            .builder()
+            .code(400)
+            .message("Failed to created user.")
+            .description(error)
+            .build());
   }
 
   @Override
@@ -102,7 +103,7 @@ public class UserController implements UserApi {
 
   @Override
   public ResponseEntity<?> userUpdatePasswordOnly(@Min(1) Long userId,
-      @Valid PasswordData passwordData) {
+                                                  @Valid PasswordData passwordData) {
     return this.userService.updateUserPasswordOnly(userId, passwordData)
         ? ResponseEntity.ok().build()
         : ResponseEntity.notFound().build();
@@ -115,25 +116,25 @@ public class UserController implements UserApi {
     return this.userService.updateUserEmailOnly(userId, emailData)
         ? ResponseEntity.ok().build()
         : ResponseEntity.badRequest()
-            .body(Error
-                .builder()
-                .code(400)
-                .message("Failed to update user.")
-                .description("Email is already taken.")
-                .build());
+        .body(Error
+            .builder()
+            .code(400)
+            .message("Failed to update user.")
+            .description("Email is already taken.")
+            .build());
   }
 
   @Override
   public ResponseEntity<?> userUpdateUsernameOnly(@Min(1) Long userId,
-      @Valid UsernameData usernameData) {
+                                                  @Valid UsernameData usernameData) {
     return this.userService.updateUserUsernameOnly(userId, usernameData)
         ? ResponseEntity.ok().build()
         : ResponseEntity.badRequest()
-            .body(Error
-                .builder()
-                .code(400)
-                .message("Failed to update user.")
-                .description("Username is already taken.")
-                .build());
+        .body(Error
+            .builder()
+            .code(400)
+            .message("Failed to update user.")
+            .description("Username is already taken.")
+            .build());
   }
 }

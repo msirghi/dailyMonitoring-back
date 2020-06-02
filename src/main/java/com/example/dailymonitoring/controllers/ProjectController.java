@@ -2,7 +2,6 @@ package com.example.dailymonitoring.controllers;
 
 import com.example.dailymonitoring.controllers.api.ProjectApi;
 import com.example.dailymonitoring.models.ProjectData;
-import com.example.dailymonitoring.models.statistics.ProjectTaskStatisticsData;
 import com.example.dailymonitoring.models.statistics.StatisticsData;
 import com.example.dailymonitoring.services.ProjectService;
 import org.springframework.http.HttpStatus;
@@ -71,5 +70,22 @@ public class ProjectController implements ProjectApi {
   @Override
   public ResponseEntity<StatisticsData> getTasksStatistics(@Min(1) Long userId, @Min(1) Long projectId) {
     return ResponseEntity.ok(projectService.getTasksStatistics(userId, projectId));
+  }
+
+  @Override
+  public ResponseEntity<ProjectData> updateProjectColor(@Valid ProjectData projectData,
+                                                        @Min(1) Long userId, @Min(1) Long projectId) {
+    ProjectData result = projectService.updateProjectColor(userId, projectId, projectData);
+    return result.getId() == null
+        ? ResponseEntity.badRequest().build()
+        : ResponseEntity.ok(result);
+  }
+
+  @Override
+  public ResponseEntity<Void> changeProjectOrder(@Min(1) Long userId,
+                                                 @Min(1) Long firstProject,
+                                                 @Min(1) Long secondProject) {
+    projectService.reorderProjects(userId, firstProject, secondProject);
+    return ResponseEntity.ok().build();
   }
 }

@@ -23,14 +23,14 @@ import java.util.List;
 public interface ProjectUserApi {
 
   @ApiOperation(value = "Add user in project", nickname = "addProjectUser",
-      response = ProjectUserData.class, tags = { "ProjectUsers", })
+      response = ProjectUserData.class, tags = {"ProjectUsers",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectUserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
       value = "/projects/addUser",
       method = RequestMethod.POST,
@@ -42,14 +42,14 @@ public interface ProjectUserApi {
   );
 
   @ApiOperation(value = "Delete a user from the project", nickname = "deleteProjectUser",
-      response = ProjectUserData.class, tags = { "ProjectUsers", })
+      response = ProjectUserData.class, tags = {"ProjectUsers",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok"),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
       value = "/projects/{projectId}/users/{userId}",
       method = RequestMethod.DELETE,
@@ -62,14 +62,14 @@ public interface ProjectUserApi {
   );
 
   @ApiOperation(value = "Get all project users", nickname = "getAllProjectUsers",
-      response = ProjectUserData.class, tags = { "ProjectUsers", })
+      response = ProjectUserData.class, tags = {"ProjectUsers",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectUserData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
       value = "users/{userId}/projects/{projectId}/users",
       method = RequestMethod.GET,

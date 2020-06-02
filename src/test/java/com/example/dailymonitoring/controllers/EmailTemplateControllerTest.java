@@ -82,9 +82,9 @@ class EmailTemplateControllerTest {
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.id").value(IsNull.notNullValue()))
-        .andExpect(jsonPath("$.name").value("Template name"))
-        .andExpect(jsonPath("$.description").value("Template description"))
-        .andExpect(jsonPath("$.template").value("Template"))
+        .andExpect(jsonPath("$.name").value("Template 1"))
+        .andExpect(jsonPath("$.description").value("Description 1"))
+        .andExpect(jsonPath("$.template").value("HTML"))
         .andExpect(status().isOk());
   }
 
@@ -159,7 +159,7 @@ class EmailTemplateControllerTest {
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$", hasSize(1)))
+        .andExpect(jsonPath("$", hasSize(2)))
         .andExpect(status().isOk());
   }
 
@@ -269,7 +269,7 @@ class EmailTemplateControllerTest {
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$", hasSize(0)))
+        .andExpect(jsonPath("$", hasSize(1)))
         .andExpect(status().isOk());
   }
 }

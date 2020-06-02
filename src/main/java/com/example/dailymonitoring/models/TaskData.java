@@ -3,18 +3,17 @@ package com.example.dailymonitoring.models;
 import com.example.dailymonitoring.models.enums.TaskStatusType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
-//Added
+import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @ApiModel
 @Builder
@@ -50,4 +49,9 @@ public class TaskData {
   @JsonProperty("status")
   private TaskStatusType status;
 
+  @JsonProperty("assignedToId")
+  private Long assignedToId;
+
+  @JsonProperty("assignedToName")
+  private String assignedToName;
 }

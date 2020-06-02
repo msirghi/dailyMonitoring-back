@@ -20,5 +20,9 @@ public interface ProjectService {
 
   ProjectData updateProjectName(Long userId, Long projectId, ProjectData projectData);
 
+  ProjectData updateProjectColor(Long userId, Long projectId, ProjectData projectData);
+
   StatisticsData getTasksStatistics(Long userId, Long projectId);
+
+  void reorderProjects(Long userId, Long firstProjectId, Long secondProjectId);
 }

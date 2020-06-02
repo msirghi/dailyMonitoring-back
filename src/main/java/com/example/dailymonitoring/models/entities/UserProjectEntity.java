@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,7 +18,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "USER_PROJECTS",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "USER_ID", "PROJECT_ID" })
+        @UniqueConstraint(columnNames = {"USER_ID", "PROJECT_ID"})
     })
 @Data
 @Builder
@@ -32,4 +33,7 @@ public class UserProjectEntity extends BaseEntity {
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "PROJECT_ID", nullable = false)
   private ProjectEntity project;
+
+  @Column(name = "ORDER_NUMBER")
+  private Long orderNumber;
 }

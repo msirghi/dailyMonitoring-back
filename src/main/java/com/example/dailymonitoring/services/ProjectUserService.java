@@ -1,8 +1,8 @@
 package com.example.dailymonitoring.services;
 
 import com.example.dailymonitoring.models.ProjectUserData;
+
 import java.util.List;
-import javassist.NotFoundException;
 
 public interface ProjectUserService {
 
@@ -10,5 +10,6 @@ public interface ProjectUserService {
 
   int deleteUserFromProject(Long projectId, Long userId);
 
-  List<ProjectUserData> getAllProjectUsers(Long userId, Long projectId) throws NotFoundException;
+  List<ProjectUserData> getAllProjectUsers(Long userId, Long projectId);
+
 }

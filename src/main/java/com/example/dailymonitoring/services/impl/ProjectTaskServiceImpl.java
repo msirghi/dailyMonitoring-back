@@ -7,6 +7,7 @@ import com.example.dailymonitoring.models.TaskData;
 import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.UserTaskData;
 import com.example.dailymonitoring.models.entities.ProjectTaskEntity;
+import com.example.dailymonitoring.models.entities.UserEntity;
 import com.example.dailymonitoring.models.entities.UserProjectEntity;
 import com.example.dailymonitoring.models.enums.TaskStatusType;
 import com.example.dailymonitoring.respositories.ProjectRepository;
@@ -57,7 +58,15 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     if (newTask.getDate() != null) {
       newTask.setDate(taskData.getDates().get(0));
     }
+    if (taskData.getAssignedToId() == null) {
+      taskData.setAssignedToId(userProjectEntity.getUser().getId());
+    }
 
+    UserEntity assignedTo = userProjectRepository
+        .getProjectByUserIdAndProjectId(taskData.getAssignedToId(), projectId)
+        .orElseThrow(() -> new BadRequestException(Constants.NO_USER_WITH_SUCH_PROJECT))
+        .getUser();
+    newTask.setTaskAssignedTo(assignedTo);
     newTask.setStatus(TaskStatusType.INPROGRESS);
     newTask.setDeleted(false);
     newTask.setTaskCreator(userProjectEntity.getUser());
@@ -71,6 +80,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
           taskData.setId(newTask.getId());
           taskData.setStatus(TaskStatusType.INPROGRESS);
+          taskData.setAssignedToName(assignedTo.getFullName());
           return taskData;
         })
         .orElse(TaskData.builder().build());
@@ -101,6 +111,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
             .stream()
             .map(task -> {
               TaskData taskData = conversionService.convert(task, TaskData.class);
+              taskData.setAssignedToName(task.getTaskAssignedTo().getFullName());
               taskData.setDates(new ArrayList<LocalDateTime>() {
                 {
                   add(task.getDate());
@@ -138,6 +149,15 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
         .findNotDeletedTaskById(taskId)
         .filter(projectTaskEntity -> projectTaskEntity.getStatus() != TaskStatusType.DELETED)
         .map(task -> {
+          if (taskData.getAssignedToId() != null) {
+            UserEntity user = userProjectRepository
+                .getProjectByUserIdAndProjectId(taskData.getAssignedToId(), projectId)
+                .orElseThrow(() -> new BadRequestException(Constants.NO_USER_WITH_SUCH_PROJECT))
+                .getUser();
+
+            task.setTaskAssignedTo(user);
+            taskData.setAssignedToName(user.getFullName());
+          }
           task.setName(taskData.getName());
           task.setDescription(taskData.getDescription());
           taskData.setId(task.getId());
@@ -168,13 +188,14 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
             .stream()
             .map(task -> {
               TaskData taskData = conversionService.convert(task, TaskData.class);
+              taskData.setAssignedToName(task.getTaskAssignedTo().getFullName());
               taskData.setDates(new ArrayList<LocalDateTime>() {
                 {
                   add(task.getDate());
                 }
               });
               list.add(UserTaskData.builder()
-                  .user(conversionService.convert(task.getTaskCreator(), UserData.class))
+                  .user(conversionService.convert(task.getTaskAssignedTo(), UserData.class))
                   .task(taskData)
                   .build());
               return taskData;

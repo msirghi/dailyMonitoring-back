@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -24,14 +25,14 @@ import java.util.List;
 public interface ProjectApi {
 
   @ApiOperation(value = "Create project", nickname = "projectCreate",
-      response = ProjectData.class, tags = { "Projects", })
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
       value = "users/{userId}/projects",
       method = RequestMethod.POST,
@@ -44,14 +45,14 @@ public interface ProjectApi {
   );
 
   @ApiOperation(value = "Get project", nickname = "getProject",
-      response = ProjectData.class, tags = { "Projects", })
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
       value = "users/{userId}/projects/{projectId}",
       method = RequestMethod.GET,
@@ -63,14 +64,14 @@ public interface ProjectApi {
   );
 
   @ApiOperation(value = "Get list of projects", nickname = "getProjectsByUser",
-      response = ProjectData.class, tags = { "Projects", })
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
       value = "users/{userId}/projects",
       method = RequestMethod.GET,
@@ -81,14 +82,14 @@ public interface ProjectApi {
   );
 
   @ApiOperation(value = "Delete project by id", nickname = "deleteProject",
-      response = ProjectData.class, tags = { "Projects", })
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
       value = "/users/{userId}/projects/{projectId}",
       method = RequestMethod.DELETE,
@@ -100,14 +101,14 @@ public interface ProjectApi {
   );
 
   @ApiOperation(value = "Update project by id", nickname = "updateProject",
-      response = ProjectData.class, tags = { "Projects", })
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
       value = "/users/{userId}/projects/{projectId}",
       method = RequestMethod.PUT,
@@ -120,14 +121,14 @@ public interface ProjectApi {
   );
 
   @ApiOperation(value = "Update project name", nickname = "updateProjectName",
-      response = ProjectData.class, tags = { "Projects", })
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
       value = "users/{userId}/projects/{projectId}/name",
       method = RequestMethod.PUT,
@@ -140,15 +141,36 @@ public interface ProjectApi {
       @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId
   );
 
-  @ApiOperation(value = "Get task statistics", nickname = "getTaskStatistics",
-      response = ProjectData.class, tags = { "Projects", })
+  @ApiOperation(value = "Update project color", nickname = "updateProjectColor",
+      response = ProjectData.class, tags = {"Projects",})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class) })
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+  @RequestMapping(
+      value = "users/{userId}/projects/{projectId}/color",
+      method = RequestMethod.PATCH,
+      consumes = "application/json;charset=utf-8",
+      produces = "application/json;charset=utf-8"
+  )
+  ResponseEntity<ProjectData> updateProjectColor(
+      @ApiParam(required = true) @RequestBody @Valid ProjectData projectData,
+      @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
+      @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId
+  );
+
+  @ApiOperation(value = "Get task statistics", nickname = "getTaskStatistics",
+      response = ProjectData.class, tags = {"Projects",})
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
+      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
+      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
+      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
+      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
       value = "users/{userId}/projects/{projectId}/statistics",
       method = RequestMethod.GET,
@@ -158,5 +180,25 @@ public interface ProjectApi {
   ResponseEntity<StatisticsData> getTasksStatistics(
       @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
       @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId
+  );
+
+  @ApiOperation(value = "Switch the order of two project", nickname = "reorderProject", tags = {"ProjectUsers",})
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Ok"),
+      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
+      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
+      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
+      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+  @RequestMapping(
+      value = "users/{userId}/projects/reorder",
+      method = RequestMethod.PATCH,
+      consumes = "application/json;charset=utf-8",
+      produces = "application/json;charset=utf-8"
+  )
+  ResponseEntity<Void> changeProjectOrder(
+      @ApiParam(required = true) @Min(1) @PathVariable("userId") Long userId,
+      @RequestParam(name = "firstProject", required = false) @Min(1) Long firstProject,
+      @RequestParam(name = "secondProject", required = false) @Min(1) Long secondProject
   );
 }

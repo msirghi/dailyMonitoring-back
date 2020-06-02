@@ -2,6 +2,7 @@ package com.example.dailymonitoring.services.impl;
 
 import com.example.dailymonitoring.constants.Constants;
 import com.example.dailymonitoring.exceptions.BadRequestException;
+import com.example.dailymonitoring.exceptions.ResourceNotFoundException;
 import com.example.dailymonitoring.models.ProjectUserData;
 import com.example.dailymonitoring.models.entities.ProjectEntity;
 import com.example.dailymonitoring.models.entities.UserEntity;
@@ -54,7 +55,6 @@ public class ProjectUserServiceImpl implements ProjectUserService {
 
   @Override
   public ProjectUserData addProjectUser(ProjectUserData projectUserData) {
-    System.out.println("SAL BRO");
     ProjectEntity project = projectRepository.getActiveProjectById(projectUserData.getProjectId())
         .orElseThrow(() -> new BadRequestException(Constants.NO_SUCH_PROJECT));
 
@@ -94,7 +94,7 @@ public class ProjectUserServiceImpl implements ProjectUserService {
     }
 
     userProjectRepository.deleteUserFromProject(userId, projectId);
-    if (!environment.getProperty("app.env").equals("test")) {
+    if (!Objects.equals(environment.getProperty("app.env"), "test")) {
       String emailSubject = String.format(Constants.PROJECT_USER_DELETED_SUBJECT,
           userProjectEntity.getProject().getName());
       String emailBody = String.format(Constants.PROJECT_USER_DELETED_BODY,
@@ -110,10 +110,9 @@ public class ProjectUserServiceImpl implements ProjectUserService {
   }
 
   @Override
-  public List<ProjectUserData> getAllProjectUsers(Long userId, Long projectId)
-      throws NotFoundException {
+  public List<ProjectUserData> getAllProjectUsers(Long userId, Long projectId) {
     userProjectRepository.getProjectByUserIdAndProjectId(userId, projectId)
-        .orElseThrow(() -> new NotFoundException(Constants.PROJECT_NOT_FOUND));
+        .orElseThrow(() -> new ResourceNotFoundException(Constants.PROJECT_NOT_FOUND));
 
     return userProjectRepository.getProjectUsers(projectId)
         .map(userProjectEntities ->

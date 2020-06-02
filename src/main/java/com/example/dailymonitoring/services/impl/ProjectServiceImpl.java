@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,7 +62,12 @@ public class ProjectServiceImpl implements ProjectService {
     projectEntity.setDeleted(false);
     projectData.setId(projectRepository.save(projectEntity).getId());
     userProjectRepository
-        .save(UserProjectEntity.builder().user(user).project(projectEntity).build());
+        .save(UserProjectEntity
+            .builder()
+            .user(user)
+            .orderNumber((long) this.getProjectsByUser(userId).size() + 1)
+            .project(projectEntity)
+            .build());
     return projectData;
   }
 
@@ -74,6 +78,33 @@ public class ProjectServiceImpl implements ProjectService {
         .filter(project -> !project.getDeleted())
         .map(project -> conversionService.convert(project, ProjectData.class))
         .orElse(ProjectData.builder().build());
+  }
+
+  @Override
+  @Transactional
+  public void reorderProjects(Long userId, Long firstProjectId, Long secondProjectId) {
+    if (firstProjectId.equals(secondProjectId)) {
+      throw new BadRequestException(Constants.PROJECT_ID_NOT_EQUAL);
+    }
+
+    List<UserProjectEntity> userProjectList = userProjectRepository.getTwoProjectById(userId, firstProjectId, secondProjectId)
+        .orElseThrow(BadRequestException::new);
+
+    UserProjectEntity firstProject;
+    UserProjectEntity secondProject;
+
+    try {
+      firstProject = userProjectList.get(0);
+      secondProject = userProjectList.get(1);
+    } catch (IndexOutOfBoundsException e) {
+      throw new BadRequestException();
+    }
+
+    Long secondProjectOrder = secondProject.getOrderNumber();
+    Long firstProjectOrder = firstProject.getOrderNumber();
+
+    firstProject.setOrderNumber(secondProjectOrder);
+    secondProject.setOrderNumber(firstProjectOrder);
   }
 
   @Override
@@ -126,6 +157,19 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
+  @Transactional
+  public ProjectData updateProjectColor(Long userId, Long projectId, ProjectData projectData) {
+    return userProjectRepository
+        .getProjectByUserIdAndProjectId(userId, projectId)
+        .map(projectEntity -> {
+          projectEntity.getProject().setColor(projectData.getColor());
+          projectData.setId(projectEntity.getProject().getId());
+          return projectData;
+        })
+        .orElse(ProjectData.builder().build());
+  }
+
+  @Override
   public StatisticsData getTasksStatistics(Long userId, Long projectId) {
     userProjectRepository.getProjectByUserIdAndProjectId(userId, projectId).orElseThrow(ResourceNotFoundException::new);
     projectRepository.getActiveProjectById(projectId).orElseThrow(ResourceNotFoundException::new);
@@ -163,8 +207,8 @@ public class ProjectServiceImpl implements ProjectService {
         .stream()
         .filter(task ->
             task.getStatus().equals(TaskStatusType.DONE)
-                && task.getTasksDoneBy() != null
-                && task.getTasksDoneBy().equals(userProjectEntity.getUser()))
+                && task.getTaskDoneBy() != null
+                && task.getTaskDoneBy().equals(userProjectEntity.getUser()))
         .collect(Collectors.toList());
   }
 

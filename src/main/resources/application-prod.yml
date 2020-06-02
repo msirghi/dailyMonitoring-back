@@ -1,7 +1,9 @@
 app:
   env: test
   secretKey: :op?<dsJd_F?YK1["C9nx%n%}z79`E;#Pi6-"N@irL7JkKHBc$4{9vO`B<V|asM
-  secretRefreshKey: 7E2F8C97049E837E6E55441CAB0AD184E8DF2D98425F7CC714F3DC9EB571AC66
+  app: daily-monitoring-sevice
+  release: 0.1
+  team: Daily Monitoring
 
 mail:
   debug: true
@@ -18,6 +20,13 @@ mail:
   username: ${EMAIL_USERNAME}
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
   security:
     enabled: false
 
@@ -29,6 +38,24 @@ server:
   port: 8182
 
 spring:
+  boot:
+    admin:
+      notify:
+        mail:
+          to: serveen.pro@gmail.com
+      context-path: /admin
+      ui:
+        title: Daily Monitoring Admin
+      client:
+        url: http://localhost:8182/admin
+        username: admin
+        password: admin
+        instance:
+          metadata:
+            address: /admin
+          management-url: http://localhost:8182/admin
+          service-url: http://localhost:8182
+
   datasource:
     driverClassName: org.h2.Driver
     password: ''

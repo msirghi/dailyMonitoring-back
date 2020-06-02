@@ -15,6 +15,8 @@ public class UserProjectDataConverter implements Converter<UserProjectEntity, Pr
         .id(source.getProject().getId())
         .name(source.getProject().getName())
         .description(source.getProject().getDescription())
+        .color(source.getProject().getColor())
+        .orderNumber(source.getOrderNumber())
         .build();
   }
 }

@@ -1,5 +1,6 @@
 package com.example.dailymonitoring;
 
+import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,6 +15,7 @@ import java.net.InetAddress;
 @EnableCaching
 @Slf4j
 @EnableScheduling
+@EnableAdminServer
 public class DailyMonitoringApplication {
 
   public static void main(String[] args) throws Exception {

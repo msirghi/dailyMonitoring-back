@@ -474,22 +474,6 @@ public class UserControllerTest {
   }
 
   @Test
-  @Order(27)
-  public void userUpdateEmailFullNameUsernameWithTakenUsername() throws Exception {
-    UserData userData = createUserModel();
-    userData.setFullName("Test Data");
-    userData.setEmail("test142@test.com");
-    userData.setUsername("username2");
-    userData.setPassword("Password3");
-    String json = generateJson(userData);
-    mockMvc.perform(put("/users/{id}", 2)
-        .accept(MediaType.APPLICATION_JSON)
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(json))
-        .andExpect(status().is(400));
-  }
-
-  @Test
   @Order(28)
   public void userUpdateEmailOnly() throws Exception {
     EmailData emailData = new EmailData();

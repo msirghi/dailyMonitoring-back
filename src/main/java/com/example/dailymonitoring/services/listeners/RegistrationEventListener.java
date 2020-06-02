@@ -8,16 +8,17 @@ import com.example.dailymonitoring.services.MailService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
+import javax.mail.internet.MimeMessage;
 import java.util.UUID;
 
 @Component
-public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
+public class RegistrationEventListener implements ApplicationListener<OnRegistrationCompleteEvent> {
 
   private final AccountConfirmationService accountConfirmationService;
 
   private final MailService mailService;
 
-  public RegistrationListener(
+  public RegistrationEventListener(
       AccountConfirmationService accountConfirmationService,
       MailService mailService) {
     this.accountConfirmationService = accountConfirmationService;

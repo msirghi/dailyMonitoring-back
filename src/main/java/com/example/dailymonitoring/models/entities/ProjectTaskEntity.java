@@ -1,5 +1,12 @@
 package com.example.dailymonitoring.models.entities;
 
+import com.example.dailymonitoring.models.enums.TaskStatusType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,16 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
-
-import com.example.dailymonitoring.models.enums.TaskStatusType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
@@ -57,9 +55,13 @@ public class ProjectTaskEntity extends BaseEntity {
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "DONE_BY_USER_ID")
-  UserEntity tasksDoneBy;
+  UserEntity taskDoneBy;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "CREATOR_USER_ID", nullable = false)
   UserEntity taskCreator;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "ASSIGNED_TO_USER_ID", nullable = false)
+  UserEntity taskAssignedTo;
 }

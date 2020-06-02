@@ -39,12 +39,14 @@ public class Constants {
   public static final String EMAIL_CONFIRMATION_SUBJECT = "Registration Confirmation";
   public static final String NO_USER_WITH_SUCH_PROJECT = "No user with such project";
   public static final String NO_USER_FOUND = "No user fount with this id";
+  public static final String ASSIGNED_TO_NOT_SPECIFIED = "Task should be assigned to someone";
+  public static final String PROJECT_ID_NOT_EQUAL = "Project ids must not be equal";
 
   public static Long getCurrentUserId() {
     try {
       return ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
           .getPrincipal()).getId();
-    } catch (NullPointerException e) {
+    } catch (NullPointerException | ClassCastException e) {
       return 0L;
     }
   }

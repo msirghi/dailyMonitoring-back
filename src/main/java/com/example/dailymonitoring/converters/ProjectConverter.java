@@ -14,6 +14,7 @@ public class ProjectConverter implements Converter<ProjectData, ProjectEntity> {
         .builder()
         .name(source.getName())
         .description(source.getDescription())
+        .color(source.getColor())
         .build();
   }
 }
