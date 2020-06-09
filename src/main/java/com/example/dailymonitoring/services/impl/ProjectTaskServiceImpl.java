@@ -10,6 +10,7 @@ import com.example.dailymonitoring.models.entities.ProjectTaskEntity;
 import com.example.dailymonitoring.models.entities.UserEntity;
 import com.example.dailymonitoring.models.entities.UserProjectEntity;
 import com.example.dailymonitoring.models.enums.TaskStatusType;
+import com.example.dailymonitoring.respositories.AuraRepository;
 import com.example.dailymonitoring.respositories.ProjectRepository;
 import com.example.dailymonitoring.respositories.ProjectTaskRepository;
 import com.example.dailymonitoring.respositories.UserProjectRepository;
@@ -36,15 +37,19 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
   private final ProjectRepository projectRepository;
 
+  private final AuraRepository auraRepository;
+
   public ProjectTaskServiceImpl(
       ConversionService conversionService,
       ProjectTaskRepository projectTaskRepository,
       UserProjectRepository userProjectRepository,
-      ProjectRepository projectRepository) {
+      ProjectRepository projectRepository,
+      AuraRepository auraRepository) {
     this.conversionService = conversionService;
     this.projectTaskRepository = projectTaskRepository;
     this.userProjectRepository = userProjectRepository;
     this.projectRepository = projectRepository;
+    this.auraRepository = auraRepository;
   }
 
   @Override
@@ -170,6 +175,14 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
   public int markProjectTaskAsDone(Long userId, Long projectId, Long taskId) {
     UserProjectEntity userProject = userProjectRepository.getProjectByUserIdAndProjectId(userId,
         projectId).orElseThrow(ResourceNotFoundException::new);
+
+    auraRepository.getAuraByUser(userId)
+        .map(auraEntity -> {
+          auraEntity.setAuraCount(auraEntity.getAuraCount() + Constants.ADD_AURA_VAL);
+          auraRepository.save(auraEntity);
+          return auraEntity;
+        })
+        .orElseThrow(ResourceNotFoundException::new);
 
     projectTaskRepository.getUndoneTaskById(taskId).orElseThrow(ResourceNotFoundException::new);
     return projectTaskRepository.markAsDone(taskId, userProject.getUser());

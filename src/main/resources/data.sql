@@ -43,3 +43,7 @@ values
 insert into EMAIL_TEMPLATES(NAME, DESCRIPTION, TEMPLATE, DELETED)
 values
 ('Template 1', 'Description 1', 'HTML', FALSE);
+
+insert into AURAS(USER_ID, AURA_COUNT)
+values
+(1, 10);

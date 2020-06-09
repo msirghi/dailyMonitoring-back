@@ -1,13 +1,18 @@
 package com.example.dailymonitoring.services.impl;
 
+import com.example.dailymonitoring.constants.Constants;
 import com.example.dailymonitoring.exceptions.BadRequestException;
 import com.example.dailymonitoring.exceptions.UserCreationException;
 import com.example.dailymonitoring.models.EmailData;
 import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.UsernameData;
+import com.example.dailymonitoring.models.entities.AuraEntity;
 import com.example.dailymonitoring.models.entities.UserEntity;
+import com.example.dailymonitoring.models.entities.UserPreferencesEntity;
 import com.example.dailymonitoring.models.enums.StatusType;
+import com.example.dailymonitoring.respositories.AuraRepository;
+import com.example.dailymonitoring.respositories.UserPreferencesRepository;
 import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.services.UserService;
 import org.springframework.core.convert.ConversionService;
@@ -26,12 +31,20 @@ public class UserServiceImpl implements UserService {
 
   private final BCryptPasswordEncoder passwordEncoder;
 
+  private final AuraRepository auraRepository;
+
+  private final UserPreferencesRepository userPreferencesRepository;
+
   public UserServiceImpl(UserRepository userRepository,
                          ConversionService conversionService,
-                         BCryptPasswordEncoder passwordEncoder) {
+                         BCryptPasswordEncoder passwordEncoder,
+                         AuraRepository auraRepository,
+                         UserPreferencesRepository userPreferencesRepository) {
     this.userRepository = userRepository;
     this.conversionService = conversionService;
     this.passwordEncoder = passwordEncoder;
+    this.auraRepository = auraRepository;
+    this.userPreferencesRepository = userPreferencesRepository;
   }
 
   @Override
@@ -51,6 +64,9 @@ public class UserServiceImpl implements UserService {
     userData.setId(userRepository.save(userEntity).getId());
     userData.setStatus(userEntity.getStatus());
     userData.setPassword("");
+
+    auraRepository.save(AuraEntity.builder().auraCount(0L).user(userEntity).build());
+    userPreferencesRepository.save(UserPreferencesEntity.builder().dailyTaskCount(Constants.DEFAULT_DAILY_GOAL).build());
     return userData;
   }
 

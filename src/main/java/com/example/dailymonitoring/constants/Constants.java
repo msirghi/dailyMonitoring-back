@@ -46,6 +46,8 @@ public class Constants {
       "You have new alert in %s. <br />"
           + "%s wrote: %s <br />"
           + "Alert type: %s";
+  public static final Long ADD_AURA_VAL = 10L;
+  public static final Long DEFAULT_DAILY_GOAL = 5L;
 
   public static Long getCurrentUserId() {
     try {
