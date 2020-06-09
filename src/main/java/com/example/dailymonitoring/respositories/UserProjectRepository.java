@@ -40,6 +40,16 @@ public interface UserProjectRepository extends JpaRepository<UserProjectEntity, 
       @Param("projectId") Long projectId
   );
 
+  @Query("SELECT up FROM UserProjectEntity up "
+      + "WHERE up.user.id = :userId "
+      + "AND up.project.id = :projectId "
+      + "AND up.user.status = 'ACTIVE' "
+      + "AND up.project.deleted = false")
+  Optional<UserProjectEntity> getProjectByNotDeletedUserIdAndProjectId(
+      @Param("userId") Long userId,
+      @Param("projectId") Long projectId
+  );
+
   @Modifying
   @Transactional
   @Query("DELETE FROM UserProjectEntity up "

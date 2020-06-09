@@ -1,9 +1,7 @@
 package com.example.dailymonitoring.controllers.api;
 
 import com.example.dailymonitoring.models.Error;
-import com.example.dailymonitoring.models.ProjectData;
-import com.example.dailymonitoring.models.TaskData;
-import com.example.dailymonitoring.models.UserTaskData;
+import com.example.dailymonitoring.models.ProjectAlertData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -20,173 +18,155 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
-@Api(value = "ProjectTasks")
+/**
+ * @author Sirghi Mihail
+ */
+@Api
 @Validated
-public interface ProjectTaskApi {
+public interface ProjectAlertApi {
 
-  @ApiOperation(value = "Create task for project", nickname = "projectTaskCreate",
-      response = ProjectData.class, tags = {"ProjectTasks",})
+  @ApiOperation(
+      value = "Add project alert",
+      nickname = "addProjectAlert",
+      tags = {"ProjectAlerts"}
+  )
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
+      @ApiResponse(code = 201, message = "Created", response = ProjectAlertData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
       @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
-      value = "/users/{userId}/projects/{projectId}/tasks",
+      value = "/users/{userId}/projects/{projectId}/alerts",
       method = RequestMethod.POST,
       consumes = "application/json;charset=utf-8",
       produces = "application/json;charset=utf-8"
   )
-  ResponseEntity<TaskData> projectTaskCreate(
-      @ApiParam(required = true) @RequestBody @Valid TaskData projectData,
+  ResponseEntity<ProjectAlertData> addProjectAlert(
+      @ApiParam(required = true) @RequestBody @Valid ProjectAlertData projectAlertData,
       @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
       @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId
   );
 
-  @ApiOperation(value = "Create task for project", nickname = "projectGet",
-      response = ProjectData.class, tags = {"ProjectTasks",})
+  @ApiOperation(
+      value = "Get project alert by id",
+      nickname = "getProjectAlertId",
+      tags = {"ProjectAlerts"}
+  )
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
+      @ApiResponse(code = 200, message = "Ok", response = ProjectAlertData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
       @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
-      value = "/users/{userId}/projects/{projectId}/tasks/{taskId}",
+      value = "/users/{userId}/projects/{projectId}/alerts/{alertId}",
       method = RequestMethod.GET,
       consumes = "application/json;charset=utf-8",
       produces = "application/json;charset=utf-8"
   )
-  ResponseEntity<TaskData> getProjectTaskById(
+  ResponseEntity<ProjectAlertData> getProjectAlertById(
       @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
       @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId,
-      @ApiParam(required = true) @PathVariable("taskId") @Min(1) Long taskId
+      @ApiParam(required = true) @PathVariable("alertId") @Min(1) Long alertId
   );
 
-  @ApiOperation(value = "Get projects tasks", nickname = "projectGetTasks",
-      response = ProjectData.class, tags = {"ProjectTasks",})
+  @ApiOperation(
+      value = "Get all project alerts",
+      nickname = "getAllProjectAlerts",
+      tags = {"ProjectAlerts"}
+  )
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
+      @ApiResponse(code = 200, message = "Ok", response = List.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
       @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
-      value = "/users/{userId}/projects/{projectId}/tasks",
+      value = "/users/{userId}/projects/{projectId}/alerts",
       method = RequestMethod.GET,
       consumes = "application/json;charset=utf-8",
       produces = "application/json;charset=utf-8"
   )
-  ResponseEntity<List<TaskData>> getAllTasksByProjectId(
+  ResponseEntity<List<ProjectAlertData>> getAllProjectAlerts(
       @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
       @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId
   );
 
-  @ApiOperation(value = "Delete project task", nickname = "deleteProjectTask",
-      response = ProjectData.class, tags = {"ProjectTasks",})
+  @ApiOperation(
+      value = "Update project alert message",
+      nickname = "updateProjectAlertMessage",
+      tags = {"ProjectAlerts"}
+  )
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
+      @ApiResponse(code = 200, message = "Ok", response = ProjectAlertData.class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
       @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
       @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
   @RequestMapping(
-      value = "/users/{userId}/projects/{projectId}/tasks/{taskId}",
+      value = "/users/{userId}/projects/{projectId}/alerts/{alertId}",
+      method = RequestMethod.PATCH,
+      consumes = "application/json;charset=utf-8",
+      produces = "application/json;charset=utf-8"
+  )
+  ResponseEntity<ProjectAlertData> updateProjectAlertMessage(
+      @ApiParam(required = true) @RequestBody @Valid ProjectAlertData projectAlertData,
+      @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
+      @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId,
+      @ApiParam(required = true) @PathVariable("alertId") @Min(1) Long alertId
+  );
+
+  @ApiOperation(
+      value = "Update project alert",
+      nickname = "updateProjectAlert",
+      tags = {"ProjectAlerts"}
+  )
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Ok", response = ProjectAlertData.class),
+      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
+      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
+      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
+      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+  @RequestMapping(
+      value = "/users/{userId}/projects/{projectId}/alerts/{alertId}",
+      method = RequestMethod.PUT,
+      consumes = "application/json;charset=utf-8",
+      produces = "application/json;charset=utf-8"
+  )
+  ResponseEntity<ProjectAlertData> updateProjectAlert(
+      @ApiParam(required = true) @RequestBody @Valid ProjectAlertData projectAlertData,
+      @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
+      @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId,
+      @ApiParam(required = true) @PathVariable("alertId") @Min(1) Long alertId
+  );
+
+  @ApiOperation(
+      value = "Delete project alert",
+      nickname = "deleteProjectAlert",
+      tags = {"ProjectAlerts"}
+  )
+  @ApiResponses(value = {
+      @ApiResponse(code = 204, message = "No content"),
+      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
+      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
+      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
+      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+  @RequestMapping(
+      value = "/users/{userId}/projects/{projectId}/alerts/{alertId}",
       method = RequestMethod.DELETE,
       consumes = "application/json;charset=utf-8",
       produces = "application/json;charset=utf-8"
   )
-  ResponseEntity<TaskData> deleteProjectTask(
+  ResponseEntity<Void> deleteProjectAlert(
       @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
       @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId,
-      @ApiParam(required = true) @PathVariable("taskId") @Min(1) Long taskId
-  );
-
-  @ApiOperation(value = "Update project task", nickname = "UpdateProjectTask",
-      response = ProjectData.class, tags = {"ProjectTasks",})
-  @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
-      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
-      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
-      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
-      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
-  @RequestMapping(
-      value = "/users/{userId}/projects/{projectId}/tasks/{taskId}",
-      method = RequestMethod.PUT,
-      consumes = "application/json;charset=utf-8",
-      produces = "application/json;charset=utf-8"
-  )
-  ResponseEntity<TaskData> updateProjectTask(
-      @ApiParam(required = true) @RequestBody @Valid TaskData projectData,
-      @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
-      @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId,
-      @ApiParam(required = true) @PathVariable("taskId") @Min(1) Long taskId
-  );
-
-  @ApiOperation(value = "Complete project task", nickname = "CompleteProjectTask",
-      response = ProjectData.class, tags = {"ProjectTasks",})
-  @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
-      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
-      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
-      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
-      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
-  @RequestMapping(
-      value = "/users/{userId}/projects/{projectId}/tasks/{taskId}/complete",
-      method = RequestMethod.PUT,
-      consumes = "application/json;charset=utf-8",
-      produces = "application/json;charset=utf-8"
-  )
-  ResponseEntity<TaskData> markProjectTaskAsDone(
-      @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
-      @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId,
-      @ApiParam(required = true) @PathVariable("taskId") @Min(1) Long taskId
-  );
-
-  @ApiOperation(value = "Get all undone tasks", nickname = "GetAllUndoneTasks",
-      response = ProjectData.class, tags = {"ProjectTasks",})
-  @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
-      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
-      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
-      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
-      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
-  @RequestMapping(
-      value = "/users/{userId}/projects/{projectId}/tasks/inprogress",
-      method = RequestMethod.GET,
-      consumes = "application/json;charset=utf-8",
-      produces = "application/json;charset=utf-8"
-  )
-  ResponseEntity<List<UserTaskData>> getAllInProgressProjectTasks(
-      @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
-      @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId
-  );
-
-  @ApiOperation(value = "Get last five done tasks", nickname = "getLastFiveDoneTasks",
-      response = ProjectData.class, tags = {"ProjectTasks",})
-  @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = ProjectData.class),
-      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
-      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
-      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
-      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
-      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
-  @RequestMapping(
-      value = "/users/{userId}/projects/{projectId}/tasks/lastDone",
-      method = RequestMethod.GET,
-      consumes = "application/json;charset=utf-8",
-      produces = "application/json;charset=utf-8"
-  )
-  ResponseEntity<List<TaskData>> getLastDoneTasks(
-      @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
-      @ApiParam(required = true) @PathVariable("projectId") @Min(1) Long projectId
+      @ApiParam(required = true) @PathVariable("alertId") @Min(1) Long alertId
   );
 }

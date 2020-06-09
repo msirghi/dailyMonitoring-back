@@ -1,11 +1,11 @@
-insert into USERS(username, FULL_NAME, PASSWORD, EMAIL, STATUS, CREATED_AT)
+insert into USERS(username, FULL_NAME, PASSWORD, EMAIL, STATUS, CREATED_AT, DELETED)
 values
-('user1', 'Sirghi Mihail', 'password', 'user1@email.com', 'ACTIVE', '2020-04-04 15:07:39.154493'),
-('user2', 'Nicolae Savastin', 'password', 'user1@email.com', 'ACTIVE', '2020-06-04 15:07:39.154493'),
-('user3', 'Dima Sokolovschii', 'password', 'user1@email.com', 'ACTIVE', '2020-06-04 15:07:39.154493'),
-('user4', 'Full Name', 'password', 'user1@email.com', 'ACTIVE', '2020-07-04 15:07:39.154493'),
-('user5', 'Full Name', 'password', 'mr.serven1@yahoo.com', 'ACTIVE', '2020-05-04 15:07:39.154493'),
-('user6', 'Full Name2', 'password', 'user2@email.com', 'ACTIVE', '2020-05-03 15:07:39.154493');
+('user1', 'Sirghi Mihail', 'password', 'user1@email.com', 'ACTIVE', '2020-04-04 15:07:39.154493', false),
+('user2', 'Nicolae Savastin', 'password', 'user1@email.com', 'ACTIVE', '2020-06-04 15:07:39.154493', false),
+('user3', 'Dima Sokolovschii', 'password', 'user1@email.com', 'ACTIVE', '2020-06-04 15:07:39.154493', false),
+('user4', 'Full Name', 'password', 'user1@email.com', 'ACTIVE', '2020-07-04 15:07:39.154493', false),
+('user5', 'Full Name', 'password', 'mr.serven1@yahoo.com', 'ACTIVE', '2020-05-04 15:07:39.154493',false),
+('user6', 'Full Name2', 'password', 'user2@email.com', 'ACTIVE', '2020-05-03 15:07:39.154493',false);
 
 insert into TASKS(USER_ID, NAME, DESCRIPTION, STATUS, CREATED_AT, UPDATED_AT, DELETED)
 values
@@ -28,6 +28,7 @@ values
 (1, 1, 1),
 (2, 1, 1),
 (1, 3, 2),
+(3, 1, 2),
 (1, 4, 3);
 
 insert into PROJECT_TASKS(PROJECT_ID, ASSIGNED_TO_USER_ID, CREATOR_USER_ID, NAME, DESCRIPTION, STATUS, CREATED_AT, UPDATED_AT, DELETED, DONE_BY_USER_ID)
@@ -41,4 +42,4 @@ values
 
 insert into EMAIL_TEMPLATES(NAME, DESCRIPTION, TEMPLATE, DELETED)
 values
-('Template 1', 'Description 1', 'HTML', FALSE)
+('Template 1', 'Description 1', 'HTML', FALSE);

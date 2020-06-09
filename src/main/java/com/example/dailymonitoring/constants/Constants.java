@@ -41,6 +41,11 @@ public class Constants {
   public static final String NO_USER_FOUND = "No user fount with this id";
   public static final String ASSIGNED_TO_NOT_SPECIFIED = "Task should be assigned to someone";
   public static final String PROJECT_ID_NOT_EQUAL = "Project ids must not be equal";
+  public static final String NEW_PROJECT_ALERT = "New project alert";
+  public static final String NEW_PROJECT_ALERT_BODY =
+      "You have new alert in %s. <br />"
+          + "%s wrote: %s <br />"
+          + "Alert type: %s";
 
   public static Long getCurrentUserId() {
     try {

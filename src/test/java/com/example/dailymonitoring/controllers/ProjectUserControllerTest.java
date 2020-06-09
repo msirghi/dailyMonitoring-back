@@ -77,7 +77,7 @@ public class ProjectUserControllerTest {
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$", hasSize(3)))
+        .andExpect(jsonPath("$", hasSize(4)))
         .andExpect(jsonPath("$.[0].fullName").value(IsNull.notNullValue()))
         .andExpect(jsonPath("$.[0].email").value(IsNull.notNullValue()))
         .andExpect(jsonPath("$.[1].fullName").value(IsNull.notNullValue()))
@@ -202,7 +202,7 @@ public class ProjectUserControllerTest {
         .header("Content-type", "application/json")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$", hasSize(2)))
+        .andExpect(jsonPath("$", hasSize(3)))
         .andExpect(jsonPath("$.[0].fullName").value(IsNull.notNullValue()))
         .andExpect(jsonPath("$.[0].email").value(IsNull.notNullValue()))
         .andExpect(status().isOk());

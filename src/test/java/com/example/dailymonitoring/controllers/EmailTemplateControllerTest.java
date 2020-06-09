@@ -33,7 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 )
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class EmailTemplateControllerTest {
+public class EmailTemplateControllerTest {
 
   @Autowired
   private MockMvc mockMvc;

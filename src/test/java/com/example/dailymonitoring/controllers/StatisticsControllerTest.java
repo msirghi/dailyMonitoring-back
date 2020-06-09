@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import javax.validation.ConstraintViolationException;
 import org.assertj.core.api.Assertions;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 )
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class StatisticsControllerTest {
+public class StatisticsControllerTest {
 
   private final String baseUrl = "/statistics";
 
@@ -39,7 +40,7 @@ class StatisticsControllerTest {
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.year").value(Calendar.getInstance().get(Calendar.YEAR)))
         .andExpect(jsonPath("$.total").value(6))
-        .andExpect(jsonPath("$.progression").value(100.0))
+        .andExpect(jsonPath("$.progression").value(0.0))
         .andExpect(jsonPath("$.perMonth").exists())
         .andExpect(jsonPath("$.perMonth.january").exists())
         .andExpect(jsonPath("$.perMonth.february").exists())
@@ -89,7 +90,7 @@ class StatisticsControllerTest {
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.year").value(Calendar.getInstance().get(Calendar.YEAR)))
         .andExpect(jsonPath("$.total").value(6))
-        .andExpect(jsonPath("$.progression").value(0.0))
+        .andExpect(jsonPath("$.progression").value(100.0))
         .andExpect(jsonPath("$.perMonth").exists())
         .andExpect(jsonPath("$.perMonth.january").exists())
         .andExpect(jsonPath("$.perMonth.february").exists())
@@ -163,8 +164,8 @@ class StatisticsControllerTest {
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.year").value(Calendar.getInstance().get(Calendar.YEAR)))
-        .andExpect(jsonPath("$.total").value(6))
-        .andExpect(jsonPath("$.progression").value(0.0))
+        .andExpect(jsonPath("$.total").value(IsNull.notNullValue()))
+        .andExpect(jsonPath("$.progression").value(IsNull.notNullValue()))
         .andExpect(jsonPath("$.perMonth").exists())
         .andExpect(jsonPath("$.perMonth.january").exists())
         .andExpect(jsonPath("$.perMonth.february").exists())
