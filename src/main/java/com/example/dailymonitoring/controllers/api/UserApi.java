@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -156,4 +158,23 @@ public interface UserApi {
       @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
       @RequestBody @Valid UsernameData usernameData
   );
+
+  @ApiOperation(value = "Update User avatar", nickname = "userUpdateAvatar",
+      response = UserData.class, tags = {"Users",})
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Ok", response = UserData.class),
+      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
+      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
+      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
+      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+  @RequestMapping(
+      value = "users/{userId}/avatar",
+      method = RequestMethod.PATCH,
+      produces = "application/json;charset=utf-8"
+  )
+  ResponseEntity<UserData> userUpdateAvatar(
+      @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
+      @RequestParam("imageFile") MultipartFile imageFile
+  ) throws Exception;
 }

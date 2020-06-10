@@ -11,12 +11,13 @@ public class UserDataConverter implements Converter<UserEntity, UserData> {
   @Override
   public UserData convert(UserEntity source) {
     return UserData
-            .builder()
-            .id(source.getId())
-            .username(source.getUsername())
-            .email(source.getEmail())
-            .status(source.getStatus())
-            .fullName(source.getFullName())
-            .build();
+        .builder()
+        .id(source.getId())
+        .username(source.getUsername())
+        .email(source.getEmail())
+        .status(source.getStatus())
+        .fullName(source.getFullName())
+        .imageName(source.getImagePath())
+        .build();
   }
 }

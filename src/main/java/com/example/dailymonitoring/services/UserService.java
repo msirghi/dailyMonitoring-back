@@ -5,6 +5,7 @@ import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.UsernameData;
 import com.example.dailymonitoring.models.entities.UserEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 
 public interface UserService {
@@ -24,5 +25,7 @@ public interface UserService {
   boolean updateUserUsernameOnly(Long userId, UsernameData usernameData);
 
   UserEntity getUserByUsername(String username);
+
+  UserData updateUserAvatar(Long userId, MultipartFile imageFile) throws Exception;
 
 }

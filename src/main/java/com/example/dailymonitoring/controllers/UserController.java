@@ -6,12 +6,12 @@ import com.example.dailymonitoring.models.Error;
 import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
 import com.example.dailymonitoring.models.UsernameData;
-import com.example.dailymonitoring.models.events.OnRegistrationCompleteEvent;
 import com.example.dailymonitoring.services.UserService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -136,5 +136,10 @@ public class UserController implements UserApi {
             .message("Failed to update user.")
             .description("Username is already taken.")
             .build());
+  }
+
+  @Override
+  public ResponseEntity<UserData> userUpdateAvatar(@Min(1) Long userId, MultipartFile imageFile) throws Exception {
+    return ResponseEntity.ok(userService.updateUserAvatar(userId, imageFile));
   }
 }

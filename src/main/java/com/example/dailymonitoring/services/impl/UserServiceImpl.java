@@ -2,6 +2,7 @@ package com.example.dailymonitoring.services.impl;
 
 import com.example.dailymonitoring.constants.Constants;
 import com.example.dailymonitoring.exceptions.BadRequestException;
+import com.example.dailymonitoring.exceptions.ResourceNotFoundException;
 import com.example.dailymonitoring.exceptions.UserCreationException;
 import com.example.dailymonitoring.models.EmailData;
 import com.example.dailymonitoring.models.PasswordData;
@@ -19,8 +20,12 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -163,5 +168,24 @@ public class UserServiceImpl implements UserService {
   public UserEntity getUserByUsername(String username) {
     return userRepository.getUserByUsername(username)
         .orElseThrow(() -> new UsernameNotFoundException(""));
+  }
+
+  @Override
+  @Transactional(rollbackOn = Exception.class)
+  public UserData updateUserAvatar(Long userId, MultipartFile imageFile) throws Exception {
+    UserEntity userEntity = userRepository.findById(userId).orElseThrow(ResourceNotFoundException::new);
+    String folder = "src/main/resources/images/";
+    byte[] bytes = imageFile.getBytes();
+    String imageName = userEntity.getId() + "_" + userEntity.getUsername();
+
+    try {
+      Path path = Paths.get(folder + imageName + ".jpeg");
+      Files.write(path, bytes);
+    } catch (Exception e) {
+      throw new BadRequestException();
+    }
+
+    userEntity.setImagePath(imageName);
+    return UserData.builder().build();
   }
 }

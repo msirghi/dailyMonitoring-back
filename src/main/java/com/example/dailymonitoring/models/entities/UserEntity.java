@@ -66,4 +66,7 @@ public class UserEntity extends BaseEntity {
   @JoinColumn(name = "ROLE_ID", referencedColumnName = "id")
   private RoleEntity role;
 
+  @Column(name = "IMAGE_PATH")
+  private String imagePath;
+
 }

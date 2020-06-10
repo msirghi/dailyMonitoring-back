@@ -1,7 +1,6 @@
 package com.example.dailymonitoring.respositories;
 
 import com.example.dailymonitoring.models.entities.ProjectAlertEntity;
-import com.example.dailymonitoring.models.entities.ProjectEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
