@@ -23,4 +23,13 @@ public class AuraData {
 
   @JsonProperty("auraCount")
   private Long auraCount;
+
+  @JsonProperty("dailyGoal")
+  private Long dailyGoal;
+
+  @JsonProperty("tasksDone")
+  private Long tasksDone;
+
+  @JsonProperty("totalCompletedTasks")
+  private Long totalCompletedTasks;
 }

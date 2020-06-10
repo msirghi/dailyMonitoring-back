@@ -66,7 +66,11 @@ public class UserServiceImpl implements UserService {
     userData.setPassword("");
 
     auraRepository.save(AuraEntity.builder().auraCount(0L).user(userEntity).build());
-    userPreferencesRepository.save(UserPreferencesEntity.builder().dailyTaskCount(Constants.DEFAULT_DAILY_GOAL).build());
+    userPreferencesRepository.save(UserPreferencesEntity
+        .builder()
+        .dailyTaskCount(Constants.DEFAULT_DAILY_GOAL)
+        .user(userEntity)
+        .build());
     return userData;
   }
 

@@ -98,9 +98,9 @@ public class ProjectAlertServiceImpl implements ProjectAlertService {
 
   @Override
   public List<ProjectAlertData> getAllProjectAlert(Long userId, Long projectId) {
-    UserProjectEntity userProjectEntity = getUserProjectById(userId, projectId);
+    getUserProjectById(userId, projectId);
     return projectAlertRepository
-        .getProjectAlertEntityByProjectAndDeletedFalseAndDateAfter(userProjectEntity.getProject())
+        .getProjectAlertEntityByProjectAndDeletedFalseAndDateAfter(projectId)
         .map(projectAlertEntities -> projectAlertEntities
             .stream()
             .map(projectAlertEntity -> conversionService.convert(projectAlertEntity, ProjectAlertData.class))

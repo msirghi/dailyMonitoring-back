@@ -30,10 +30,13 @@ public interface ProjectAlertRepository extends JpaRepository<ProjectAlertEntity
   @Query("SELECT alert "
       + "FROM ProjectAlertEntity alert "
       + "WHERE alert.author.deleted = false "
+      + "AND alert.project.id = :projectId "
       + "AND alert.deleted = false "
       + "AND (alert.date > CURRENT_DATE OR alert.date = null) "
       + "ORDER BY alert.date DESC")
-  Optional<List<ProjectAlertEntity>> getProjectAlertEntityByProjectAndDeletedFalseAndDateAfter(ProjectEntity project);
+  Optional<List<ProjectAlertEntity>> getProjectAlertEntityByProjectAndDeletedFalseAndDateAfter(
+      @Param("projectId") Long projectId
+  );
 
   @Transactional
   @Modifying

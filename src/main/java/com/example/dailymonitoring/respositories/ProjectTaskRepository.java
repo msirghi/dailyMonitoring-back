@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,5 +87,22 @@ public interface ProjectTaskRepository extends JpaRepository<ProjectTaskEntity, 
       " WHERE tsk.status is not 'DONE' AND tsk.id = :id")
   Optional<ProjectTaskEntity> getUndoneTaskById(
       @Param("id") Long taskId
+  );
+
+  @Query("SELECT tsk FROM ProjectTaskEntity tsk"
+      + " WHERE tsk.status is 'DONE'"
+      + " AND tsk.updatedAt > :firstDate AND tsk.updatedAt < :secondDate "
+      + " AND tsk.taskDoneBy.id = :userId")
+  Optional<List<ProjectTaskEntity>> getTotalDoneTasksForToday(
+      @Param("userId") Long userId,
+      @Param("firstDate") Date firstDate,
+      @Param("secondDate") Date secondDate
+  );
+
+  @Query("SELECT tsk FROM ProjectTaskEntity tsk"
+      + " WHERE tsk.status is 'DONE'"
+      + " AND tsk.taskDoneBy.id = :userId")
+  Optional<List<ProjectTaskEntity>> getTotalDoneTasksByUser(
+      @Param("userId") Long userId
   );
 }
