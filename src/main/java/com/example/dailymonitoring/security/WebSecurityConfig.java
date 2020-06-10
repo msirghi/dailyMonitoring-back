@@ -60,6 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/admin/**",
             "/actuator/**",
             "/instances/**",
+            "/images/**",
             "/registrationConfirm/**").permitAll()
         .antMatchers(HttpMethod.POST, "/users").permitAll()
         .anyRequest().authenticated();

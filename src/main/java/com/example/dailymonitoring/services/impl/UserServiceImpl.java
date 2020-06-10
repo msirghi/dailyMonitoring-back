@@ -16,6 +16,12 @@ import com.example.dailymonitoring.respositories.AuraRepository;
 import com.example.dailymonitoring.respositories.UserPreferencesRepository;
 import com.example.dailymonitoring.respositories.UserRepository;
 import com.example.dailymonitoring.services.UserService;
+import lombok.SneakyThrows;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +29,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,6 +62,7 @@ public class UserServiceImpl implements UserService {
     this.userPreferencesRepository = userPreferencesRepository;
   }
 
+  @SneakyThrows
   @Override
   public UserData createUser(UserData userData) {
     if (userRepository.getUserByUsername(userData.getUsername()).isPresent()) {
@@ -63,12 +74,15 @@ public class UserServiceImpl implements UserService {
     userData.setPassword(passwordEncoder.encode(userData.getPassword()));
 
     UserEntity userEntity = conversionService.convert(userData, UserEntity.class);
+    String imageName = this.createUserDefaultAvatar(userData);
+    userEntity.setImagePath(imageName);
     userEntity.setStatus(StatusType.ACTIVE);
     userEntity.setEnabled(false);
     userEntity.setDeleted(false);
     userData.setId(userRepository.save(userEntity).getId());
     userData.setStatus(userEntity.getStatus());
     userData.setPassword("");
+    userData.setImageName(imageName);
 
     auraRepository.save(AuraEntity.builder().auraCount(0L).user(userEntity).build());
     userPreferencesRepository.save(UserPreferencesEntity
@@ -174,18 +188,41 @@ public class UserServiceImpl implements UserService {
   @Transactional(rollbackOn = Exception.class)
   public UserData updateUserAvatar(Long userId, MultipartFile imageFile) throws Exception {
     UserEntity userEntity = userRepository.findById(userId).orElseThrow(ResourceNotFoundException::new);
-    String folder = "src/main/resources/images/";
     byte[] bytes = imageFile.getBytes();
-    String imageName = userEntity.getId() + "_" + userEntity.getUsername();
+    String imageName = userEntity.getUsername();
+    String imagePath = Constants.IMAGE_PATH + imageName + Constants.IMAGE_EXTENSION;
 
+    this.deleteFileIfExists(imagePath);
     try {
-      Path path = Paths.get(folder + imageName + ".jpeg");
+      Path path = Paths.get(imagePath);
       Files.write(path, bytes);
     } catch (Exception e) {
       throw new BadRequestException();
     }
-
-    userEntity.setImagePath(imageName);
     return UserData.builder().build();
+  }
+
+  private String createUserDefaultAvatar(UserData data) throws Exception {
+    final CloseableHttpClient httpClient = HttpClients.createDefault();
+    HttpGet request = new HttpGet(Constants.IMAGE_GENERATOR_URL + data.getFullName());
+    HttpResponse response = httpClient.execute(request);
+    HttpEntity entity = response.getEntity();
+    String imageName = data.getUsername();
+    String filePath = Constants.IMAGE_PATH + imageName + Constants.IMAGE_EXTENSION;
+
+    if (entity != null) {
+      this.deleteFileIfExists(filePath);
+      BufferedInputStream bis = new BufferedInputStream(entity.getContent());
+      BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+      int inByte;
+      while ((inByte = bis.read()) != -1) bos.write(inByte);
+      bis.close();
+      bos.close();
+    }
+    return imageName;
+  }
+
+  private void deleteFileIfExists(String filePath) throws Exception {
+//    Files.deleteIfExists(new File(filePath).toPath());
   }
 }

@@ -6,16 +6,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+/**
+ * @author Sirghi Mihail
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserTaskData {
+public class NotificationListData {
 
-  @JsonProperty("user")
-  private UserData user;
-
-  @JsonProperty("task")
-  private TaskData task;
-
+  @JsonProperty("notificationIdList")
+  private List<Long> notificationIdList;
 }

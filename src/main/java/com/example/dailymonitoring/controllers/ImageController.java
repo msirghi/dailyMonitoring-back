@@ -2,7 +2,6 @@ package com.example.dailymonitoring.controllers;
 
 import com.example.dailymonitoring.controllers.api.ImageApi;
 import com.example.dailymonitoring.services.ImageService;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +19,7 @@ public class ImageController implements ImageApi {
   }
 
   @Override
-  public ResponseEntity<InputStreamResource> getImageByName(String name) {
+  public ResponseEntity<byte[]> getImageByName(String name) {
     return ResponseEntity
         .ok()
         .contentType(MediaType.IMAGE_JPEG)

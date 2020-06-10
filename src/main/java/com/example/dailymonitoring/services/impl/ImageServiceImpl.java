@@ -1,12 +1,13 @@
 package com.example.dailymonitoring.services.impl;
 
+import com.example.dailymonitoring.constants.Constants;
 import com.example.dailymonitoring.exceptions.ResourceNotFoundException;
 import com.example.dailymonitoring.services.ImageService;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * @author Sirghi Mihail
@@ -15,11 +16,13 @@ import java.io.IOException;
 public class ImageServiceImpl implements ImageService {
 
   @Override
-  public InputStreamResource getImageByName(String name) {
-    ClassPathResource classPathResource = new ClassPathResource("images/" + name + ".jpeg");
+  public byte[] getImageByName(String name) {
     try {
-      return new InputStreamResource(classPathResource.getInputStream());
+      File imgPath = new File(Constants.IMAGE_PATH + name + Constants.IMAGE_EXTENSION);
+
+      return Files.readAllBytes(imgPath.toPath());
     } catch (IOException e) {
+      e.printStackTrace();
       throw new ResourceNotFoundException();
     }
   }

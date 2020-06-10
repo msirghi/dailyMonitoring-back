@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * @author Sirghi Mihail
  */
-@Api(value = "EmailTemplates")
+@Api(value = "Images")
 @Validated
 public interface ImageApi {
 
   @ApiOperation(value = "Get image by name", nickname = "getImageByName", tags = {"Images",})
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Ok", response = InputStreamResource.class),
+      @ApiResponse(code = 200, message = "Ok", response = byte[].class),
       @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
       @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
       @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
@@ -34,7 +34,7 @@ public interface ImageApi {
       method = RequestMethod.GET,
       produces = MediaType.IMAGE_JPEG_VALUE
   )
-  ResponseEntity<InputStreamResource> getImageByName(
+  ResponseEntity<byte[]> getImageByName(
       @ApiParam(required = true) @PathVariable("name") String name
   );
 }

@@ -49,8 +49,7 @@ public class UserEntity extends BaseEntity {
 
   @Column(name = "EMAIL")
   @NotNull
-  @Pattern(regexp = Constants.EMAIL_REGEX,
-      message = Constants.EMAIL_ERROR)
+  @Pattern(regexp = Constants.EMAIL_REGEX, message = Constants.EMAIL_ERROR)
   @Email
   private String email;
 

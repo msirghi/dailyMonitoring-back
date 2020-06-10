@@ -54,4 +54,7 @@ public class TaskData {
 
   @JsonProperty("assignedToName")
   private String assignedToName;
+
+  @JsonProperty("username")
+  private String username;
 }

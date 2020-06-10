@@ -7,5 +7,5 @@ import org.springframework.core.io.InputStreamResource;
  */
 public interface ImageService {
 
-  InputStreamResource getImageByName(String name);
+  byte[]  getImageByName(String name);
 }

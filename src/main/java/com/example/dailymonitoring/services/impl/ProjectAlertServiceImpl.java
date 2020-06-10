@@ -3,8 +3,12 @@ package com.example.dailymonitoring.services.impl;
 import com.example.dailymonitoring.constants.Constants;
 import com.example.dailymonitoring.exceptions.ResourceNotFoundException;
 import com.example.dailymonitoring.models.ProjectAlertData;
+import com.example.dailymonitoring.models.entities.NotificationEntity;
 import com.example.dailymonitoring.models.entities.ProjectAlertEntity;
 import com.example.dailymonitoring.models.entities.UserProjectEntity;
+import com.example.dailymonitoring.models.enums.NotificationStatus;
+import com.example.dailymonitoring.models.enums.NotificationType;
+import com.example.dailymonitoring.respositories.NotificationRepository;
 import com.example.dailymonitoring.respositories.ProjectAlertRepository;
 import com.example.dailymonitoring.respositories.UserProjectRepository;
 import com.example.dailymonitoring.services.MailService;
@@ -32,19 +36,23 @@ public class ProjectAlertServiceImpl implements ProjectAlertService {
 
   private final MailService mailService;
 
+  private final NotificationRepository notificationRepository;
+
   public ProjectAlertServiceImpl(ProjectAlertRepository projectAlertRepository,
                                  UserProjectRepository userProjectRepository,
                                  ConversionService conversionService,
-                                 MailService mailService) {
+                                 MailService mailService,
+                                 NotificationRepository notificationRepository) {
     this.projectAlertRepository = projectAlertRepository;
     this.userProjectRepository = userProjectRepository;
     this.conversionService = conversionService;
     this.mailService = mailService;
+    this.notificationRepository = notificationRepository;
   }
 
   private UserProjectEntity getUserProjectById(Long userId, Long projectId) {
     return userProjectRepository.getProjectByNotDeletedUserIdAndProjectId(userId, projectId)
-        .orElseThrow(() -> new ResourceNotFoundException("User or project does not exist."));
+        .orElseThrow(() -> new ResourceNotFoundException(Constants.NO_USER_WITH_SUCH_PROJECT));
   }
 
   private void sendEmails(Long userId, Long projectId, UserProjectEntity initialUser, ProjectAlertData data) {
@@ -80,6 +88,9 @@ public class ProjectAlertServiceImpl implements ProjectAlertService {
     if (projectAlertData.getDate() != null) {
       alertEntity.setDate(projectAlertData.getDate());
     }
+
+    this.createNotifications(projectId, userProjectEntity, projectAlertData);
+
     projectAlertRepository.save(alertEntity);
     projectAlertData.setId(alertEntity.getId());
     projectAlertData.setAuthorId(userProjectEntity.getUser().getId());
@@ -160,5 +171,22 @@ public class ProjectAlertServiceImpl implements ProjectAlertService {
           return 1;
         })
         .orElseThrow(ResourceNotFoundException::new);
+  }
+
+  private void createNotifications(Long projectId, UserProjectEntity userProjectEntity, ProjectAlertData projectAlertData) {
+    userProjectRepository.getProjectUsers(projectId)
+        .map(userProjectEntities -> userProjectEntities
+            .stream()
+            .filter(userProject -> !userProject.getUser().getId().equals(userProjectEntity.getUser().getId()))
+            .peek(userProject ->
+                notificationRepository.save(NotificationEntity
+                    .builder()
+                    .message(projectAlertData.getMessage())
+                    .status(NotificationStatus.UNREAD)
+                    .type(NotificationType.PROJECT_TYPE)
+                    .user(userProject.getUser())
+                    .project(userProject.getProject())
+                    .build())).collect(Collectors.toList())
+        );
   }
 }

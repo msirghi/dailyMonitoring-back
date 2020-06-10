@@ -43,8 +43,7 @@ public interface UserApi {
       produces = "application/json;charset=utf-8"
   )
   ResponseEntity<?> userCreate(
-      @ApiParam(required = true) @RequestBody @Valid UserData userData,
-      HttpServletRequest request
+      @ApiParam(required = true) @RequestBody @Valid UserData userData
   );
 
   @ApiOperation(value = "Get User", nickname = "userGet",

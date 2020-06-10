@@ -20,11 +20,7 @@ import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "PROJECT_TASKS"
-//    , uniqueConstraints = {
-//        @UniqueConstraint(columnNames = {"PROJECT_ID", "TASK_ID"})
-//    }
-)
+@Table(name = "PROJECT_TASKS")
 @Data
 @Builder
 @NoArgsConstructor
@@ -51,17 +47,17 @@ public class ProjectTaskEntity extends BaseEntity {
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "PROJECT_ID", nullable = false)
-  ProjectEntity project;
+  private ProjectEntity project;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "DONE_BY_USER_ID")
-  UserEntity taskDoneBy;
+  private UserEntity taskDoneBy;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "CREATOR_USER_ID", nullable = false)
-  UserEntity taskCreator;
+  private UserEntity taskCreator;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "ASSIGNED_TO_USER_ID", nullable = false)
-  UserEntity taskAssignedTo;
+  private UserEntity taskAssignedTo;
 }

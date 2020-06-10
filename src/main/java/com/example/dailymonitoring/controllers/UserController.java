@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
@@ -31,9 +30,11 @@ public class UserController implements UserApi {
   }
 
   @Override
-  public ResponseEntity<?> userCreate(@Valid UserData userData, HttpServletRequest request) {
+  public ResponseEntity<?> userCreate(@Valid UserData userData) {
     UserData result = this.userService.createUser(userData);
     String error = "";
+
+    // TODO: 10.06.2020 move to service
 //    if (result.getId() != null) {
 //      eventPublisher.publishEvent(new OnRegistrationCompleteEvent(result,
 //          request.getLocale(), request.getContextPath()));

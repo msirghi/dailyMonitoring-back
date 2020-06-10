@@ -86,6 +86,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
           taskData.setId(newTask.getId());
           taskData.setStatus(TaskStatusType.INPROGRESS);
           taskData.setAssignedToName(assignedTo.getFullName());
+          taskData.setUsername(assignedTo.getUsername());
           return taskData;
         })
         .orElse(TaskData.builder().build());
@@ -117,6 +118,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
             .map(task -> {
               TaskData taskData = conversionService.convert(task, TaskData.class);
               taskData.setAssignedToName(task.getTaskAssignedTo().getFullName());
+              taskData.setUsername(task.getTaskAssignedTo().getUsername());
               taskData.setDates(new ArrayList<LocalDateTime>() {
                 {
                   add(task.getDate());

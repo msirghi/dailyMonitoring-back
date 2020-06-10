@@ -48,6 +48,9 @@ public class Constants {
           + "Alert type: %s";
   public static final Long ADD_AURA_VAL = 10L;
   public static final Long DEFAULT_DAILY_GOAL = 5L;
+  public static final String IMAGE_GENERATOR_URL = "https://eu.ui-avatars.com/api/?size=256&name=";
+  public static final String IMAGE_PATH = "src/main/resources/images/";
+  public static final String IMAGE_EXTENSION = ".jpeg";
 
   public static Long getCurrentUserId() {
     try {
