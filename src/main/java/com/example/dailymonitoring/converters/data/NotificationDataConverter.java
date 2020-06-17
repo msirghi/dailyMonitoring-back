@@ -21,6 +21,10 @@ public class NotificationDataConverter implements Converter<NotificationEntity, 
         .status(source.getStatus())
         .authorName(source.getUser().getFullName())
         .projectName(source.getProject().getName())
+        .authorUsername(source.getUser().getUsername())
+        .projectId(source.getProject().getId())
+        .date(source.getUpdatedAt())
+        .authorId(source.getUser().getId())
         .build();
   }
 }

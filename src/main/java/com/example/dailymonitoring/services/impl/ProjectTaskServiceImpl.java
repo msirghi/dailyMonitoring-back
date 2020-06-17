@@ -168,6 +168,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
           task.setName(taskData.getName());
           task.setDescription(taskData.getDescription());
           taskData.setId(task.getId());
+          taskData.setUsername(task.getTaskAssignedTo().getUsername());
           return taskData;
         })
         .orElseThrow(ResourceNotFoundException::new);

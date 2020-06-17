@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @author Sirghi Mihail
  */
@@ -32,6 +34,18 @@ public class NotificationData {
   @JsonProperty("projectName")
   private String projectName;
 
+  @JsonProperty("projectId")
+  private Long projectId;
+
+  @JsonProperty("authorId")
+  private Long authorId;
+
   @JsonProperty("authorName")
   private String authorName;
+
+  @JsonProperty("authorUsername")
+  private String authorUsername;
+
+  @JsonProperty("date")
+  private Date date;
 }
