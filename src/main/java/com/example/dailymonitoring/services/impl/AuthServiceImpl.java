@@ -3,6 +3,7 @@ package com.example.dailymonitoring.services.impl;
 import com.example.dailymonitoring.configs.utils.JwtUtil;
 import com.example.dailymonitoring.exceptions.BadRequestException;
 import com.example.dailymonitoring.exceptions.ForbiddenException;
+import com.example.dailymonitoring.models.auth.AuthenticationProviderRequestData;
 import com.example.dailymonitoring.models.auth.AuthenticationRequestData;
 import com.example.dailymonitoring.models.auth.AuthenticationResponseData;
 import com.example.dailymonitoring.models.entities.UserEntity;
@@ -84,6 +85,23 @@ public class AuthServiceImpl implements AuthService {
     return AuthenticationResponseData
         .builder()
         .jwt(token)
+        .refreshToken(refreshToken)
+        .build();
+  }
+
+  @Override
+  public AuthenticationResponseData authenticateWithProvider(AuthenticationProviderRequestData data) {
+    UserEntity userEntity = userRepository
+        .getFirstByProvider(data.getExternalId(), data.getEmail())
+        .orElseThrow(BadRequestException::new);
+
+    UserDetails userDetails = userDetailsService.loadUserByUsername(userEntity.getUsername());
+    final String jwt = jwtUtil.generateToken(userDetails);
+    final String refreshToken = jwtUtil.createRefreshToken(userEntity.getUsername(), null);
+
+    return AuthenticationResponseData
+        .builder()
+        .jwt(jwt)
         .refreshToken(refreshToken)
         .build();
   }

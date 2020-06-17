@@ -3,6 +3,7 @@ package com.example.dailymonitoring.services;
 import com.example.dailymonitoring.models.EmailData;
 import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
+import com.example.dailymonitoring.models.UserProviderData;
 import com.example.dailymonitoring.models.UsernameData;
 import com.example.dailymonitoring.models.entities.UserEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,4 +29,9 @@ public interface UserService {
 
   UserData updateUserAvatar(Long userId, MultipartFile imageFile) throws Exception;
 
+  UserProviderData createUserWithOtherProvider(UserProviderData data);
+
+  UserProviderData getUserByIdToken(String idToken);
+
+  void getUserByExternalId(String externalId);
 }

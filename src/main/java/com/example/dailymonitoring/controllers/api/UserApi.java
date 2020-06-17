@@ -4,6 +4,7 @@ import com.example.dailymonitoring.models.EmailData;
 import com.example.dailymonitoring.models.Error;
 import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
+import com.example.dailymonitoring.models.UserProviderData;
 import com.example.dailymonitoring.models.UsernameData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +21,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 @Api(value = "Users")
 @Validated
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 public interface UserApi {
 
   @ApiOperation(value = "Create User", nickname = "userCreate",
@@ -176,4 +178,58 @@ public interface UserApi {
       @ApiParam(required = true) @PathVariable("userId") @Min(1) Long userId,
       @RequestParam("imageFile") MultipartFile imageFile
   ) throws Exception;
+
+  @ApiOperation(value = "Create user with other provider", nickname = "createUserWithOtherProvider",
+      response = UserData.class, tags = {"Users",})
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Ok", response = UserProviderData.class),
+      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
+      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
+      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
+      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+  @RequestMapping(
+      value = "/login",
+      method = RequestMethod.POST,
+      produces = "application/json;charset=utf-8"
+  )
+  ResponseEntity<UserProviderData> createUserWithOtherProvider(
+      @ApiParam(required = true) @RequestBody @Valid UserProviderData data
+  );
+
+  @ApiOperation(value = "Create user with other provider", nickname = "createUserWithOtherProvider",
+       tags = {"Users",})
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Ok"),
+      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
+      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
+      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
+      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+  @RequestMapping(
+      value = "users/provider/test",
+      method = RequestMethod.GET,
+      produces = "application/json;charset=utf-8"
+  )
+  ResponseEntity<UserProviderData> getUserByIdToken(
+      @RequestParam(name = "idToken", required = false) String idToken
+  );
+
+  @ApiOperation(value = "Create user with other provider", nickname = "createUserWithOtherProvider",
+      response = UserData.class, tags = {"Users",})
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Ok", response = UserProviderData.class),
+      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
+      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
+      @ApiResponse(code = 404, message = "Not Found  ", response = Error.class),
+      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class),
+      @ApiResponse(code = 503, message = "Service Unavailable  ", response = Error.class)})
+  @RequestMapping(
+      value = "users/provider",
+      method = RequestMethod.GET,
+      produces = "application/json;charset=utf-8"
+  )
+  ResponseEntity<Void> getUserByExternalId(
+      @RequestParam(name = "externalId") String externalId
+  );
 }

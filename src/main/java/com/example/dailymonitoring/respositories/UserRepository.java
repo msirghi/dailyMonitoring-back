@@ -96,4 +96,14 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
   int countUsersByYear(
       @Param("year") int year
   );
+
+  Optional<UserEntity> getFirstByExternalId(String externalId);
+
+  @Query("SELECT user FROM UserEntity user "
+      + "WHERE user.externalId =:externalId "
+      + "AND user.email = :email")
+  Optional<UserEntity> getFirstByProvider(
+      @Param("externalId") String externalId,
+      @Param("email") String email
+  );
 }

@@ -1,6 +1,7 @@
 package com.example.dailymonitoring.controllers;
 
 import com.example.dailymonitoring.controllers.api.AuthApi;
+import com.example.dailymonitoring.models.auth.AuthenticationProviderRequestData;
 import com.example.dailymonitoring.models.auth.AuthenticationRequestData;
 import com.example.dailymonitoring.models.auth.AuthenticationResponseData;
 import com.example.dailymonitoring.services.AuthService;
@@ -37,5 +38,10 @@ public class AuthController implements AuthApi {
   public ResponseEntity<AuthenticationResponseData> renewToken(AuthenticationResponseData authData,
                                                                HttpServletResponse response) {
     return ResponseEntity.ok(authService.renewToken(authData));
+  }
+
+  @Override
+  public ResponseEntity<AuthenticationResponseData> authenticateWithProvider(AuthenticationProviderRequestData data) {
+    return ResponseEntity.ok(authService.authenticateWithProvider(data));
   }
 }

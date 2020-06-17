@@ -1,6 +1,7 @@
 package com.example.dailymonitoring.controllers.api;
 
 import com.example.dailymonitoring.models.Error;
+import com.example.dailymonitoring.models.auth.AuthenticationProviderRequestData;
 import com.example.dailymonitoring.models.auth.AuthenticationRequestData;
 import com.example.dailymonitoring.models.auth.AuthenticationResponseData;
 import io.swagger.annotations.Api;
@@ -55,5 +56,23 @@ public interface AuthApi {
   ResponseEntity<AuthenticationResponseData> renewToken(
       @RequestBody AuthenticationResponseData authData,
       HttpServletResponse response
+  );
+
+  @ApiOperation(value = "Authenticate User", nickname = "userAuthenticate",
+      response = AuthenticationResponseData.class, tags = {"Authenticate",})
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Ok", response = AuthenticationResponseData.class),
+      @ApiResponse(code = 400, message = "Bad Request  ", response = Error.class),
+      @ApiResponse(code = 403, message = "Forbidden  ", response = Error.class),
+      @ApiResponse(code = 500, message = "Internal Server Error  ", response = Error.class)
+  })
+  @RequestMapping(
+      value = "/authenticate/provider",
+      method = RequestMethod.POST,
+      consumes = "application/json;charset=utf-8",
+      produces = "application/json;charset=utf-8"
+  )
+  ResponseEntity<AuthenticationResponseData> authenticateWithProvider(
+      @RequestBody AuthenticationProviderRequestData data
   );
 }

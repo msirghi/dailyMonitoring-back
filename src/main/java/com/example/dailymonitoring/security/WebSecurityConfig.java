@@ -52,13 +52,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http.headers().frameOptions().disable();
 
     http
+        .httpBasic()
+        .and()
         .authorizeRequests()
-        .antMatchers("/authenticate",
+        .antMatchers("/authenticate/**",
             "/createUser",
+            "/users/provider",
             "/renewToken",
             "/h2-console/**",
             "/admin/**",
             "/actuator/**",
+            "/login/**",
             "/instances/**",
             "/images/**",
             "/registrationConfirm/**").permitAll()

@@ -38,7 +38,6 @@ public class UserEntity extends BaseEntity {
   private String username;
 
   @Column(name = "PASSWORD")
-  @NotNull
   private String password;
 
   @Column(name = "FULL_NAME")
@@ -68,4 +67,9 @@ public class UserEntity extends BaseEntity {
   @Column(name = "IMAGE_PATH")
   private String imagePath;
 
+  @Column(name = "EXTERNAL_ID")
+  private String externalId;
+
+  @Column(name = "PROVIDER")
+  private String provider;
 }

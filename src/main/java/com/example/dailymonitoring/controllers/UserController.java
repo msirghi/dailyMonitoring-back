@@ -5,6 +5,7 @@ import com.example.dailymonitoring.models.EmailData;
 import com.example.dailymonitoring.models.Error;
 import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
+import com.example.dailymonitoring.models.UserProviderData;
 import com.example.dailymonitoring.models.UsernameData;
 import com.example.dailymonitoring.services.UserService;
 import org.springframework.context.ApplicationEventPublisher;
@@ -142,5 +143,21 @@ public class UserController implements UserApi {
   @Override
   public ResponseEntity<UserData> userUpdateAvatar(@Min(1) Long userId, MultipartFile imageFile) throws Exception {
     return ResponseEntity.ok(userService.updateUserAvatar(userId, imageFile));
+  }
+
+  @Override
+  public ResponseEntity<UserProviderData> createUserWithOtherProvider(@Valid UserProviderData data) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUserWithOtherProvider(data));
+  }
+
+  @Override
+  public ResponseEntity<UserProviderData> getUserByIdToken(String idToken) {
+    return null;
+  }
+
+  @Override
+  public ResponseEntity<Void> getUserByExternalId(String externalId) {
+    userService.getUserByExternalId(externalId);
+    return ResponseEntity.ok().build();
   }
 }

@@ -7,6 +7,7 @@ import com.example.dailymonitoring.exceptions.UserCreationException;
 import com.example.dailymonitoring.models.EmailData;
 import com.example.dailymonitoring.models.PasswordData;
 import com.example.dailymonitoring.models.UserData;
+import com.example.dailymonitoring.models.UserProviderData;
 import com.example.dailymonitoring.models.UsernameData;
 import com.example.dailymonitoring.models.entities.AuraEntity;
 import com.example.dailymonitoring.models.entities.UserEntity;
@@ -204,7 +205,7 @@ public class UserServiceImpl implements UserService {
 
   private String createUserDefaultAvatar(UserData data) throws Exception {
     final CloseableHttpClient httpClient = HttpClients.createDefault();
-    HttpGet request = new HttpGet(Constants.IMAGE_GENERATOR_URL + data.getFullName());
+    HttpGet request = new HttpGet(Constants.IMAGE_GENERATOR_URL + data.getUsername());
     HttpResponse response = httpClient.execute(request);
     HttpEntity entity = response.getEntity();
     String imageName = data.getUsername();
@@ -224,5 +225,49 @@ public class UserServiceImpl implements UserService {
 
   private void deleteFileIfExists(String filePath) throws Exception {
 //    Files.deleteIfExists(new File(filePath).toPath());
+  }
+
+  @Override
+  public UserProviderData createUserWithOtherProvider(UserProviderData data) {
+    try {
+      if (userRepository.getUserByUsername(data.getUsername()).isPresent()) {
+        throw new UserCreationException("Username is already taken.");
+      } else if (userRepository.getUserByEmail(data.getEmail()).isPresent()) {
+        throw new UserCreationException("Email is already taken.");
+      }
+      String imageName = this.createUserDefaultAvatar(UserData.builder()
+          .fullName(data.getFullName())
+          .username(data.getUsername()).build());
+
+      UserEntity userEntity = UserEntity
+          .builder()
+          .email(data.getEmail())
+          .username(data.getUsername())
+          .provider(data.getProvider())
+          .status(StatusType.ACTIVE)
+          .externalId(data.getExternalId())
+          .fullName(data.getFullName())
+          .enabled(true)
+          .imagePath(imageName)
+          .build();
+      userRepository.save(userEntity);
+
+      data.setId(userEntity.getId());
+      return data;
+    } catch (Exception e) {
+      throw new BadRequestException(e.getMessage());
+    }
+  }
+
+  @Override
+  public UserProviderData getUserByIdToken(String idToken) {
+    return null;
+  }
+
+  @Override
+  public void getUserByExternalId(String externalId) {
+    if (!userRepository.getFirstByExternalId(externalId).isPresent()) {
+      throw new ResourceNotFoundException();
+    }
   }
 }
